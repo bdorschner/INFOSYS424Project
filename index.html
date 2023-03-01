@@ -3,9 +3,55 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bulma CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!-- Cabin 500 fontpack -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500&display=swap" rel="stylesheet">
     <title>ISS UW</title>
+
+    <!-- Limited Styling (fonts, etc.) -->
+    <style>
+        body{
+            font-family: 'Cabin', sans-serif;
+            background-color: rgba(255, 0, 0, .10);
+        }
+        .navbar-item{
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
-    
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" id="index">
+                <img src="images/ISS_logo.png" alt="ISS Logo">
+            </a>
+
+            <a role="button" class="navbar-burger" id="" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item ml-3 mr-3" id="">Home</a>
+                <a class="navbar-item ml-3 mr-3" id="">About Us</a>
+                <a class="navbar-item ml-3 mr-3" id="">Upcoming Events</a>
+                <a class="navbar-item ml-3 mr-3" id="">Contact Us</a>
+                <a class="navbar-item ml-3 mr-3" id="">Resources</a>
+                <a class="navbar-item ml-3 mr-3" id="">Attendance History</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button" id="">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </nav>
 </body>
 </html>
