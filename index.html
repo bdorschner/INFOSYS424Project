@@ -1,1 +1,86 @@
-<!-- Creating blank commit to main to test branch visualization/avoiding fast forward merge -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bulma CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!-- Cabin 500 fontpack -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500&display=swap" rel="stylesheet">
+    <title>ISS UW</title>
+
+    <!-- Limited Styling (fonts, etc.) -->
+    <style>
+        body{
+            font-family: 'Cabin', sans-serif;
+            background-color: rgba(255, 0, 0, .10);
+        }
+        .navbar-item{
+            font-weight: 500;
+        }
+        .navbar-end{
+            border-left: 2px solid #F1F1F1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" id="">
+                <img src="images/ISS_logo.png" alt="ISS Logo">
+            </a>
+
+            <a role="button" class="navbar-burger" id="" aria-label="menu" aria-expanded="false" data-target="navbar_page_links">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbar_page_links" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item ml-3 mr-3" id="index">Home</a>
+                <a class="navbar-item ml-3 mr-3" id="about">About Us</a>
+                <a class="navbar-item ml-3 mr-3" id="events">Upcoming Events</a>
+                <a class="navbar-item ml-3 mr-3" id="contact">Contact Us</a>
+                <a class="navbar-item ml-3 mr-3" id="resources">Resources</a>
+                <a class="navbar-item ml-3 mr-3" id="attendance">Attendance History</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button" id="">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </nav>
+      <!-- Main element for dynamically inserted content -->
+      <main class="container" id="index_container">
+        <p class="title is-4 has-text-centered m-4">Placeholder content for 'Home' page</p>
+      </main>
+      <!-- About Us content -->
+      <div class="container is-hidden" id="about_container">
+        <p class="title is-4 has-text-centered m-4">Placeholder content for 'About Us' page</p>
+      </div>
+      <!-- Upcoming Events content -->
+      <div class="container is-hidden" id="events_container">
+        <p class="title is-4 has-text-centered m-4">Placeholder content for 'Upcoming Events' page</p>
+      </div>
+      <!-- Contact Us content -->
+      <div class="container is-hidden" id="contact_container">
+        <p class="title is-4 has-text-centered m-4">Placeholder content for 'Contact Us' page</p>
+      </div>
+      <!-- Resources content -->
+      <div class="container is-hidden" id="resources_container">
+        <p class="title is-4 has-text-centered m-4">Placeholder content for 'Resources' page</p>
+      </div>
+      <!-- Attendance History content -->
+      <div class="container is-hidden" id="attendance_container">
+        <p class="title is-4 has-text-centered m-4">Placeholder content for 'Attendance History' page</p>
+      </div>
+
+      <script src="app.js"></script>
+</body>
+</html>
