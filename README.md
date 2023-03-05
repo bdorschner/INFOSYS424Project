@@ -19,6 +19,6 @@ Link to Project Trello Board: https://trello.com/invite/b/YggAJH3R/ATTI76db0d4c9
 | Create About Us Page        | 1                               | 1 hour       | 4             | Average           | Drew & Al               |
 | Create Contact Us Page/Form | 1                               | 1 hour       | 4             | Average           | Drew & Al               |
 | Create Resources Page       | 1                               | 1 hour       | 4             | Average           | Brian                   |
-| Create Cohesive style.css   | 2                               | 2.5 hours    | 7             | High              | Everyone                |
+| Create Cohesive CSS Framwork| 2                               | 2.5 hours    | 7             | High              | Everyone                |
 | Generate Content for Pages  | 1                               | 2 hours      | 5             | Average           | Everyone                |
 
