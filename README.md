@@ -23,3 +23,13 @@ Link to Project Trello Board: https://trello.com/invite/b/YggAJH3R/ATTI76db0d4c9
 | Create Cohesive CSS Framwork| 2                               | 2.5 hours    | 7             | High              | Everyone                |
 | Generate Content for Pages  | 1                               | 2 hours      | 5             | Average           | Everyone                |
 
+#Burndown Chart Images Days 4, 9, and 14
+
+Day 4:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%204%20Burndown%20Chart.png?raw=true)
+
+Day 9:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%209%20Burndown%20Chart.png?raw=true)
+
+Day 14:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%2014%20Burndown%20Chart.png?raw=true)
