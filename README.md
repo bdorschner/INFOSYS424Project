@@ -15,6 +15,7 @@ Link to Project Trello Board: https://trello.com/invite/b/YggAJH3R/ATTI76db0d4c9
 | ----------------------------| ------------------------------- | ------------ | ------------- | ----------------- | ----------------------- |
 | Create WireFrame Prototype  | 1, 2                            | 1.5 hours    | 9             | Low               | Jacob                   |
 | Create Home Page            | 1                               | 3 hours      | 8             | High              | Michael                 |
+| Create app.js for SPA       | 1                               | 2 hours      | 6             | High              | Jacob                   |
 | Create Navigation Bar       | 1, 2                            | 1 hour       | 7             | Average           | Jacob                   |
 | Create About Us Page        | 1                               | 1 hour       | 4             | Average           | Drew & Al               |
 | Create Contact Us Page/Form | 1                               | 1 hour       | 4             | Average           | Drew & Al               |
