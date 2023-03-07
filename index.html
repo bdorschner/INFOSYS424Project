@@ -76,9 +76,10 @@
       <h4 class="title is-4 has-text-centered m-4">
         Welcome to Information Systems Society!
       </h4>
-      <div class="columns">
-        <div class="column is-one-third">
-          <div class="box is-rounded has-background-white">
+      <div class="tile is-ancestor">
+        <div class="tile is-4 is-parent">
+          <!--Overview Box-->
+          <div class="tile is-child box">
             <h2 class="subtitle has-text-weight-bold">Overview</h2>
             <p>
               ISS is the Wisconsin School of Business's premiere student
@@ -92,9 +93,12 @@
             <p>Click any of the links to get started!</p>
           </div>
         </div>
-        <div class="column is is-two-thirds">
-          <div class="box is-rounded has-background-white">
-            <h2 class="subtitle has-text-weight-bold">Follow Us On Social Media!</h2>
+        <div class="tile is-parent">
+          <!--Social Media Box-->
+          <div class="tile is-child box">
+            <h2 class="subtitle has-text-weight-bold">
+              Follow Us On Social Media!
+            </h2>
             <div class="level">
               <div class="level-left">
                 <div class="level-item">
@@ -113,7 +117,6 @@
                     <p>Linked-In</p>
                   </a>
                 </div>
-
                 <div class="level-item">
                   <a
                     href="https://www.instagram.com/"
@@ -130,7 +133,6 @@
                     <p>Instagram</p>
                   </a>
                 </div>
-
                 <div class="level-item">
                   <a
                     href="https://www.youtube.com/"
@@ -152,30 +154,32 @@
           </div>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-one-third">
-            <div class="box is-rounded has-background-white">
-                <h2 class="subtitle has-text-weight-bold">ISS Member New Video</h2>
-            </div>
+      <div class="tile is-ancestor">
+        <div class="tile is-4 is-parent">
+          <!--New Video Box-->
+          <div class="tile is-child box">
+            <h2 class="subtitle has-text-weight-bold">ISS Member New Video</h2>
+          </div>
         </div>
-        <div class="column is-one-third">
-            <div class="box is-rounded has-background-white">
-                <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
-                <h3 class="subtitle">Date: 3/7/23</h3>
-
-            </div>
+        <div class="tile is-4 is-parent">
+          <!--Upcoming Events Box-->
+          <div class="tile is-child box">
+            <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
+            <h3 class="subtitle">Date: 3/7/23</h3>
+            <button class="button is-medium is-danger">RSVP</button>
+          </div>
         </div>
-        <div class="column is-one-third">
-            <div class="box is-rounded has-background-white">
-                <h2 class="subtitle">Town Halls Left this Semester:</h2>
-            </div>
-            <div class="box is-rounded has-background-white">
-                <h2 class="subtitle">Total Club Members:</h2>
-            </div>
-            <div class="box is-rounded has-background-white">
-                <h2 class="subtitle">Events I've Attented:</h2>
-                
-            </div>
+        <div class="tile is-4 is-vertical is-parent">
+          <!--Personal Stats Boxes-->
+          <div class="tile is-child box">
+            <h2 class="subtitle">Town Halls Left this Semester:</h2>
+          </div>
+          <div class="tile is-child box">
+            <h2 class="subtitle">Total Club Members:</h2>
+          </div>
+          <div class="tile is-child box">
+            <h2 class="subtitle">Events I've Attented:</h2>
+          </div>
         </div>
       </div>
     </main>
