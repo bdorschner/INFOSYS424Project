@@ -1,5 +1,8 @@
 ﻿# INFOSYS424Project
 
+#General Description of Project
+This website will provide a centralized spot for both members and admin users of the ISS society to have one access spot for all information about the club. Members will be able to sign up and log into the website to modify their profile, view and RSVP to upcoming events, and view personalized data based on event attendence. Admins will be able to create upcoming events, modify or delete member profiles, and view attendence trends.
+
 #Trello Board Links
 
 Link to Sprint Trello Board: https://trello.com/invite/b/BgvWCOVC/ATTI41bb7bec70e0578b2fa2727bf856db691C73057E/is424-group-4-sprint-one
