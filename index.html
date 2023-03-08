@@ -23,6 +23,48 @@
       .navbar-end {
         border-left: 2px solid #f1f1f1;
       }
+      h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+      .leaders {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+      }
+      .leader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 2rem;
+      }
+      .leader-image {
+        width: 100%;
+        height: auto;
+        max-width: 120px;
+        max-height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 5px solid rgb(125, 18, 18);
+        margin-bottom: 0.5rem;
+      }
+      .leader-name {
+        margin-top: 0.5rem;
+        margin-bottom: 0;
+        text-align: center;
+        font-weight: bold;
+      }
+      @media (max-width: 768px) {
+        .leaders {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
     </style>
   </head>
   <body>
@@ -170,9 +212,40 @@
     </main>
     <!-- About Us content -->
     <div class="container is-hidden" id="about_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'About Us' page
+      <h1>About Us</h1>
+      <p class="has-text-centered">
+        Welcome to the ISS! We are a group of students who share a passion for
+        the growing field of Information Systems. Our mission is to create a
+        community between students at UW.
       </p>
+      <br />
+      <h2 class="title is-4 has-text-centered">Meet Our Leaders:</h2>
+      <div class="leaders">
+        <div class="leader">
+          <img class="leader-image" src="https://canvas.wisc.edu/images/thumbnails/14522244/fjUEXpph0uR5Z4wlmS1ftV7UcnMRje30RtOjSQkB" alt="David" />
+          <p class="leader-name">David Viggiano, President</p>
+        </div>
+        <div class="leader">
+          <img class="leader-image" src="https://media.licdn.com/dms/image/C5603AQEggZDym59iKg/profile-displayphoto-shrink_800_800/0/1643145212017?e=1683763200&v=beta&t=zmUEhyVl8D6LaCq0ACpzPpcKLLBFlYJghIomXno-_ac" alt="Eli" />
+          <p class="leader-name">Eli Sistler, Junior: Senior VP</p>
+        </div>
+        <div class="leader">
+          <img class="leader-image" src="https://media.licdn.com/dms/image/C5603AQE1RATwe1FwHQ/profile-displayphoto-shrink_800_800/0/1651121257543?e=1683763200&v=beta&t=3qfUhneUG34FNElD29WHgOO3p2buKSjyYezlQUuZ6Vg" alt="Mason" />
+          <p class="leader-name">Mason Kaddatz, Junior: VP of Operations</p>
+        </div>
+        <div class="leader">
+          <img class="leader-image" src="https://media.licdn.com/dms/image/C4E03AQHZT78asR9-yQ/profile-displayphoto-shrink_800_800/0/1621347515916?e=1683763200&v=beta&t=VOuLe0cIxRt9gm_iXQcix7Aqj6PpvJR8Vg9DC4I2sIw" alt="Ethan" />
+          <p class="leader-name">Ethan Kofman, Senior: VP of Marketing</p>
+        </div>
+        <div class="leader">
+          <img class="leader-image" src="https://media.licdn.com/dms/image/C5603AQELIa0a105arQ/profile-displayphoto-shrink_800_800/0/1635718100154?e=1683763200&v=beta&t=mkcqscRIiDLXARfsxEea-lHFUjeX-mMOLIgvNGvGfP4" alt="Katelyn" />
+          <p class="leader-name">Katelyn Lam, Sophomore: VP of Events</p>
+        </div>
+        <div class="leader">
+          <img class="leader-image" src="https://media.licdn.com/dms/image/C5603AQFwQoqU3ls25Q/profile-displayphoto-shrink_800_800/0/1597078405189?e=1683763200&v=beta&t=yR1GwopyeraHabotAcgBAm4vtxNwdEfbK-Y3hRlpfGU" alt="Samer" />
+          <p class="leader-name">Samer Khasawneh: Faculty Advisor</p>
+        </div>
+      </div>
     </div>
     <!-- Upcoming Events content -->
     <div class="container is-hidden" id="events_container">
@@ -182,9 +255,41 @@
     </div>
     <!-- Contact Us content -->
     <div class="container is-hidden" id="contact_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Contact Us' page
-      </p>
+      <h1 class="title">Contact Us</h1>
+      <div class="columns">
+        <div class="column">
+          <form action="#" method="post" class="mx-5 my-5">
+            <div class="field">
+              <label class="label" for="name">Name</label>
+              <div class="control">
+                <input class="input" type="text" name="name" id="contact-name" required/>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="email">Email</label>
+              <div class="control">
+                <input class="input" type="email" placeholder="Email" name="email" id="contact-email" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="message">Message</label>
+              <div class="control">
+                <textarea class="textarea" placeholder="Enter your comments/concerns..." name="message" id="contact-message" required></textarea>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <button class="button is-link" type="submit" id="contact-button">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <!-- Resources content -->
     <div class="container is-hidden" id="resources_container">
