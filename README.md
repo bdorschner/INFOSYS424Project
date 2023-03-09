@@ -36,3 +36,33 @@ Day 9:
 
 Day 14:
 ![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%2014%20Burndown%20Chart.png?raw=true)
+
+Sprint Review: 
+
+What did you learn from doing our first sprint? - 
+
+We learned how to execute agile's planning, analysis, design, and implementation phase. From creating a wireframe using Justinmind to utilizing Bulma framworks for styling, we successfully completed the front-end focused sprint that we had planned. 
+
+What did go well? Why? - 
+
+Through daily scrum meetings, progress was steady, and updates were effectively communicated and handled. 
+
+What didn’t go well? Why not? - 
+
+Aside from some minor bugs and git issues that were quickly resolved, our sprint went according to plan. 
+
+How can you make things better next time? - 
+
+We must continue to communicate effectively with each other as the project progresses in complexity. 
+
+Are you satisfied with what you already completed? - 
+
+Yes. 
+
+Which group was invited? What are your observations/notes? Everybody was present? - 
+
+Group 8's sprint similarly performed as ours based on our meeting after class. Everybody was present. 
+
+
+
+
