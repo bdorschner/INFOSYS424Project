@@ -3,6 +3,9 @@
 #General Description of Project
 This website will provide a centralized spot for both members and admin users of the ISS society to have one access spot for all information about the club. Members will be able to sign up and log into the website to modify their profile, view and RSVP to upcoming events, and view personalized data based on event attendence. Admins will be able to create upcoming events, modify or delete member profiles, and view attendence trends.
 
+#Justinmind Prototype
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/912171281af39bacf8a02629e3ca9aeb02ae286b/images/ISS%20Homepage@1x.png)
+
 #Trello Board Links
 
 Link to Sprint Trello Board: https://trello.com/invite/b/BgvWCOVC/ATTI41bb7bec70e0578b2fa2727bf856db691C73057E/is424-group-4-sprint-one
@@ -45,23 +48,23 @@ We learned how to execute agile's planning, analysis, design, and implementation
 
 What did go well? Why? - 
 
-Through daily scrum meetings, progress was steady, and updates were effectively communicated and handled. 
+Through daily scrum meetings, progress was steady, and updates were effectively communicated and handled. Completion of a functional site that matched the styling of our prototype was excellent, and helped us to meet client expectations. 
 
 What didn’t go well? Why not? - 
 
-Aside from some minor bugs and git issues that were quickly resolved, our sprint went according to plan. 
+Aside from some minor bugs and git issues that were quickly resolved, our sprint went according to plan. However, communication about allocation of responsibilities proved to be difficult, as communicating through asynchronous virtual mediums (IM, email, etc.) led to some confusion. We hope to resolve this during our next sprint by being more consistent with in-person meetings. 
 
 How can you make things better next time? - 
 
-We must continue to communicate effectively with each other as the project progresses in complexity. 
+We must continue to communicate effectively with each other as the project progresses in complexity. To make things better for our next sprint, we aim to meet more consistently in-person, particularly during the beginning of the sprint. This will allow us to complete the bulk of our responsibilities at the beginning of the sprint, giving us additional time at the end to focus on bug fixing and addressing any issues that may arise. 
 
 Are you satisfied with what you already completed? - 
 
-Yes. 
+Yes. Our goal was to complete the static content by the end of the first sprint. We achieved this goal, as well as going beyond that goal to implement limited JavaScript. However, we hope to make further progress in sprint 2, creating a fully-functional prototype with dynamic content, and a Firebase backend. 
 
 Which group was invited? What are your observations/notes? Everybody was present? - 
 
-Group 8's sprint similarly performed as ours based on our meeting after class. Everybody was present. 
+We met with Group 8 for our sprint review. Group 8's sprint similarly performed as ours based on our meeting after class. We met in-person and discussed what went well from a technical and organizational perspective, and what could be improved in the next sprint, based on the successes and setbacks of each group. Everybody was present. 
 
 
 
