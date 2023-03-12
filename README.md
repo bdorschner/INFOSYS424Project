@@ -50,20 +50,29 @@ A link to our Github Repository can be found here: https://github.com/bdorschner
 We chose to document our ‘stand-up’ Scrum meetings from 3/2/23, 3/7/23, and 3/9/23. Our reports from those dates are as follows:
 
 3/2/23
-Al and Drew: For our responsibilities this sprint, we worked collaboratively. Today, we gathered information pertaining to the user stories. This information was aggregated from our planning we performed for milestone 1, which involved our problem analysis and scope definition. Yesterday, we planned our workflow for gathering these user stories, laying out a time to meet and work together on the project. Currently, we are not facing any major issues, but we are still discussing with the group how to handle merging branches properly. 
+
+Al and Drew: For our responsibilities this sprint, we worked collaboratively. Today, we gathered information pertaining to the user stories. This information was aggregated from our planning we performed for milestone 1, which involved our problem analysis and scope definition. Yesterday, we planned our workflow for gathering these user stories, laying out a time to meet and work together on the project. Currently, we are not facing any major issues, but we are still discussing with the group how to handle merging branches properly.
+
 Jacob: Yesterday, I created the index.html file and the app.js file. I put together a wireframe for the site, creating placeholder content for all of our planned pages, a responsive navbar menu with compatible javascript for mobile browsing, and variable/function definition in app.js to handle the ‘is-hidden’ tags on each of the page containers within the index.html page. Today, I plan to monitor the github and review my merge to make sure that everything goes as planned as the other group members begin their contributions. I have not faced any issues as of yet. 
+
 Brian: Yesterday, I discussed project responsibilities with my other group members. Today, I began reviewing the Justinmind prototype to plan out how the ‘Resources’ page should be structured. I have not run into any problems yet. 
+
 Michael: From my current work, I spoke with group members about dividing up the workload for this sprint. Yesterday, I came up with a general description of the project, based on the problem analysis and project scope assignment. Today, I don’t plan on completing any work until the wireframe of the site is completed. I have not encountered any problems today. 
 
 
 3/7/23
+
 Al and Drew: Yesterday, we added significant updates to the README, based on the project criteria provided in the rubric. We also created and pushed our first commit to the ‘About-Us/Contact-Us’ branch. Today, we don’t plan on completing any additional work due to schedule conflicts, but we are discussing some of the issues encountered during our preliminary development work. We’ve encountered some issues with responsive styling, which we plan to sort out as we move into Sprint 2. 
+
 Jacob: Yesterday, I monitored the Trello board and reviewed any remaining tasks in the backlog. Today, I plan on dividing up the remainder of the work evenly among our group members. I have not encountered any issues today. 
+
 Brian: Yesterday, I made and pushed my first commit to the ‘Resources’ branch. Today, I don’t plan on completing any additional work. No problems were encountered today. 
+
 Michael: Yesterday, I completed the general layout structure of the home page. Today, I plan on merging the ‘main’ branch into my ‘homepage’ branch. I’ve encountered some minor problems with the layout of the social media icons, which I plan to resolve using the Bulma ‘tiles’ styling options, as we move into Sprint 2. 
 
 
 3/9/23
+
 Al, Drew, Jacob, Brian, and Michael: Yesterday, we fixed some minor formatting issues, confirmed that all merges were performed properly, and added the ‘ISS New Member Video’ iframe to the homepage. Today, we plan to compile and place most of our work into the README. Although we’ve faced some minor issues, including an unexplained problem with the placeholder content on the ‘Attendance History’ page, we plan to resolve these into Sprint 2, as the majority of us will be out of town for spring break by the end of the day. 
 
 
