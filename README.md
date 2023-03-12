@@ -1,6 +1,7 @@
 ﻿# INFOSYS424Project
 
 #General Description of Project
+
 This website will provide a centralized spot for both members and admin users of the ISS society to have one access spot for all information about the club. Members will be able to sign up and log into the website to modify their profile, view and RSVP to upcoming events, and view personalized data based on event attendence. Admins will be able to create upcoming events, modify or delete member profiles, and view attendence trends.
 
 #Justinmind Prototype
@@ -45,6 +46,7 @@ Day 14:
 A link to our Github Repository can be found here: https://github.com/bdorschner/INFOSYS424Project
 
 #Daily Scrum Meetings
+
 We chose to document our ‘stand-up’ Scrum meetings from 3/2/23, 3/7/23, and 3/9/23. Our reports from those dates are as follows:
 
 3/2/23
@@ -66,6 +68,7 @@ Al, Drew, Jacob, Brian, and Michael: Yesterday, we fixed some minor formatting i
 
 
 #Sprint Review: 
+
 What did you learn from doing our first sprint? - 
 
 We learned how to execute agile's planning, analysis, design, and implementation phase. From creating a wireframe using Justinmind to utilizing Bulma framworks for styling, we successfully completed the front-end focused sprint that we had planned. 
