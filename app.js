@@ -66,7 +66,7 @@ resources.addEventListener('click', () => {
     const resources_container = document.querySelector('#resources_container');
     showPageContent(resources_container);
 })
-// Insert 'About Us' page content
+// Insert 'Attendance' page content
 attendance.addEventListener('click', () => {
     const attendance_container = document.querySelector('#attendance_container');
     showPageContent(attendance_container);
