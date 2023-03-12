@@ -23,3 +23,26 @@ Link to Project Trello Board: https://trello.com/invite/b/YggAJH3R/ATTI76db0d4c9
 | Create Cohesive CSS Framwork| 2                               | 2.5 hours    | 7             | High              | Everyone                |
 | Generate Content for Pages  | 1                               | 2 hours      | 5             | Average           | Everyone                |
 
+Daily Scrum Meetings
+
+For the first two meetings what is done the next meeting is what we said we would do. For the third meeting the sprint was completed as we were all leaving for spring break.
+
+3/2/23
+
+Al and Drew: Attained user stories and added them to README
+Jacob: Updated trello board and created website framework with navigation bar after creating justinmind prototype
+Michael: Created spring backlog of user stories
+Brian: Notetaking and app.js framework
+
+3/7/23
+
+Drew: Created burndown chart
+Al: Implemented About us page
+Brian: Implemented resources page sample
+Jacob: Updated app.js with dynamic uses
+Michael: Wrote detailed project description
+
+
+3/9/23
+
+Completed sprint review meeting and met with other team
