@@ -46,3 +46,13 @@ Michael: Wrote detailed project description
 3/9/23
 
 Completed sprint review meeting and met with other team
+#Burndown Chart Images Days 4, 9, and 14
+
+Day 4:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%204%20Burndown%20Chart.png?raw=true)
+
+Day 9:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%209%20Burndown%20Chart.png?raw=true)
+
+Day 14:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/main/images/Day%2014%20Burndown%20Chart.png?raw=true)
