@@ -5,6 +5,7 @@ const events = document.querySelector('#events');
 const contact = document.querySelector('#contact');
 const resources = document.querySelector('#resources');
 const attendance = document.querySelector('#attendance');
+const profile = document.querySelector('#profile');
 
 // Bulma Navbar Burger JS for expanding Navbar on click
 document.addEventListener('DOMContentLoaded', () => {
@@ -70,4 +71,9 @@ resources.addEventListener('click', () => {
 attendance.addEventListener('click', () => {
     const attendance_container = document.querySelector('#attendance_container');
     showPageContent(attendance_container);
+})
+// Insert 'Profile' page content
+profile.addEventListener('click', () => {
+  const profile_container = document.querySelector('#profile_container');
+  showPageContent(profile_container);
 })

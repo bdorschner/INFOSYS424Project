@@ -19,6 +19,15 @@
       }
       .navbar-item {
         font-weight: 500;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      .page-item:hover {
+        color: white !important;
+        background-color: #e95861 !important;
+      }
+      .page-item.active {
+        background-color: #e95861;
+        color: #fff;
       }
       .navbar-end {
         border-left: 2px solid #f1f1f1;
@@ -30,18 +39,32 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
       }
+      
+      /* Home page CSS */
+      .custom-danger {
+        background-color: #e95861;
+      }
+      .social-icon{
+        padding: 2rem;
+      }
+
+      /* About Us CSS */
       .leaders {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 2rem;
+        flex-wrap: wrap; /* allow items to wrap to a new line */
+        flex-grow: 1; /* allow the .leaders div to expand */
       }
+
       .leader {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        margin: 2rem;
+        width: 200px; /* set a fixed width */
+        margin: 1rem; /* use margins for spacing */
       }
       .leader-image {
         width: 100%;
@@ -58,6 +81,13 @@
         margin-bottom: 0;
         text-align: center;
         font-weight: bold;
+      }
+
+      /* Upcoming events CSS */
+      .cover-image {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
       }
       @media (max-width: 768px) {
         #member_vid{
@@ -86,17 +116,21 @@
       </div>
       <div id="navbar_page_links" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item ml-3 mr-3" id="index">Home</a>
-          <a class="navbar-item ml-3 mr-3" id="about">About Us</a>
-          <a class="navbar-item ml-3 mr-3" id="events">Upcoming Events</a>
-          <a class="navbar-item ml-3 mr-3" id="contact">Contact Us</a>
-          <a class="navbar-item ml-3 mr-3" id="resources">Resources</a>
-          <a class="navbar-item ml-3 mr-3" id="attendance">Attendance History</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="index">Home</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="about">About Us</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="events" data-auth="true" style="display: none;">Upcoming Events</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="contact">Contact Us</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="resources">Resources</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="attendance" data-auth="true" style="display: none;">Attendance History</a>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons">
-              <a class="button" id="">Sign In</a>
+            <div class="buttons" id="sign-in-status">
+              <a class="button" id="login">Sign in with <img src="images/Google_icon.png" alt=""></a>
+              <div id="sign-out" style="display: none;">
+                <a id="profile"><img class="mt-1 mr-2" id="profile-pic" style="border-radius: 50%;" src=""></a>
+                <a class="button" id="sign-out-button">Sign out</a>
+              </div>
             </div>
           </div>
         </div>
@@ -130,9 +164,9 @@
             <h2 class="subtitle has-text-weight-bold">
               Follow Us On Social Media!
             </h2>
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
+            <div class="level is-justify-content-center">
+              <div class="level">
+                <div class="level-item social-icon">
                   <a
                     href="https://www.linkedin.com/"
                     class="is-flex is-flex-direction-column has-text-centered"
@@ -148,7 +182,7 @@
                     <p>Linked-In</p>
                   </a>
                 </div>
-                <div class="level-item">
+                <div class="level-item social-icon">
                   <a
                     href="https://www.instagram.com/"
                     class="is-flex is-flex-direction-column has-text-centered"
@@ -164,7 +198,7 @@
                     <p>Instagram</p>
                   </a>
                 </div>
-                <div class="level-item">
+                <div class="level-item social-icon">
                   <a
                     href="https://www.youtube.com/"
                     class="is-flex is-flex-direction-column has-text-centered"
@@ -191,16 +225,25 @@
           <div class="tile is-child box">
             <h2 class="subtitle has-text-weight-bold">ISS New Member Video</h2>
             <div class="has-text-centered">
-              <iframe id="Member_vid" width="70%" height="70%" src="https://www.youtube.com/embed/bp01u-ELS1c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <!-- <iframe id="Member_vid" width="70%" height="70%" src="https://www.youtube.com/embed/bp01u-ELS1c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
             </div>
           </div>
         </div>
         <div class="tile is-4 is-parent">
           <!--Upcoming Events Box-->
-          <div class="tile is-child box">
+          <div class="tile is-child box" id="upcoming-event">
             <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
-            <h3 class="subtitle">Date: 3/7/23</h3>
-            <button class="button is-medium is-danger">RSVP</button>
+            <div class="columns">
+              <div class="column is-one-third">
+                <figure class="image is-1by1">
+                  <img id="upcoming-event-image" src="" alt="Event Image">
+                </figure>
+              </div>
+              <div class="column is-two-thirds">
+                <h3 class="subtitle" id="upcoming-event-date">Date: </h3>
+                <button class="button is-medium custom-danger has-text-white">Event Details</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="tile is-4 is-vertical is-parent">
@@ -219,7 +262,7 @@
     </main>
     <!-- About Us content -->
     <div class="container is-hidden" id="about_container">
-      <h1>About Us</h1>
+      <h1 class="title">About Us</h1>
       <p class="has-text-centered">
         Welcome to the ISS! We are a group of students who share a passion for
         the growing field of Information Systems. Our mission is to create a
@@ -231,10 +274,12 @@
         <div class="leader">
           <img class="leader-image" src="https://canvas.wisc.edu/images/thumbnails/14522244/fjUEXpph0uR5Z4wlmS1ftV7UcnMRje30RtOjSQkB" alt="David" />
           <p class="leader-name">David Viggiano, President</p>
+          <br />
         </div>
         <div class="leader">
           <img class="leader-image" src="https://media.licdn.com/dms/image/C5603AQEggZDym59iKg/profile-displayphoto-shrink_800_800/0/1643145212017?e=1683763200&v=beta&t=zmUEhyVl8D6LaCq0ACpzPpcKLLBFlYJghIomXno-_ac" alt="Eli" />
           <p class="leader-name">Eli Sistler, Junior: Senior VP</p>
+          <br />
         </div>
         <div class="leader">
           <img class="leader-image" src="https://media.licdn.com/dms/image/C5603AQE1RATwe1FwHQ/profile-displayphoto-shrink_800_800/0/1651121257543?e=1683763200&v=beta&t=3qfUhneUG34FNElD29WHgOO3p2buKSjyYezlQUuZ6Vg" alt="Mason" />
@@ -256,10 +301,13 @@
     </div>
     <!-- Upcoming Events content -->
     <div class="container is-hidden" id="events_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Upcoming Events' page
-      </p>
-    </div>
+      <h1 class="title has-text-centered">
+        Upcoming Events
+      </h1>
+        <div class="columns is-multiline m-4" id="event_cards">
+  
+  </div>
+</div>
     <!-- Contact Us content -->
     <div class="container is-hidden" id="contact_container">
       <h1 class="title">Contact Us</h1>
@@ -299,10 +347,10 @@
       </div>
     </div>
     <!-- Resources content -->
-    <div class="container is-hidden p-2" id="resources_container">
+    <div class="container is-hidden" id="resources_container">
+      <h1 class="title">Resources</h1>
       <p class="title is-4 has-text-centered m-4">
-        <p class="title is-3">Resources</p>
-        <div class="columns">
+        <div class="columns mt-2">
           <div class="column box m-1">
               <h2 class="title is-5">Skill Based Resources</h2>
               <ul class="box m-1">
@@ -320,14 +368,224 @@
                   <li><a href="https://canvas.wisc.edu/courses/223825/pages/career-development-resources?module_item_id=3691300" target="_blank">Career Development Resources</a></li>
               </ul>
           </div>
+        </div> 
       </p>
     </div>
+
+
     <!-- Attendance History content -->
     <div class="container is-hidden" id="attendance_container">
       <p class="title is-4 has-text-centered m-4">
         Placeholder content for 'Attendance History' page
       </p>
     </div>
+
+    <!-- Profile Page content -->
+    <div class="container is-hidden" id="profile_container">
+      <p class="title is-4 has-text-centered m-4">
+        Placeholder content for 'User Profile' page
+      </p>
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+    <script type="module">
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyD6mxa3xJskoX0F7Lp-4iQY8CdEINgmfZ8",
+        authDomain: "issuw-34261.firebaseapp.com",
+        projectId: "issuw-34261",
+        storageBucket: "issuw-34261.appspot.com",
+        messagingSenderId: "220013519791",
+        appId: "1:220013519791:web:0dff597f72b1b7ace7855a"
+      };
+    
+      // Initialize Firebase
+      let app = firebase.initializeApp(firebaseConfig);
+      // define authentication variable
+      let auth = firebase.auth();
+      let db = firebase.firestore();
+
+      // define a storage reference
+      let ref = firebase.storage().ref();
+      let provider = new firebase.auth.GoogleAuthProvider();
+
+      // Event listener to handle redirecting to Google auth
+      login.addEventListener('click', (e) => {
+          signInWithRedirect(auth, provider);
+
+          // Redirect to another page
+          getRedirectResult(auth)
+            .then((result) => {
+              // This gives you a Google Access Token. You can use it to access Google APIs.
+              const credential = GoogleAuthProvider.credentialFromResult(result);
+              const token = credential.accessToken;
+
+              // The signed-in user info.
+              const user = result.user;
+
+            }).catch((error) => {
+              // Handle Errors here.
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              // The email of the user's account used.
+              const email = error.email;
+              // The AuthCredential type that was used.
+              const credential = GoogleAuthProvider.credentialFromError(error);
+              // ...
+              
+          });
+      })
+
+      // *** NAVBAR AND LOGIN AUTH JS
+      const navbarItems = document.querySelectorAll('.navbar-item');
+
+      const homeNavItem = document.querySelector('#index');
+
+      homeNavItem.classList.add('active');
+
+      navbarItems.forEach(item => {
+        item.addEventListener('click', () => {
+          // Remove the active class from all navbar items
+          navbarItems.forEach(item => {
+            item.classList.remove('active');
+          });
+
+          // Add the active class to the clicked navbar item
+          item.classList.add('active');
+        });
+      });
+
+      // Replace Sign-in button with user icon and sign out button
+      const loginButton = document.getElementById('login');
+      const signOut = document.getElementById('sign-out');
+      const signOutBtn = document.getElementById('sign-out-button');
+      const profilePic = document.getElementById('profile-pic');
+      const upcomingEventsPage = document.getElementById('events');
+      const attendanceHistoryPage = document.getElementById('attendance');
+
+      // Hide upcoming events and attendance history page initially
+      upcomingEventsPage.style.display = 'none';
+      attendanceHistoryPage.style.display = 'none';
+
+      // listen for sign in state changes
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          // user is signed in
+          loginButton.style.display = 'none';
+          profilePic.src = user.photoURL;
+          profilePic.style.display = '';
+          signOut.style.display = '';
+          upcomingEventsPage.style.display = '';
+          attendanceHistoryPage.style.display = '';
+        } else {
+          // user is signed out
+          loginButton.style.display = '';
+          profilePic.style.display = 'none';
+          signOut.style.display = 'none';
+          upcomingEventsPage.style.display = 'none';
+          attendanceHistoryPage.style.display = 'none';
+        }
+      });
+
+      // handle sign in button click event
+      loginButton.addEventListener('click', () => {
+        auth.signInWithRedirect(provider);
+      });
+
+      // handle sign out button click event
+      signOutBtn.addEventListener('click', () => {
+        auth.signOut();
+      });
+
+      // *** HOME PAGE JS
+      const upcomingEventTile = document.querySelector('#upcoming-event');
+      const upcomingEventImage = document.querySelector('#upcoming-event-image');
+      const upcomingEventDate = document.querySelector('#upcoming-event-date');
+
+      db.collection('events')
+        .orderBy('date', 'asc')
+        .limit(1)
+        .get()
+        .then(querySnapshot => {
+          if (!querySnapshot.empty) {
+            const eventData = querySnapshot.docs[0].data();
+
+            // Update the upcoming event tile with the event data
+            upcomingEventImage.src = eventData.image_url;
+            upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
+          } else {
+            // No events found in the database
+            upcomingEventTile.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          upcomingEventTile.style.display = 'none';
+        });
+
+      // *** UPCOMING EVENTS PAGE JS
+      const eventCards = document.getElementById('event_cards');
+
+      // Create empty list to store card data before date sorting
+      const cards = [];
+
+      db.collection('events').get().then(querySnapshot => {
+        // Gather card data from the db and add it to the 'cards' list
+          querySnapshot.forEach(doc => {
+            const eventData = doc.data();
+
+            const card = {
+              name: eventData.name,
+              date: eventData.date.toDate(),
+              image_url: eventData.image_url,
+              description: eventData.description
+            };
+
+            cards.push(card);
+          });
+
+          // Sort the cards by date
+          cards.sort((a, b) => a.date - b.date);
+
+          // Loop through the sorted cards and create a new element for each card
+          cards.forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('column', 'is-one-third');
+            cardElement.innerHTML = `
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-3by1">
+                    <img src="${card.image_url}" alt="Event Image" class="cover-image">
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <p class="title is-4">${card.name}</p>
+                  <p class="subtitle is-6">Date: ${card.date.toLocaleDateString()}</p>
+                  <div class="content">
+                    ${card.description}
+                  </div>
+                  <button class="button is-info is-fullwidth">Event Details</button>
+                </div>
+              </div>
+            `;
+
+            eventCards.appendChild(cardElement);
+          });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    </script>
 
     <script src="app.js"></script>
   </body>
