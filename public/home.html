@@ -417,8 +417,6 @@
                   <h3 class="subtitle is-5" id="attendance-total"></h3>
                 </div>
               </div>
-              <h3 class="subtitle is-5"><strong>Bio:</strong></h3>
-              <p id="profile-bio"></p>
               <hr>
               <h3 class="subtitle is-5">Attended Events:</h3>
               <table class="table is-fullwidth" id="attended-events-table">
@@ -542,7 +540,6 @@
               membersCollection.doc(user.uid).set({
                 attendance_total: 0,
                 attended_events: [],
-                bio: '',
                 admin: false,
                 email: user.email,
                 name: user.displayName
@@ -684,8 +681,6 @@
               document.getElementById('profile-role').innerHTML = `<strong>Club Role: </strong> ${userData.admin ? 'Admin' : 'Member'}`;
               // set the attendance total
               document.getElementById('attendance-total').innerHTML = `<strong>Attendance Total: </strong> ${userData.attendance_total}`;
-              // set the bio
-              document.getElementById('profile-bio').innerHTML = userData.bio;
               // clear the table of attended events
               const attendedEventsTableBody = document.getElementById('attended-events-table').getElementsByTagName('tbody')[0];
               attendedEventsTableBody.innerHTML = '';
