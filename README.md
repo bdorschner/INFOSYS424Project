@@ -130,13 +130,13 @@ We met with Group 8 for our sprint review. Group 8's sprint similarly performed 
 #Burndown Chart Images Day 4, 9, 14 (Scrum Master: Jacob Ringhand)
 
 Day 4:
-
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/4479c4a17dba70cc16d1aff39a633cc4ce5ac1da/public/images/Sprint%202%20Day%204.png?raw=true)
 
 Day 9:
-
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/4479c4a17dba70cc16d1aff39a633cc4ce5ac1da/public/images/Sprint%202%20Day%209.png?raw=true)
 
 Day 14: 
-
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/4479c4a17dba70cc16d1aff39a633cc4ce5ac1da/public/images/Sprint%202%20Day%2014.png?raw=true)
 
 #Daily Srum Meetings
 
