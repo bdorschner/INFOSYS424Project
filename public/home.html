@@ -311,38 +311,44 @@
     <!-- Contact Us content -->
     <div class="container is-hidden" id="contact_container">
       <h1 class="title">Contact Us</h1>
-      <div class="columns">
-        <div class="column">
-          <form action="#" method="post" class="mx-5 my-5">
-            <div class="field">
-              <label class="label" for="name">Name</label>
-              <div class="control">
-                <input class="input" type="text" name="name" id="contact-name" required/>
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child box" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); background-color: white;">
+            <form action="#" method="post" class="mx-5 my-5">
+              <div class="field">
+                <label class="label" for="name">Name</label>
+                <div class="control">
+                  <input class="input" type="text" name="name" id="contact-name" required />
+                </div>
               </div>
-            </div>
-
-            <div class="field">
-              <label class="label" for="email">Email</label>
-              <div class="control">
-                <input class="input" type="email" placeholder="Email" name="email" id="contact-email" />
+  
+  
+              <div class="field">
+                <label class="label" for="email">Email</label>
+                <div class="control">
+                  <input class="input" type="email" placeholder="Email" name="email" id="contact-email" />
+                </div>
               </div>
-            </div>
-
-            <div class="field">
-              <label class="label" for="message">Message</label>
-              <div class="control">
-                <textarea class="textarea" placeholder="Enter your comments/concerns..." name="message" id="contact-message" required></textarea>
+  
+  
+              <div class="field">
+                <label class="label" for="message">Message</label>
+                <div class="control">
+                  <textarea class="textarea" placeholder="Enter your comments/concerns..." name="message"
+                    id="contact-message" required></textarea>
+                </div>
               </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <button class="button is-link" type="submit" id="contact-button">
-                  Submit
-                </button>
+  
+  
+              <div class="field">
+                <div class="control">
+                  <button class="button is-link" type="submit" id="contact-button">
+                    Submit
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -495,14 +501,14 @@
                 admin: false,
                 email: user.email,
                 name: user.displayName
-              }).then(() => {
-                console.log('New member document created for user:', user.uid);
-              }).catch(error => {
-                console.error('Error creating new member document:', error);
               });
+            } else {
+              // check if the user is not an admin
+              if (!doc.data().admin) {
+                // if user is not an admin, hide the attendance history page
+                attendanceHistoryPage.style.display = 'none';
+              }
             }
-          }).catch(error => {
-            console.error('Error checking for member document:', error);
           });
           // update the UI to show the user is signed in
           loginButton.style.display = 'none';
