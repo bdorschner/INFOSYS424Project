@@ -477,10 +477,34 @@
       upcomingEventsPage.style.display = 'none';
       attendanceHistoryPage.style.display = 'none';
 
-      // listen for sign in state changes
+      // get a reference to the 'members' collection
+      const membersCollection = db.collection('members');
+
+      // listen for authentication state changes
       auth.onAuthStateChanged(user => {
         if (user) {
           // user is signed in
+          // check if the user exists in the 'members' collection
+          membersCollection.doc(user.uid).get().then(doc => {
+            if (!doc.exists) {
+              // create a new member document for the user
+              membersCollection.doc(user.uid).set({
+                attendance_total: 0,
+                attended_events: [],
+                bio: '',
+                admin: false,
+                email: user.email,
+                name: user.displayName
+              }).then(() => {
+                console.log('New member document created for user:', user.uid);
+              }).catch(error => {
+                console.error('Error creating new member document:', error);
+              });
+            }
+          }).catch(error => {
+            console.error('Error checking for member document:', error);
+          });
+          // update the UI to show the user is signed in
           loginButton.style.display = 'none';
           profilePic.src = user.photoURL;
           profilePic.style.display = '';
@@ -489,6 +513,7 @@
           attendanceHistoryPage.style.display = '';
         } else {
           // user is signed out
+          // update the UI to show the user is signed out
           loginButton.style.display = '';
           profilePic.style.display = 'none';
           signOut.style.display = 'none';
