@@ -581,6 +581,8 @@
       // handle sign out button click event
       signOutBtn.addEventListener('click', () => {
         auth.signOut();
+        let index = document.querySelector('#index');
+        index.click();
       });
 
       // *** HOME PAGE JS
