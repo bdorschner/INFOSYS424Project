@@ -142,27 +142,109 @@ Day 14:
 
 We chose to document our ‘stand-up’ Scrum meetings from 4/6/23 and 3/11/23. Our reports from those dates are as follows:
 
-4/6/23
+4/6/23:
 
-[Enter info]
+Jacob:
+a. What did you do yesterday?
+Yesterday I looked at our logical diagrams in order to prepare for the attendance logic.
+b. What are you planning to do today?
+I am planning on beginning to write JavaScript that includes math so that the 'total events attended' is accurate for users.
+c. Any problems are you facing?
+The problems I am facing is figuring out how to visualize the attendance for each event.
 
-4/11/23
+Brian:
+a. What did you do yesterday?
+Yesterday I looked through the various links on ISS canvas for the resources page.
+b. What are you planning to do today?
+I am planning on updating the resources page by including the accurate resources.
+c. Any problems are you facing?
+I am having problems planning out how to add/design a profile page for users.
 
-[Enter info]
+Michael:
+a. What did you do yesterday?
+Yesterday I worked on the home page and begin to work on the upcoming events tab.
+b. What are you planning to do today?
+Today I plan to work on the event details with .innerHTML logic.
+c. Any problems are you facing?
+No problems encountered yet. 
+
+Al:
+a. What did you do yesterday?
+Yesterday I created a users authentication in Google Firebase.
+b. What are you planning to do today?
+I am planning to add the users sign in with Google on the navbar.
+c. Any problems are you facing?
+The problems I am facing is that for some reason on safari for a mobile device the Google Auth. does not work.
+
+Drew: 
+a. What did you do yesterday?
+Yesterday I worked on figuring out what specific information is necessary for the user profile bio.
+b. What are you planning to do today?
+I am planning on updating the contact us page so that it looks consistent with the entire website.
+c. Any problems are you facing?
+No problems just yet.
+
+4/11/23:
+
+Jacob:
+a. What did you do yesterday?
+Yesterday I planned on seeing what visualization (maybe chart js?)
+b. What are you planning to do today?
+Today I am planning on figuring out the CRUD of the events collection.
+c. Any problems are you facing?
+No problems right now in the sprint.
+
+Brian:
+a. What did you do yesterday?
+Yesterday I added an edit button for user bio.
+b. What are you planning to do today?
+Today I am planning on completing the resources page.
+c. Any problems are you facing?
+The problem I faced is completing the user profile page.
+
+Michael:
+a. What did you do yesterday?
+Yesterday I completed the adding events tab.
+b. What are you planning to do today?
+Today I am planning on tweaking the security rules on google firebase.
+c. Any problems are you facing?
+The problems I am facing is figuring out how the client wants the admin capabilities.
+
+Al:
+a. What did you do yesterday?
+Yesterday I worked on computing townhalls left for the semester
+b. What are you planning to do today?
+Completing javascript for image sources.
+c. Any problems are you facing?
+No problems I am facing.
+
+Drew: 
+a. What did you do yesterday?
+Yesterday I worked on the user profile page.
+b. What are you planning to do today?
+Today I am planning on tweeking some of the css with bulma.
+c. Any problems are you facing?
+The problems I am facing is showing null values for events when a user signs out of their account.
 
 #Sprint Review
 
-What did you learn from doing our first sprint?
+What did you learn from doing our second sprint?
+From our second sprint, our group learned how to actively and efficiently communicate with each other during the two weeks and we were able to complete most of the back-end work in this focused sprint with events and attendance, through the use of Google Firebase and JavaScript.
 
 What did go well? Why?
+What went well in this second sprint was again our strong communication and the entire group understanding the tasks necessary for the sprint to be successful. Scrum Master Jacob was able to create a specific role designation document that laid out all specific tasks for members before the start of the sprint, so each group member was able to get a head start in understanding what was needed to be completed in the two weeks.
 
 What didn’t go well? Why not?
+What did not go well in our second sprint besides minor bugs and git issues was multiple members using Google Firebase at the same time. For example, it was difficult for one member to see if their update function was working when another member was using/working on the same collection.
 
 How can you make things better next time?
+We can make things better next time by communicating when someone is starting to work on a certain collection as well as when they are completed with their task, although there will not be too much work on the back-end for the upcoming third sprint.
 
 Are you satisfied with what you already completed?
+Yes, our group is satisfied with the work we put in on the second sprint. If the work on the back-end and our tweaks on the front end, our Web App for ISS is coming together really well and could be considered a fully-functional prototype.
 
 Which group was invited? What are your observations/notes? Everybody was present?
+For the second sprint we met with group eight for the sprint review. This group's sprint was similar to ours as they tailored and focuesed their sprint on the back-end and database. We met in-person and talked about what went well and what could be improved for the last sprint, based on the postives and negatives of both groups. Everybody was present. 
 
 #Github Repo URL
 
