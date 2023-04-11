@@ -125,8 +125,47 @@ We met with Group 8 for our sprint review. Group 8's sprint similarly performed 
 | Update Resources Page                | 4                               | 1 hours      | 2             | Low               | Brian                   |
 | Complete all JS and DB Logic         | 1, 2, 3, 4                      | 5 hours      | 10            | High              | Everyone                |
 
-#Trello Board Sprint Two Link: 
+#Trello Board Sprint Two Link: https://trello.com/invite/b/EtTsxksq/ATTIb15989f504b54dd6c3510daa9009d56857A8118A/is424-group-4-sprint-two
+
+#Burndown Chart Images Day 4, 9, 14 (Scrum Master: Jacob Ringhand)
+
+Day 4:
 
 
+Day 9:
+
+
+Day 14: 
+
+
+#Daily Srum Meetings
+
+We chose to document our ‘stand-up’ Scrum meetings from 4/6/23 and 3/11/23. Our reports from those dates are as follows:
+
+4/6/23
+
+[Enter info]
+
+4/11/23
+
+[Enter info]
+
+#Sprint Review
+
+What did you learn from doing our first sprint?
+
+What did go well? Why?
+
+What didn’t go well? Why not?
+
+How can you make things better next time?
+
+Are you satisfied with what you already completed?
+
+Which group was invited? What are your observations/notes? Everybody was present?
+
+#Github Repo URL
+
+A link to our Github Repository can be found here: https://github.com/bdorschner/INFOSYS424Project
 
 
