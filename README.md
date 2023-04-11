@@ -108,6 +108,25 @@ We met with Group 8 for our sprint review. Group 8's sprint similarly performed 
 
 #User Stories
 1. As an ISS Admin, I want to be able to create, modify, and delete upcoming events to display to users.
-2. As an ISS member, I want to be able to easily locate and mark myself as 'attending' for upcoming/current club events. 
+2. As an ISS member, I want to be able to easily locate and mark myself as 'attending' for upcoming/current club events.
+3. As an ISS Admin, I want to be able to see the attendance history of events, and as a member I want to see how many events I have attended.
+4. As a user, I want to create and update my profile bio, message panel members, and see club resources.
+
+#Task Assignment Table
+| Task                                 | Corresponding Story Number      | Duration     | Priority      | Complexity        | Lead Person             |
+| ------------------------------------ | ------------------------------- | ------------ | ------------- | ----------------- | ----------------------- |
+| Implementing Sign in Auth.           | 1, 2                            | 2 hours      | 9             | Average           | Al                      |
+| Link Users to DB                     | 1, 2                            | 2 hours      | 5             | Average           | Al                      |
+| Show events and details              | 1                               | 2 hours      | 8             | High              | Michael                 |
+| CRUD events in DB                    | 1                               | 1 hour       | 8             | Average           | Jacob                   |
+| Logic/Visualize Attendance Metrics   | 1, 2                            | 3 hour       | 9             | High              | Michael & Jacob         |
+| Edit User Bio / Put in DB            | 4                               | 3 hour       | 4             | Average           | Drew & Brian            |
+| Update Contact Us form with DB       | 4                               | 1 hour       | 3             | Low               | Drew                    |
+| Update Resources Page                | 4                               | 1 hours      | 2             | Low               | Brian                   |
+| Complete all JS and DB Logic         | 1, 2, 3, 4                      | 5 hours      | 10            | High              | Everyone                |
+
+#Trello Board Sprint Two Link: 
+
+
 
 
