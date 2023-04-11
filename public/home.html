@@ -99,6 +99,16 @@
           align-items: center;
         }
       }
+
+      /* Profile Page CSS */
+      @media screen and (max-width: 768px) {
+        #profile_container .image.is-128x128 {
+          margin: 0 auto;
+        }
+        #profile_container .column:first-child {
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body>
@@ -249,7 +259,7 @@
         <div class="tile is-4 is-vertical is-parent">
           <!--Personal Stats Boxes-->
           <div class="tile is-child box">
-            <h2 class="subtitle">Town Halls Left this Semester:</h2>
+            <h2 class="subtitle">Events Left this Semester:</h2>
           </div>
           <div class="tile is-child box">
             <h2 class="subtitle">Total Club Members:</h2>
@@ -388,9 +398,44 @@
 
     <!-- Profile Page content -->
     <div class="container is-hidden" id="profile_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'User Profile' page
-      </p>
+      <h1 class="title">My Profile</h1>
+      <div class="columns p-4">
+        <div class="column is-2"></div>
+        <div class="column is-8">
+          <div class="card">
+            <div class="card-content">
+              <div class="columns">
+                <div class="column is-one-third">
+                  <figure class="image is-128x128">
+                    <img id="profile-icon" class="is-rounded" src="">
+                  </figure>
+                </div>
+                <div class="column">
+                  <h2 class="title has-text-centered pb-4" id="profile-name"></h2>
+                  <h2 class="subtitle is-5" id="profile-email"></h2>
+                  <h3 class="subtitle is-5" id="profile-role"></h3>
+                  <h3 class="subtitle is-5" id="attendance-total"></h3>
+                </div>
+              </div>
+              <h3 class="subtitle is-5"><strong>Bio:</strong></h3>
+              <p id="profile-bio"></p>
+              <hr>
+              <h3 class="subtitle is-5">Attended Events:</h3>
+              <table class="table is-fullwidth" id="attended-events-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="column is-2"></div>
+      </div>
     </div>
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -615,6 +660,65 @@
         })
         .catch(error => {
           console.error(error);
+        });
+
+        // ***PROFILE PAGE JS
+        // add an event listener to the profile picture element
+        profilePic.addEventListener('click', () => {
+          // get the currently signed-in user
+          const user = auth.currentUser;
+          // get a reference to the user's document in the 'members' collection
+          const userDocRef = db.collection('members').doc(user.uid);
+          // fetch the user's data from the document
+          userDocRef.get().then((doc) => {
+            if (doc.exists) {
+              // if the user document exists, populate the profile page with their data
+              const userData = doc.data();
+              // set the profile icon
+              document.getElementById('profile-icon').src = user.photoURL;
+              // set the profile name
+              document.getElementById('profile-name').textContent = userData.name;
+              // set the profile email
+              document.getElementById('profile-email').innerHTML = `<strong>Email: </strong>${userData.email}`;
+              // set the profile role
+              document.getElementById('profile-role').innerHTML = `<strong>Club Role: </strong> ${userData.admin ? 'Admin' : 'Member'}`;
+              // set the attendance total
+              document.getElementById('attendance-total').innerHTML = `<strong>Attendance Total: </strong> ${userData.attendance_total}`;
+              // set the bio
+              document.getElementById('profile-bio').innerHTML = userData.bio;
+              // clear the table of attended events
+              const attendedEventsTableBody = document.getElementById('attended-events-table').getElementsByTagName('tbody')[0];
+              attendedEventsTableBody.innerHTML = '';
+              // populate the table of attended events
+              userData.attended_events.forEach((eventId) => {
+                // get a reference to the attended event document
+                const eventDocRef = db.collection('events').doc(eventId);
+                // fetch the attended event data from the document
+                eventDocRef.get().then((eventDoc) => {
+                  if (eventDoc.exists) {
+                    // if the attended event document exists, add a row to the table with the event data
+                    const eventData = eventDoc.data();
+                    const attendedEventTableRow = attendedEventsTableBody.insertRow(-1);
+                    const attendedEventNameCell = attendedEventTableRow.insertCell(0);
+                    const attendedEventDateCell = attendedEventTableRow.insertCell(1);
+                    attendedEventNameCell.textContent = eventData.name;
+                    attendedEventDateCell.textContent = eventData.date.toDate().toLocaleDateString();
+                  }
+                }).catch((error) => {
+                  console.error(error);
+                });
+              });
+              // show the profile page
+              document.getElementById('profile_container').classList.remove('is-hidden');
+              // hide the other pages
+              document.getElementById('events_container').classList.add('is-hidden');
+              document.getElementById('attendance_container').classList.add('is-hidden');
+            } else {
+              console.error(`User document with UID ${user.uid} does not exist.`);
+            }
+          }).catch((error) => {
+            console.error(error);
+          });
         });
     </script>
 
