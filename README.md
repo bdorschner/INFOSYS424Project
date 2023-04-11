@@ -1,5 +1,7 @@
 ﻿# INFOSYS424Project
 
+#Sprint 1:
+
 #General Description of Project
 
 This website will provide a centralized spot for both members and admin users of the ISS society to have one access spot for all information about the club. Members will be able to sign up and log into the website to modify their profile, view and RSVP to upcoming events, and view personalized data based on event attendence. Admins will be able to create upcoming events, modify or delete member profiles, and view attendence trends.
@@ -102,6 +104,10 @@ Which group was invited? What are your observations/notes? Everybody was present
 
 We met with Group 8 for our sprint review. Group 8's sprint similarly performed as ours based on our meeting after class. We met in-person and discussed what went well from a technical and organizational perspective, and what could be improved in the next sprint, based on the successes and setbacks of each group. Everybody was present. 
 
+#Sprint 2:
 
+#User Stories
+1. As an ISS Admin, I want to be able to create, modify, and delete upcoming events to display to users.
+2. As an ISS member, I want to be able to easily locate and mark myself as 'attending' for upcoming/current club events. 
 
 
