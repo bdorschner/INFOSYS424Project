@@ -187,7 +187,9 @@ auth.signInWithRedirect(provider);
 
 // handle sign out button click event
 signOutBtn.addEventListener('click', () => {
-auth.signOut();
+  auth.signOut();
+  let index = document.querySelector("#index");
+  index.click();
 });
 
 // *** HOME PAGE JS
@@ -213,7 +215,11 @@ db.collection('events')
 })
 .catch(error => {
   console.error(error);
-  upcomingEventTile.style.display = 'none';
+  upcomingEventTile.innerHTML = `
+  <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
+  <div>
+    <p>Sign in to see upcoming events</p>
+  </div>`;
 });
 
 // *** UPCOMING EVENTS PAGE JS
