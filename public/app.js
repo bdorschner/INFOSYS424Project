@@ -188,8 +188,9 @@ auth.signInWithRedirect(provider);
 // handle sign out button click event
 signOutBtn.addEventListener('click', () => {
   auth.signOut();
-  let index = document.querySelector("#index");
-  index.click();
+  // let index = document.querySelector("#index");
+  // index.click();
+  location.reload();
 });
 
 // *** HOME PAGE JS
