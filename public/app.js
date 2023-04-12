@@ -7,6 +7,33 @@ const resources = document.querySelector("#resources");
 const attendance = document.querySelector("#attendance");
 const profile = document.querySelector("#profile");
 
+// *** HOME PAGE JS
+const upcomingEventTile = document.querySelector("#upcoming-event");
+const upcomingEventImage = document.querySelector("#upcoming-event-image");
+const upcomingEventDate = document.querySelector("#upcoming-event-date");
+
+// Replace Sign-in button with user icon and sign out button
+const loginButton = document.getElementById("login");
+const signOut = document.getElementById("sign-out");
+const signOutBtn = document.getElementById("sign-out-button");
+const profilePic = document.getElementById("profile-pic");
+const upcomingEventsPage = document.getElementById("events");
+const attendanceHistoryPage = document.getElementById("attendance");
+
+// Hide upcoming events and attendance history page initially
+upcomingEventsPage.style.display = "none";
+attendanceHistoryPage.style.display = "none";
+
+// get a reference to the 'members' collection
+const membersCollection = db.collection("members");
+
+// *** NAVBAR AND LOGIN AUTH JS
+const navbarItems = document.querySelectorAll(".navbar-item");
+
+const homeNavItem = document.querySelector("#index");
+
+homeNavItem.classList.add("active");
+
 // Bulma Navbar Burger JS for expanding Navbar on click
 document.addEventListener("DOMContentLoaded", () => {
   // Get all "navbar-burger" elements
@@ -103,13 +130,6 @@ login.addEventListener("click", (e) => {
     });
 });
 
-// *** NAVBAR AND LOGIN AUTH JS
-const navbarItems = document.querySelectorAll(".navbar-item");
-
-const homeNavItem = document.querySelector("#index");
-
-homeNavItem.classList.add("active");
-
 navbarItems.forEach((item) => {
   item.addEventListener("click", () => {
     // Remove the active class from all navbar items
@@ -121,21 +141,6 @@ navbarItems.forEach((item) => {
     item.classList.add("active");
   });
 });
-
-// Replace Sign-in button with user icon and sign out button
-const loginButton = document.getElementById("login");
-const signOut = document.getElementById("sign-out");
-const signOutBtn = document.getElementById("sign-out-button");
-const profilePic = document.getElementById("profile-pic");
-const upcomingEventsPage = document.getElementById("events");
-const attendanceHistoryPage = document.getElementById("attendance");
-
-// Hide upcoming events and attendance history page initially
-upcomingEventsPage.style.display = "none";
-attendanceHistoryPage.style.display = "none";
-
-// get a reference to the 'members' collection
-const membersCollection = db.collection("members");
 
 // listen for authentication state changes
 auth.onAuthStateChanged((user) => {
@@ -193,11 +198,6 @@ signOutBtn.addEventListener("click", () => {
   let index = document.querySelector("#index");
   index.click();
 });
-
-// *** HOME PAGE JS
-const upcomingEventTile = document.querySelector("#upcoming-event");
-const upcomingEventImage = document.querySelector("#upcoming-event-image");
-const upcomingEventDate = document.querySelector("#upcoming-event-date");
 
 db.collection("events")
   .orderBy("date", "asc")
