@@ -152,7 +152,8 @@ if (user) {
         attended_events: [],
         admin: false,
         email: user.email,
-        name: user.displayName
+        name: user.displayName, 
+        photoURL: user.photoURL
       });
     } else {
       // check if the user is not an admin
@@ -235,10 +236,12 @@ db.collection('events').get().then(querySnapshot => {
     const eventData = doc.data();
 
     const card = {
+      id: doc.id,
       name: eventData.name,
       date: eventData.date.toDate(),
       image_url: eventData.image_url,
-      description: eventData.description
+      description: eventData.description, 
+      members: eventData.members
     };
 
     cards.push(card);
@@ -261,13 +264,157 @@ db.collection('events').get().then(querySnapshot => {
         <div class="card-content">
           <p class="title is-4">${card.name}</p>
           <p class="subtitle is-6">Date: ${card.date.toLocaleDateString()}</p>
-          <div class="content">
-            ${card.description}
-          </div>
           <button class="button is-info is-fullwidth">Event Details</button>
         </div>
       </div>
     `;
+
+    // Add event listener to the "Event Details" button
+    const eventDetailsButton = cardElement.querySelector('.button');
+    eventDetailsButton.addEventListener('click', async () => {
+      // Fetch event details from Firestore
+      const eventId = card.id; // Assuming the card has an "id" field
+      const eventRef = firebase.firestore().collection('events').doc(eventId);
+      const eventDoc = await eventRef.get();
+      const eventData = eventDoc.data();
+
+      // Fetch member details from Firestore
+      const memberRefs = eventData.members.map(memberId => {
+        return firebase.firestore().collection('members').doc(memberId);
+      });
+      const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
+      const memberData = memberDocs.map(doc => doc.data());
+
+      // Build attendee list HTML
+      let attendeesHtml;
+      if (memberData.length > 0) {
+        attendeesHtml = memberData.map(member => `
+          <div class="column is-one-fifth">
+            <img src="${member.photoURL}" alt="Avatar">
+            <p>${member.name}</p>
+          </div>
+        `).join('');
+      } else {
+        attendeesHtml = '<p>Be the first to attend!</p>';
+      }
+
+      // Build modal HTML with event and member data
+      const modalHtml = `
+        <div class="modal is-active">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <div class="box">
+              <h1 class="title mb-2">${eventData.name}</h1>
+              <p class="has-text-centered">${eventData.description}</p>
+              <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
+              <h2 class="subtitle mb-1"><strong>Number of attendees: </strong>${memberData.length}</h2>
+              <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
+              <div class="columns is-multiline mb-0">
+                ${memberData.map(member => `
+                  <div class="column is-one-fifth">
+                      <figure class="image is-32x32">
+                        <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
+                      </figure>
+                    </a>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="field">
+                <label class="label">Attendance Code</label>
+                <div class="control">
+                  <input id="attendanceCodeInput" class="input" type="text" placeholder="Enter attendance code">
+                </div>
+                <p id="attendanceStatus" class="help"></p>
+                <button id="submitAttendance" class="button is-info is-fullwidth mt-4">Submit Attendance</button>
+              </div>
+            </div>
+          </div>
+          <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+      `;
+
+      // Add modal HTML to the page
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+      // Add event listener to the "Submit Attendance" button
+      const submitAttendanceButton = document.getElementById('submitAttendance');
+      submitAttendanceButton.addEventListener('click', async () => {
+        const attendanceCodeInput = document.getElementById('attendanceCodeInput');
+        const attendanceStatus = document.getElementById('attendanceStatus');
+        const attendanceCode = attendanceCodeInput.value;
+
+        // Fetch event details from Firestore
+        const eventId = card.id; // Assuming the card has an "id" field
+        const eventRef = firebase.firestore().collection('events').doc(eventId);
+        const eventDoc = await eventRef.get();
+        const eventData = eventDoc.data();
+
+        // Check attendance code against the one in the database
+        if (attendanceCode === eventData.attendance_code) {
+          // Get the current user's UID
+          const currentUserUid = firebase.auth().currentUser.uid;
+
+          // Check if the user is already marked as attending
+          if (eventData.members.includes(currentUserUid)) {
+            attendanceStatus.innerText = 'You are already marked as attending for this event!';
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+              attendanceStatus.innerText = '';
+            }, 3000);
+            return;
+          }
+
+          // Add the user's UID to the members array in the events collection
+          await eventRef.update({
+            members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
+          });
+
+          // Get the current user's document from the members collection
+          const userRef = firebase.firestore().collection('members').doc(currentUserUid);
+          const userDoc = await userRef.get();
+          const userData = userDoc.data();
+
+          // Add the event's DocID to the attended_events array in the user's document
+          await userRef.update({
+            attended_events: firebase.firestore.FieldValue.arrayUnion(eventId)
+          });
+
+          // Display attendance code validation status
+          attendanceStatus.innerText = 'Attendance code is correct!';
+
+          // Replace the "Event Details" button with a completed button
+          eventDetailsButton.classList.remove('button');
+          eventDetailsButton.classList.add('button', 'is-static');
+          eventDetailsButton.disabled = true;
+          eventDetailsButton.innerText = 'Completed!';
+        } else {
+          attendanceStatus.innerText = 'Attendance code is incorrect!';
+      
+          // Hide the "Attendance code is incorrect!" message after 3 seconds
+          setTimeout(() => {
+            attendanceStatus.innerText = '';
+          }, 3000);
+        }
+      });
+
+      // Add event listener to the "Event Details" button
+      eventDetailsButton.addEventListener('click', async (event) => {
+        event.stopPropagation(); // stop click event propagation to prevent closing the modal
+        //...
+      });
+
+      // Add event listener to the modal background
+      const modalBackground = document.querySelector('.modal-background');
+      modalBackground.addEventListener('click', () => {
+        document.querySelector('.modal').remove();
+      });
+
+      // Add event listener to the modal close button
+      const modalCloseButton = document.querySelector('.modal-close');
+      modalCloseButton.addEventListener('click', () => {
+        document.querySelector('.modal').remove();
+      });
+    });
 
     eventCards.appendChild(cardElement);
   });
@@ -289,7 +436,7 @@ profilePic.addEventListener('click', () => {
       // if the user document exists, populate the profile page with their data
       const userData = doc.data();
       // set the profile icon
-      document.getElementById('profile-icon').src = user.photoURL;
+      document.getElementById('profile-icon').src = userData.photoURL;
       // set the profile name
       document.getElementById('profile-name').textContent = userData.name;
       // set the profile email
