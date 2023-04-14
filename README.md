@@ -1,5 +1,7 @@
 ﻿# INFOSYS424Project
 
+#Sprint 1:
+
 #General Description of Project
 
 This website will provide a centralized spot for both members and admin users of the ISS society to have one access spot for all information about the club. Members will be able to sign up and log into the website to modify their profile, view and RSVP to upcoming events, and view personalized data based on event attendence. Admins will be able to create upcoming events, modify or delete member profiles, and view attendence trends.
@@ -102,6 +104,150 @@ Which group was invited? What are your observations/notes? Everybody was present
 
 We met with Group 8 for our sprint review. Group 8's sprint similarly performed as ours based on our meeting after class. We met in-person and discussed what went well from a technical and organizational perspective, and what could be improved in the next sprint, based on the successes and setbacks of each group. Everybody was present. 
 
+#Sprint 2:
 
+#User Stories
+1. As an ISS Admin, I want to be able to create, modify, and delete upcoming events to display to users.
+2. As an ISS member, I want to be able to easily locate and mark myself as 'attending' for upcoming/current club events.
+3. As an ISS Admin, I want to be able to see the attendance history of events, and as a member I want to see how many events I have attended.
+4. As a user, I want to create and update my profile bio, message panel members, and see club resources.
+
+#Task Assignment Table
+| Task                                 | Corresponding Story Number      | Duration     | Priority      | Complexity        | Lead Person             |
+| ------------------------------------ | ------------------------------- | ------------ | ------------- | ----------------- | ----------------------- |
+| Implementing Sign in Auth.           | 1, 2                            | 2 hours      | 9             | Average           | Al                      |
+| Link Users to DB                     | 1, 2                            | 2 hours      | 5             | Average           | Al                      |
+| Show events and details              | 1                               | 2 hours      | 8             | High              | Michael                 |
+| CRUD events in DB                    | 1                               | 1 hour       | 8             | Average           | Jacob                   |
+| Logic/Visualize Attendance Metrics   | 1, 2                            | 3 hour       | 9             | High              | Michael & Jacob         |
+| Edit User Bio / Put in DB            | 4                               | 3 hour       | 4             | Average           | Drew & Brian            |
+| Update Contact Us form with DB       | 4                               | 1 hour       | 3             | Low               | Drew                    |
+| Update Resources Page                | 4                               | 1 hours      | 2             | Low               | Brian                   |
+| Complete all JS and DB Logic         | 1, 2, 3, 4                      | 5 hours      | 10            | High              | Everyone                |
+
+#Trello Board Sprint Two Link: https://trello.com/invite/b/EtTsxksq/ATTIb15989f504b54dd6c3510daa9009d56857A8118A/is424-group-4-sprint-two
+
+#Burndown Chart Images Day 4, 9, 14 (Scrum Master: Jacob Ringhand)
+
+Day 4:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/4479c4a17dba70cc16d1aff39a633cc4ce5ac1da/public/images/Sprint%202%20Day%204.png?raw=true)
+
+Day 9:
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/4479c4a17dba70cc16d1aff39a633cc4ce5ac1da/public/images/Sprint%202%20Day%209.png?raw=true)
+
+Day 14: 
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/4479c4a17dba70cc16d1aff39a633cc4ce5ac1da/public/images/Sprint%202%20Day%2014.png?raw=true)
+
+#Daily Srum Meetings
+
+We chose to document our ‘stand-up’ Scrum meetings from 4/6/23 and 3/11/23. Our reports from those dates are as follows:
+
+4/6/23:
+
+Jacob:
+a. What did you do yesterday?
+Yesterday I looked at our logical diagrams in order to prepare for the attendance logic.
+b. What are you planning to do today?
+I am planning on beginning to write JavaScript that includes math so that the 'total events attended' is accurate for users.
+c. Any problems are you facing?
+The problems I am facing is figuring out how to visualize the attendance for each event.
+
+Brian:
+a. What did you do yesterday?
+Yesterday I looked through the various links on ISS canvas for the resources page.
+b. What are you planning to do today?
+I am planning on updating the resources page by including the accurate resources.
+c. Any problems are you facing?
+I am having problems planning out how to add/design a profile page for users.
+
+Michael:
+a. What did you do yesterday?
+Yesterday I worked on the home page and begin to work on the upcoming events tab.
+b. What are you planning to do today?
+Today I plan to work on the event details with .innerHTML logic.
+c. Any problems are you facing?
+No problems encountered yet. 
+
+Al:
+a. What did you do yesterday?
+Yesterday I created a users authentication in Google Firebase.
+b. What are you planning to do today?
+I am planning to add the users sign in with Google on the navbar.
+c. Any problems are you facing?
+The problems I am facing is that for some reason on safari for a mobile device the Google Auth. does not work.
+
+Drew: 
+a. What did you do yesterday?
+Yesterday I worked on figuring out what specific information is necessary for the user profile bio.
+b. What are you planning to do today?
+I am planning on updating the contact us page so that it looks consistent with the entire website.
+c. Any problems are you facing?
+No problems just yet.
+
+4/11/23:
+
+Jacob:
+a. What did you do yesterday?
+Yesterday I planned on seeing what visualization (maybe chart js?)
+b. What are you planning to do today?
+Today I am planning on figuring out the CRUD of the events collection.
+c. Any problems are you facing?
+No problems right now in the sprint.
+
+Brian:
+a. What did you do yesterday?
+Yesterday I added an edit button for user bio.
+b. What are you planning to do today?
+Today I am planning on completing the resources page.
+c. Any problems are you facing?
+The problem I faced is completing the user profile page.
+
+Michael:
+a. What did you do yesterday?
+Yesterday I completed the adding events tab.
+b. What are you planning to do today?
+Today I am planning on tweaking the security rules on google firebase.
+c. Any problems are you facing?
+The problems I am facing is figuring out how the client wants the admin capabilities.
+
+Al:
+a. What did you do yesterday?
+Yesterday I worked on computing townhalls left for the semester
+b. What are you planning to do today?
+Completing javascript for image sources.
+c. Any problems are you facing?
+No problems I am facing.
+
+Drew: 
+a. What did you do yesterday?
+Yesterday I worked on the user profile page.
+b. What are you planning to do today?
+Today I am planning on tweeking some of the css with bulma.
+c. Any problems are you facing?
+The problems I am facing is showing null values for events when a user signs out of their account.
+
+#Sprint Review
+
+What did you learn from doing our second sprint?
+From our second sprint, our group learned how to actively and efficiently communicate with each other during the two weeks and we were able to complete most of the back-end work in this focused sprint with events and attendance, through the use of Google Firebase and JavaScript.
+
+What did go well? Why?
+What went well in this second sprint was again our strong communication and the entire group understanding the tasks necessary for the sprint to be successful. Scrum Master Jacob was able to create a specific role designation document that laid out all specific tasks for members before the start of the sprint, so each group member was able to get a head start in understanding what was needed to be completed in the two weeks.
+
+What didn’t go well? Why not?
+What did not go well in our second sprint besides minor bugs and git issues was multiple members using Google Firebase at the same time. For example, it was difficult for one member to see if their update function was working when another member was using/working on the same collection.
+
+How can you make things better next time?
+We can make things better next time by communicating when someone is starting to work on a certain collection as well as when they are completed with their task, although there will not be too much work on the back-end for the upcoming third sprint.
+
+Are you satisfied with what you already completed?
+Yes, our group is satisfied with the work we put in on the second sprint. If the work on the back-end and our tweaks on the front end, our Web App for ISS is coming together really well and could be considered a fully-functional prototype.
+
+Which group was invited? What are your observations/notes? Everybody was present?
+For the second sprint we met with group eight for the sprint review. This group's sprint was similar to ours as they tailored and focuesed their sprint on the back-end and database. We met in-person and talked about what went well and what could be improved for the last sprint, based on the postives and negatives of both groups. Everybody was present. 
+
+#Github Repo URL
+
+A link to our Github Repository can be found here: https://github.com/bdorschner/INFOSYS424Project
 
 
