@@ -13,9 +13,12 @@
 
     <!-- Limited Styling (fonts, etc.) -->
     <style>
+      html {
+        background-color: rgba(255, 0, 0, 0.1);
+      }
       body {
         font-family: "Cabin", sans-serif;
-        background-color: rgba(255, 0, 0, 0.1);
+        /* background-color: rgba(255, 0, 0, 0.1); */
       }
       .navbar-item {
         font-weight: 500;
@@ -54,6 +57,7 @@
         justify-content: center;
         align-items: center;
         margin-top: 2rem;
+        margin-bottom: 2rem;
         flex-wrap: wrap; /* allow items to wrap to a new line */
         flex-grow: 1; /* allow the .leaders div to expand */
       }
@@ -251,7 +255,7 @@
               </div>
               <div class="column is-two-thirds">
                 <h3 class="subtitle" id="upcoming-event-date">Date: </h3>
-                <button class="button is-medium custom-danger has-text-white">Event Details</button>
+                <button class="button is-medium custom-danger has-text-white" id="event-details-button">Event Details</button>
               </div>
             </div>
           </div>
@@ -259,13 +263,13 @@
         <div class="tile is-4 is-vertical is-parent">
           <!--Personal Stats Boxes-->
           <div class="tile is-child box">
-            <h2 class="subtitle">Events Left this Semester:</h2>
+            <h2 class="subtitle">Events Left this Semester: <span id="events-left-count"><strong>--</strong></span></h2>
           </div>
           <div class="tile is-child box">
-            <h2 class="subtitle">Total Club Members:</h2>
+            <h2 class="subtitle">Total Club Members: <span id="total-club-members-count"><strong>--</strong></span></h2>
           </div>
           <div class="tile is-child box">
-            <h2 class="subtitle">Events I've Attented:</h2>
+            <h2 class="subtitle">Events I've Attented: <span id="events-attended-count"><strong>--</strong></span></h2>
           </div>
         </div>
       </div>
@@ -273,14 +277,14 @@
     <!-- About Us content -->
     <div class="container is-hidden" id="about_container">
       <h1 class="title">About Us</h1>
-      <p class="has-text-centered">
+      <p class="has-text-centered box ml-2 mr-2">
         Welcome to the ISS! We are a group of students who share a passion for
         the growing field of Information Systems. Our mission is to create a
         community between students at UW.
       </p>
       <br />
       <h2 class="title is-4 has-text-centered">Meet Our Leaders:</h2>
-      <div class="leaders">
+      <div class="leaders box ml-2 mr-2">
         <div class="leader">
           <img class="leader-image" src="https://canvas.wisc.edu/images/thumbnails/14522244/fjUEXpph0uR5Z4wlmS1ftV7UcnMRje30RtOjSQkB" alt="David" />
           <p class="leader-name">David Viggiano, President</p>
@@ -405,7 +409,7 @@
           <div class="card">
             <div class="card-content">
               <div class="columns">
-                <div class="column is-one-third">
+                <div class="column is-one-third is-flex is-justify-content-center is-align-items-center">
                   <figure class="image is-128x128">
                     <img id="profile-icon" class="is-rounded" src="">
                   </figure>

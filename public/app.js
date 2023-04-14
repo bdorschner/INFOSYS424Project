@@ -78,32 +78,58 @@ profile.addEventListener('click', () => {
   showPageContent(profile_container);
 })
 
-// Event listener to handle redirecting to Google auth
-login.addEventListener('click', (e) => {
-  signInWithRedirect(auth, provider);
+// Event listener to handle redirecting to Google auth - OLD WAY - likely is what's causing mobile browser errors
+// login.addEventListener('click', (e) => {
+//   signInWithRedirect(auth, provider);
 
-  // Redirect to another page
-  getRedirectResult(auth)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
+//   // Redirect to another page
+//   getRedirectResult(auth)
+//     .then((result) => {
+//       // This gives you a Google Access Token. You can use it to access Google APIs.
+//       const credential = GoogleAuthProvider.credentialFromResult(result);
+//       const token = credential.accessToken;
 
-      // The signed-in user info.
-      const user = result.user;
+//       // The signed-in user info.
+//       const user = result.user;
 
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
+//     }).catch((error) => {
+//       // Handle Errors here.
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       // The email of the user's account used.
+//       const email = error.email;
+//       // The AuthCredential type that was used.
+//       const credential = GoogleAuthProvider.credentialFromError(error);
+//       // ...
       
-  });
-})
+//   });
+// })
+
+// Event listener to handle Google auth
+// Source: https://firebase.google.com/docs/auth/web/redirect-best-practices
+login.addEventListener('click', async (e) => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    
+    // This gives you a Google Access Token. You can use it to access Google APIs.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+
+    // The signed-in user info.
+    const user = result.user;
+
+  } catch (error) {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  }
+});
 
 // *** NAVBAR AND LOGIN AUTH JS
 const navbarItems = document.querySelectorAll('.navbar-item');
@@ -224,6 +250,208 @@ db.collection('events')
   </div>`;
 });
 
+const eventDetailsButton = document.querySelector('#event-details-button');
+
+eventDetailsButton.addEventListener('click', async () => {
+  try {
+    // Fetch the details of the upcoming event from Firestore
+    const querySnapshot = await db.collection('events')
+      .orderBy('date', 'asc')
+      .limit(1)
+      .get();
+
+    if (!querySnapshot.empty) {
+      const eventData = querySnapshot.docs[0].data();
+
+      // Fetch member details from Firestore
+      const memberRefs = eventData.members.map(memberId => {
+        return db.collection('members').doc(memberId);
+      });
+      const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
+      const memberData = memberDocs.map(doc => doc.data());
+
+      // Build the attendees list HTML
+      let attendeesHtml;
+      if (memberData.length > 0) {
+        attendeesHtml = memberData.map(member => `
+          <div class="column is-one-fifth">
+            <figure class="image is-32x32">
+              <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
+            </figure>
+          </div>
+        `).join('');
+      } else {
+        attendeesHtml = '<p>Be the first to attend!</p>';
+      }
+
+      // Build the modal HTML with the event and attendance data
+      const modalHtml = `
+        <div class="modal is-active">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <div class="box">
+              <h1 class="title mb-2">${eventData.name}</h1>
+              <p class="has-text-centered">${eventData.description}</p>
+              <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
+              <h2 class="subtitle mb-1"><strong>Number of attendees: </strong>${memberData.length}</h2>
+              <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
+              <div class="columns is-multiline mb-0">
+                ${attendeesHtml}
+              </div>
+              <div class="field">
+                <label class="label">Attendance Code</label>
+                <div class="control">
+                  <input id="attendanceCodeInput" class="input" type="text" placeholder="Enter attendance code">
+                </div>
+                <p id="attendanceStatus" class="help"></p>
+                <button id="submitAttendance" class="button is-success is-fullwidth mt-4">Submit Attendance</button>
+              </div>
+            </div>
+          </div>
+          <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+      `;
+
+      // Insert the modal HTML into the page
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+      // Add event listener to the "Submit Attendance" button
+      const submitAttendanceButton = document.getElementById('submitAttendance');
+submitAttendanceButton.addEventListener('click', async () => {
+  try {
+    const attendanceCodeInput = document.getElementById('attendanceCodeInput');
+    const attendanceStatus = document.getElementById('attendanceStatus');
+    const attendanceCode = attendanceCodeInput.value;
+
+    // Fetch the details of the upcoming event from Firestore
+    const querySnapshot = await db.collection('events')
+      .orderBy('date', 'asc')
+      .limit(1)
+      .get();
+
+    if (!querySnapshot.empty) {
+      const eventData = querySnapshot.docs[0].data();
+
+      // Check attendance code against the one in the database
+      if (attendanceCode === eventData.attendance_code) {
+        // Get the current user's UID
+        const currentUserUid = firebase.auth().currentUser.uid;
+
+        // Check if the user is already marked as attending
+        if (eventData.members.includes(currentUserUid)) {
+          attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
+          // Hide the message after 3 seconds
+          setTimeout(() => {
+            attendanceStatus.innerText = '';
+          }, 3000);
+          return;
+        }
+
+        // Add the user's UID to the members array in the events collection
+        await db.collection('events').doc(eventData.id).update({
+          members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
+        });
+
+        // Get the current user's document from the members collection
+        const userDoc = await db.collection('members').doc(currentUserUid).get();
+        const userData = userDoc.data();
+
+        // Add the event's DocID to the attended_events array in the user's document
+        await db.collection('members').doc(currentUserUid).update({
+          attended_events: firebase.firestore.FieldValue.arrayUnion(eventData.id)
+        });
+
+        // Display attendance code validation status
+        attendanceStatus.innerText = 'Attendance code is correct!';
+
+        // Replace the "Event Details" button with a completed button
+        const eventDetailsButton = document.getElementById('event-details-button');
+        eventDetailsButton.classList.remove('button');
+        eventDetailsButton.classList.add('button', 'is-static');
+        eventDetailsButton.disabled = true;
+        eventDetailsButton.innerText = 'Completed!';
+      } else {
+        attendanceStatus.innerText = 'Attendance code is incorrect!';
+
+        // Hide the "Attendance code is incorrect!" message after 3 seconds
+        setTimeout(() => {
+          attendanceStatus.innerText = '';
+        }, 3000);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+      // Add event listener to the modal background
+      const modalBackground = document.querySelector('.modal-background');
+      modalBackground.addEventListener('click', () => {
+        document.querySelector('.modal').remove();
+      });
+
+      // Add event listener to the modal close button
+      const modalCloseButton = document.querySelector('.modal-close');
+      modalCloseButton.addEventListener('click', () => {
+        document.querySelector('.modal').remove();
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+var eventsLeftCount = document.getElementById("events-left-count");
+var totalMembersCount = document.getElementById("total-club-members-count");
+var attendedEventsCount = document.getElementById("events-attended-count");
+
+
+var eventsLeft = 0;
+
+
+// Query the Firestore database for the events collection
+db.collection("events").get().then(function(querySnapshot) {
+  
+  // Loop through the documents in the events collection
+  querySnapshot.forEach(function(doc) {
+    var eventData = doc.data();
+    var eventTimestamp = eventData.date;
+    var eventDate = eventTimestamp.toDate();
+
+
+    // Check if the event date is today or after
+    if (eventDate >= new Date()) {
+      eventsLeft++;
+    }
+        });
+
+
+  // Update the HTML with the queried values
+  eventsLeftCount.innerHTML = "<strong>" + eventsLeft + "</strong>";
+});
+
+
+// Query the Firestore database for the club members collection
+db.collection("members").get().then(function(querySnapshot) {
+  var totalMembers = querySnapshot.size;
+  
+  // Update the HTML with the queried value
+  totalMembersCount.innerHTML = "<strong>" + totalMembers + "</strong>";
+
+
+});
+
+// Query the Firestore database for the club members collection
+db.collection("members").get().then(function(querySnapshot) {
+  // Get the document for the current user
+  var userDoc = querySnapshot.docs.filter(doc => doc.id === auth.currentUser.uid)[0];
+  var userDocData = userDoc.data();
+  var attendedEvents = userDocData.attended_events.length;
+
+  // Update the HTML with the queried value
+  attendedEventsCount.innerHTML = "<strong>" + attendedEvents + "</strong>";
+});
+
 // *** UPCOMING EVENTS PAGE JS
 const eventCards = document.getElementById('event_cards');
 
@@ -268,6 +496,10 @@ db.collection('events').get().then(querySnapshot => {
         </div>
       </div>
     `;
+
+    // select the button element and add a red background
+    let buttonElement = cardElement.querySelector('.button');
+    buttonElement.style.backgroundColor = '#e95861';
 
     // Add event listener to the "Event Details" button
     const eventDetailsButton = cardElement.querySelector('.button');
@@ -325,7 +557,7 @@ db.collection('events').get().then(querySnapshot => {
                   <input id="attendanceCodeInput" class="input" type="text" placeholder="Enter attendance code">
                 </div>
                 <p id="attendanceStatus" class="help"></p>
-                <button id="submitAttendance" class="button is-info is-fullwidth mt-4">Submit Attendance</button>
+                <button id="submitAttendance" class="button is-success is-fullwidth mt-4">Submit Attendance</button>
               </div>
             </div>
           </div>
@@ -356,7 +588,7 @@ db.collection('events').get().then(querySnapshot => {
 
           // Check if the user is already marked as attending
           if (eventData.members.includes(currentUserUid)) {
-            attendanceStatus.innerText = 'You are already marked as attending for this event!';
+            attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
             // Hide the message after 3 seconds
             setTimeout(() => {
               attendanceStatus.innerText = '';
