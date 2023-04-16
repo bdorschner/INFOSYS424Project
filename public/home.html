@@ -13,9 +13,12 @@
 
     <!-- Limited Styling (fonts, etc.) -->
     <style>
+      html {
+        background-color: rgba(255, 0, 0, 0.1);
+      }
       body {
         font-family: "Cabin", sans-serif;
-        background-color: rgba(255, 0, 0, 0.1);
+        /* background-color: rgba(255, 0, 0, 0.1); */
       }
       .navbar-item {
         font-weight: 500;
@@ -54,6 +57,7 @@
         justify-content: center;
         align-items: center;
         margin-top: 2rem;
+        margin-bottom: 2rem;
         flex-wrap: wrap; /* allow items to wrap to a new line */
         flex-grow: 1; /* allow the .leaders div to expand */
       }
@@ -99,6 +103,16 @@
           align-items: center;
         }
       }
+
+      /* Profile Page CSS */
+      @media screen and (max-width: 768px) {
+        #profile_container .image.is-128x128 {
+          margin: 0 auto;
+        }
+        #profile_container .column:first-child {
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body>
@@ -141,7 +155,7 @@
       <h4 class="title is-4 has-text-centered m-4">
         Welcome to Information Systems Society!
       </h4>
-      <div class="tile is-ancestor">
+      <div class="tile is-ancestor pr-4 pl-4">
         <div class="tile is-4 is-parent">
           <!--Overview Box-->
           <div class="tile is-child box">
@@ -219,7 +233,7 @@
           </div>
         </div>
       </div>
-      <div class="tile is-ancestor">
+      <div class="tile is-ancestor pl-4 pr-4">
         <div class="tile is-4 is-parent">
           <!--New Video Box-->
           <div class="tile is-child box">
@@ -233,15 +247,18 @@
           <!--Upcoming Events Box-->
           <div class="tile is-child box" id="upcoming-event">
             <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
+            <div id="no-event-element" style="display: block">
+              <p>Sign in to see upcoming events</p>
+            </div>
             <div class="columns">
               <div class="column is-one-third">
                 <figure class="image is-1by1">
-                  <img id="upcoming-event-image" src="" alt="Event Image">
+                  <img id="upcoming-event-image" src="" alt="Event Image" style="display: none">
                 </figure>
               </div>
               <div class="column is-two-thirds">
-                <h3 class="subtitle" id="upcoming-event-date">Date: </h3>
-                <button class="button is-medium custom-danger has-text-white">Event Details</button>
+                <h3 class="subtitle" id="upcoming-event-date" style="display: none;">Date: </h3>
+                <button class="button is-medium custom-danger has-text-white" id="event-details-button" style="display: none">Event Details</button>
               </div>
             </div>
           </div>
@@ -249,13 +266,13 @@
         <div class="tile is-4 is-vertical is-parent">
           <!--Personal Stats Boxes-->
           <div class="tile is-child box">
-            <h2 class="subtitle">Town Halls Left this Semester:</h2>
+            <h2 class="subtitle">Events Left this Semester: <span id="events-left-count"><strong>--</strong></span></h2>
           </div>
           <div class="tile is-child box">
-            <h2 class="subtitle">Total Club Members:</h2>
+            <h2 class="subtitle">Total Club Members: <span id="total-club-members-count"><strong>--</strong></span></h2>
           </div>
           <div class="tile is-child box">
-            <h2 class="subtitle">Events I've Attented:</h2>
+            <h2 class="subtitle">Events I've Attented: <span id="events-attended-count"><strong>--</strong></span></h2>
           </div>
         </div>
       </div>
@@ -263,14 +280,14 @@
     <!-- About Us content -->
     <div class="container is-hidden" id="about_container">
       <h1 class="title">About Us</h1>
-      <p class="has-text-centered">
+      <p class="has-text-centered box ml-2 mr-2">
         Welcome to the ISS! We are a group of students who share a passion for
         the growing field of Information Systems. Our mission is to create a
         community between students at UW.
       </p>
       <br />
       <h2 class="title is-4 has-text-centered">Meet Our Leaders:</h2>
-      <div class="leaders">
+      <div class="leaders box ml-2 mr-2">
         <div class="leader">
           <img class="leader-image" src="https://canvas.wisc.edu/images/thumbnails/14522244/fjUEXpph0uR5Z4wlmS1ftV7UcnMRje30RtOjSQkB" alt="David" />
           <p class="leader-name">David Viggiano, President</p>
@@ -319,38 +336,44 @@
     <!-- Contact Us content -->
     <div class="container is-hidden" id="contact_container">
       <h1 class="title">Contact Us</h1>
-      <div class="columns">
-        <div class="column">
-          <form action="#" method="post" class="mx-5 my-5">
-            <div class="field">
-              <label class="label" for="name">Name</label>
-              <div class="control">
-                <input class="input" type="text" name="name" id="contact-name" required/>
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child box" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); background-color: white;">
+            <form action="#" method="post" class="mx-5 my-5">
+              <div class="field">
+                <label class="label" for="name">Name</label>
+                <div class="control">
+                  <input class="input" type="text" name="name" id="contact-name" required />
+                </div>
               </div>
-            </div>
-
-            <div class="field">
-              <label class="label" for="email">Email</label>
-              <div class="control">
-                <input class="input" type="email" placeholder="Email" name="email" id="contact-email" />
+  
+  
+              <div class="field">
+                <label class="label" for="email">Email</label>
+                <div class="control">
+                  <input class="input" type="email" placeholder="Email" name="email" id="contact-email" />
+                </div>
               </div>
-            </div>
-
-            <div class="field">
-              <label class="label" for="message">Message</label>
-              <div class="control">
-                <textarea class="textarea" placeholder="Enter your comments/concerns..." name="message" id="contact-message" required></textarea>
+  
+  
+              <div class="field">
+                <label class="label" for="message">Message</label>
+                <div class="control">
+                  <textarea class="textarea" placeholder="Enter your comments/concerns..." name="message"
+                    id="contact-message" required></textarea>
+                </div>
               </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <button class="button is-link" type="submit" id="contact-button">
-                  Submit
-                </button>
+  
+  
+              <div class="field">
+                <div class="control">
+                  <button class="button is-link" type="submit" id="contact-button">
+                    Submit
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -358,7 +381,7 @@
     <div class="container is-hidden" id="resources_container">
       <h1 class="title">Resources</h1>
       <p class="title is-4 has-text-centered m-4">
-        <div class="columns mt-2">
+        <div class="columns mt-2 pl-4 pr-4">
           <div class="column box m-1">
               <h2 class="title is-5">Skill Based Resources</h2>
               <ul class="box m-1">
@@ -390,9 +413,47 @@
 
     <!-- Profile Page content -->
     <div class="container is-hidden" id="profile_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'User Profile' page
-      </p>
+      <h1 class="title">My Profile</h1>
+      <div class="columns p-4">
+        <div class="column is-2"></div>
+        <div class="column is-8">
+          <div class="card">
+            <div class="card-content">
+              <div class="columns">
+                <div class="column is-one-third is-flex is-justify-content-center is-align-items-center">
+                  <figure class="image is-128x128">
+                    <img id="profile-icon" class="is-rounded" src="">
+                  </figure>
+                </div>
+                <div class="column">
+                  <h2 class="title has-text-centered pb-4" id="profile-name"></h2>
+                  <h2 class="subtitle is-5" id="profile-email"></h2>
+                  <h3 class="subtitle is-5" id="profile-role"></h3>
+                  <h3 class="subtitle is-5" id="attendance-total"></h3>
+                </div>
+              </div>
+              <hr>
+              <h3 class="subtitle is-5">Attended Events:</h3>
+              <table class="table is-fullwidth" id="attended-events-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="loadingSpinner" class="is-hidden">
+                    <td colspan="2" class="has-text-centered">
+                      <i class="fas fa-spinner fa-pulse"></i> Loading...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="column is-2"></div>
+      </div>
     </div>
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -406,7 +467,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
 
-    <script type="module">
+    <script>
       // Your web app's Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyD6mxa3xJskoX0F7Lp-4iQY8CdEINgmfZ8",
@@ -425,214 +486,7 @@
 
       // define a storage reference
       let ref = firebase.storage().ref();
-      let provider = new firebase.auth.GoogleAuthProvider();
-
-      // Event listener to handle redirecting to Google auth
-      login.addEventListener('click', (e) => {
-          signInWithRedirect(auth, provider);
-
-          // Redirect to another page
-          getRedirectResult(auth)
-            .then((result) => {
-              // This gives you a Google Access Token. You can use it to access Google APIs.
-              const credential = GoogleAuthProvider.credentialFromResult(result);
-              const token = credential.accessToken;
-
-              // The signed-in user info.
-              const user = result.user;
-
-            }).catch((error) => {
-              // Handle Errors here.
-              const errorCode = error.code;
-              const errorMessage = error.message;
-              // The email of the user's account used.
-              const email = error.email;
-              // The AuthCredential type that was used.
-              const credential = GoogleAuthProvider.credentialFromError(error);
-              // ...
-              
-          });
-      })
-
-      // *** NAVBAR AND LOGIN AUTH JS
-      const navbarItems = document.querySelectorAll('.navbar-item');
-
-      const homeNavItem = document.querySelector('#index');
-
-      homeNavItem.classList.add('active');
-
-      navbarItems.forEach(item => {
-        item.addEventListener('click', () => {
-          // Remove the active class from all navbar items
-          navbarItems.forEach(item => {
-            item.classList.remove('active');
-          });
-
-          // Add the active class to the clicked navbar item
-          item.classList.add('active');
-        });
-      });
-
-      // Replace Sign-in button with user icon and sign out button
-      const loginButton = document.getElementById('login');
-      const signOut = document.getElementById('sign-out');
-      const signOutBtn = document.getElementById('sign-out-button');
-      const profilePic = document.getElementById('profile-pic');
-      const upcomingEventsPage = document.getElementById('events');
-      const attendanceHistoryPage = document.getElementById('attendance');
-
-      // Hide upcoming events and attendance history page initially
-      upcomingEventsPage.style.display = 'none';
-      attendanceHistoryPage.style.display = 'none';
-
-      // listen for sign in state changes
-      auth.onAuthStateChanged(user => {
-        if (user) {
-          // user is signed in
-          loginButton.style.display = 'none';
-          profilePic.src = user.photoURL;
-          profilePic.style.display = '';
-          signOut.style.display = '';
-          upcomingEventsPage.style.display = '';
-          attendanceHistoryPage.style.display = '';
-        } else {
-          // user is signed out
-          loginButton.style.display = '';
-          profilePic.style.display = 'none';
-          signOut.style.display = 'none';
-          upcomingEventsPage.style.display = 'none';
-          attendanceHistoryPage.style.display = 'none';
-        }
-      });
-
-      // handle sign in button click event
-      loginButton.addEventListener('click', () => {
-        auth.signInWithRedirect(provider);
-      });
-
-      // handle sign out button click event
-      signOutBtn.addEventListener('click', () => {
-        auth.signOut();
-      });
-
-      // *** HOME PAGE JS
-      const upcomingEventTile = document.querySelector('#upcoming-event');
-      const upcomingEventImage = document.querySelector('#upcoming-event-image');
-      const upcomingEventDate = document.querySelector('#upcoming-event-date');
-      const now = new Date();
-
-      db.collection('events')
-        .where('date', '>', now)
-        .orderBy('date', 'asc')
-        .limit(1)
-        .get()
-        .then(querySnapshot => {
-          if (!querySnapshot.empty) {
-            const eventData = querySnapshot.docs[0].data();
-
-            // Update the upcoming event tile with the event data
-            upcomingEventImage.src = eventData.image_url;
-            upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
-          } else {
-            // No events found in the database
-            upcomingEventTile.style.display = 'none';
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          upcomingEventTile.style.display = 'none';
-        });
-
-      // *** UPCOMING EVENTS PAGE JS
-      const eventCards = document.getElementById('event_cards');
-      const upcomingBtn = document.getElementById('upcoming_btn');
-      const pastBtn = document.getElementById('past_btn');
-      const currentDate = new Date();
-
-      // Create empty list to store card data before date sorting
-      const cards = [];
-
-      
-db.collection('events').get().then(querySnapshot => {
-  // Gather card data from the db and add it to the 'cards' list
-  querySnapshot.forEach(doc => {
-    const eventData = doc.data();
-
-    const card = {
-      name: eventData.name,
-      date: eventData.date.toDate(),
-      image_url: eventData.image_url,
-      description: eventData.description
-    };
-
-    cards.push(card);
-  });
-
-  // Sort the cards by date
-  cards.sort((a, b) => a.date - b.date);
-
-  // Function to filter cards based on date
-  const filterCardsByDate = (cardsArr, isUpcoming) => {
-    return cardsArr.filter(card => {
-      if (isUpcoming) {
-        return card.date >= currentDate;
-      } else {
-        return card.date < currentDate;
-      }
-    });
-  };
-
-  // Show upcoming events by default
-  let filteredCards = filterCardsByDate(cards, true);
-
-  // Add event listeners to buttons
-  upcomingBtn.addEventListener('click', () => {
-    pastBtn.classList.remove('is-active');
-    upcomingBtn.classList.add('is-active');
-    filteredCards = filterCardsByDate(cards, true);
-    renderCards(filteredCards);
-  });
-
-  pastBtn.addEventListener('click', () => {
-    upcomingBtn.classList.remove('is-active');
-    pastBtn.classList.add('is-active');
-    filteredCards = filterCardsByDate(cards, false);
-    renderCards(filteredCards);
-  });
-
-  // Function to render cards
-  const renderCards = (cardsArr) => {
-    eventCards.innerHTML = '';
-    cardsArr.forEach(card => {
-      const cardElement = document.createElement('div');
-      cardElement.classList.add('column', 'is-one-third');
-      cardElement.innerHTML = `
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-3by1">
-              <img src="${card.image_url}" alt="Event Image" class="cover-image">
-            </figure>
-          </div>
-          <div class="card-content">
-            <p class="title is-4">${card.name}</p>
-            <p class="subtitle is-6">Date: ${card.date.toLocaleDateString()}</p>
-            <div class="content">
-              ${card.description}
-            </div>
-            <button class="button is-info is-fullwidth">Event Details</button>
-          </div>
-        </div>
-      `;
-      eventCards.appendChild(cardElement);
-    });
-  };
-
-  // Render the cards
-  renderCards(filteredCards);
-})
-.catch(error => {
-  console.error(error);
-});
+      let provider = new firebase.auth.GoogleAuthProvider(); 
     </script>
 
     <script src="app.js"></script>
