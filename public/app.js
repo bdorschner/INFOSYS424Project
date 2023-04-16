@@ -226,8 +226,10 @@ const upcomingEventImage = document.querySelector('#upcoming-event-image');
 const upcomingEventDate = document.querySelector('#upcoming-event-date');
 const upcomingEventButton = document.querySelector('#event-details-button');
 const noEventElement = document.querySelector('#no-event-element');
+const now = new Date();
 
 db.collection('events')
+.where('date', '>', now)
 .orderBy('date', 'asc')
 .limit(1)
 .get()
@@ -460,6 +462,9 @@ db.collection("members").get().then(function(querySnapshot) {
 
 // *** UPCOMING EVENTS PAGE JS (NEW)
 const eventCards = document.getElementById('event_cards');
+const upcomingBtn = document.getElementById('upcoming_btn');
+const pastBtn = document.getElementById('past_btn');
+const currentDate = new Date();
 
 // Create empty list to store card data before date sorting
 const cards = [];
@@ -651,8 +656,23 @@ db.collection('events').get().then(querySnapshot => {
   // Sort the cards by date
   cards.sort((a, b) => a.date - b.date);
 
-  // Loop through the sorted cards and create a new element for each card
-  cards.forEach(card => {
+  // Function to filter the cards based on the button clicked
+  function filterCards(filterType) {
+    const currentDate = new Date();
+    eventCards.innerHTML = '';
+
+    cards.forEach(card => {
+      // Check if the card should be included based on the filter type
+      if (filterType === 'upcoming' && card.date >= currentDate) {
+        createCard(card);
+      } else if (filterType === 'past' && card.date < currentDate) {
+        createCard(card);
+      }
+    });
+  }
+
+  // Function to create a new element for each card
+  function createCard(card) {
     const cardElement = document.createElement('div');
     cardElement.classList.add('column', 'is-one-third');
     cardElement.innerHTML = `
@@ -670,15 +690,27 @@ db.collection('events').get().then(querySnapshot => {
       </div>
     `;
 
-      // select the button element and add a red background
-      let buttonElement = cardElement.querySelector('.button');
-      buttonElement.style.backgroundColor = '#e95861';
+    // select the button element and add a red background
+    let buttonElement = cardElement.querySelector('.button');
+    buttonElement.style.backgroundColor = '#e95861';
 
     // Add the event ID as a data attribute to the "Event Details" button
     const eventDetailsButton = cardElement.querySelector('.button');
     eventDetailsButton.dataset.eventId = card.id;
 
     eventCards.appendChild(cardElement);
+  }
+
+  // Initial load: filter cards by upcoming events
+  filterCards('upcoming');
+
+  // Add event listeners to the filter buttons
+  upcomingBtn.addEventListener('click', () => {
+    filterCards('upcoming');
+  });
+
+  pastBtn.addEventListener('click', () => {
+    filterCards('past');
   });
 
   // Add a single event listener to the event cards container for event delegation
