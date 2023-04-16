@@ -302,8 +302,16 @@
     <!-- Upcoming Events content -->
     <div class="container is-hidden" id="events_container">
       <h1 class="title has-text-centered">
-        Upcoming Events
+        Club Events
       </h1>
+      <div class="columns">
+        <div class="column is-6">
+          <button class="button custom-danger is-fullwidth" id="upcoming_btn"> Upcoming Events </button>
+        </div>
+        <div class="column is-6">
+          <button class="button custom-danger is-fullwidth" id="past_btn"> Past Events </button>
+        </div>
+      </div>
         <div class="columns is-multiline m-4" id="event_cards">
   
   </div>
@@ -511,8 +519,10 @@
       const upcomingEventTile = document.querySelector('#upcoming-event');
       const upcomingEventImage = document.querySelector('#upcoming-event-image');
       const upcomingEventDate = document.querySelector('#upcoming-event-date');
+      const now = new Date();
 
       db.collection('events')
+        .where('date', '>', now)
         .orderBy('date', 'asc')
         .limit(1)
         .get()
@@ -535,56 +545,94 @@
 
       // *** UPCOMING EVENTS PAGE JS
       const eventCards = document.getElementById('event_cards');
+      const upcomingBtn = document.getElementById('upcoming_btn');
+      const pastBtn = document.getElementById('past_btn');
+      const currentDate = new Date();
 
       // Create empty list to store card data before date sorting
       const cards = [];
 
-      db.collection('events').get().then(querySnapshot => {
-        // Gather card data from the db and add it to the 'cards' list
-          querySnapshot.forEach(doc => {
-            const eventData = doc.data();
+      
+db.collection('events').get().then(querySnapshot => {
+  // Gather card data from the db and add it to the 'cards' list
+  querySnapshot.forEach(doc => {
+    const eventData = doc.data();
 
-            const card = {
-              name: eventData.name,
-              date: eventData.date.toDate(),
-              image_url: eventData.image_url,
-              description: eventData.description
-            };
+    const card = {
+      name: eventData.name,
+      date: eventData.date.toDate(),
+      image_url: eventData.image_url,
+      description: eventData.description
+    };
 
-            cards.push(card);
-          });
+    cards.push(card);
+  });
 
-          // Sort the cards by date
-          cards.sort((a, b) => a.date - b.date);
+  // Sort the cards by date
+  cards.sort((a, b) => a.date - b.date);
 
-          // Loop through the sorted cards and create a new element for each card
-          cards.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('column', 'is-one-third');
-            cardElement.innerHTML = `
-              <div class="card">
-                <div class="card-image">
-                  <figure class="image is-3by1">
-                    <img src="${card.image_url}" alt="Event Image" class="cover-image">
-                  </figure>
-                </div>
-                <div class="card-content">
-                  <p class="title is-4">${card.name}</p>
-                  <p class="subtitle is-6">Date: ${card.date.toLocaleDateString()}</p>
-                  <div class="content">
-                    ${card.description}
-                  </div>
-                  <button class="button is-info is-fullwidth">Event Details</button>
-                </div>
-              </div>
-            `;
+  // Function to filter cards based on date
+  const filterCardsByDate = (cardsArr, isUpcoming) => {
+    return cardsArr.filter(card => {
+      if (isUpcoming) {
+        return card.date >= currentDate;
+      } else {
+        return card.date < currentDate;
+      }
+    });
+  };
 
-            eventCards.appendChild(cardElement);
-          });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+  // Show upcoming events by default
+  let filteredCards = filterCardsByDate(cards, true);
+
+  // Add event listeners to buttons
+  upcomingBtn.addEventListener('click', () => {
+    pastBtn.classList.remove('is-active');
+    upcomingBtn.classList.add('is-active');
+    filteredCards = filterCardsByDate(cards, true);
+    renderCards(filteredCards);
+  });
+
+  pastBtn.addEventListener('click', () => {
+    upcomingBtn.classList.remove('is-active');
+    pastBtn.classList.add('is-active');
+    filteredCards = filterCardsByDate(cards, false);
+    renderCards(filteredCards);
+  });
+
+  // Function to render cards
+  const renderCards = (cardsArr) => {
+    eventCards.innerHTML = '';
+    cardsArr.forEach(card => {
+      const cardElement = document.createElement('div');
+      cardElement.classList.add('column', 'is-one-third');
+      cardElement.innerHTML = `
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-3by1">
+              <img src="${card.image_url}" alt="Event Image" class="cover-image">
+            </figure>
+          </div>
+          <div class="card-content">
+            <p class="title is-4">${card.name}</p>
+            <p class="subtitle is-6">Date: ${card.date.toLocaleDateString()}</p>
+            <div class="content">
+              ${card.description}
+            </div>
+            <button class="button is-info is-fullwidth">Event Details</button>
+          </div>
+        </div>
+      `;
+      eventCards.appendChild(cardElement);
+    });
+  };
+
+  // Render the cards
+  renderCards(filteredCards);
+})
+.catch(error => {
+  console.error(error);
+});
     </script>
 
     <script src="app.js"></script>
