@@ -247,15 +247,18 @@
           <!--Upcoming Events Box-->
           <div class="tile is-child box" id="upcoming-event">
             <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
+            <div id="no-event-element" style="display: block">
+              <p>Sign in to see upcoming events</p>
+            </div>
             <div class="columns">
               <div class="column is-one-third">
                 <figure class="image is-1by1">
-                  <img id="upcoming-event-image" src="" alt="Event Image">
+                  <img id="upcoming-event-image" src="" alt="Event Image" style="display: none">
                 </figure>
               </div>
               <div class="column is-two-thirds">
-                <h3 class="subtitle" id="upcoming-event-date">Date: </h3>
-                <button class="button is-medium custom-danger has-text-white" id="event-details-button">Event Details</button>
+                <h3 class="subtitle" id="upcoming-event-date" style="display: none;">Date: </h3>
+                <button class="button is-medium custom-danger has-text-white" id="event-details-button" style="display: none">Event Details</button>
               </div>
             </div>
           </div>
@@ -431,6 +434,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr id="loadingSpinner" class="is-hidden">
+                    <td colspan="2" class="has-text-centered">
+                      <i class="fas fa-spinner fa-pulse"></i> Loading...
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

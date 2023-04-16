@@ -224,6 +224,8 @@ signOutBtn.addEventListener('click', () => {
 const upcomingEventTile = document.querySelector('#upcoming-event');
 const upcomingEventImage = document.querySelector('#upcoming-event-image');
 const upcomingEventDate = document.querySelector('#upcoming-event-date');
+const upcomingEventButton = document.querySelector('#event-details-button');
+const noEventElement = document.querySelector('#no-event-element');
 
 db.collection('events')
 .orderBy('date', 'asc')
@@ -234,20 +236,24 @@ db.collection('events')
     const eventData = querySnapshot.docs[0].data();
 
     // Update the upcoming event tile with the event data
+    upcomingEventImage.style.display = 'block';
+    upcomingEventDate.style.display = 'block';
+    upcomingEventButton.style.display = 'block';
+    noEventElement.style.display = 'none';
+
     upcomingEventImage.src = eventData.image_url;
     upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
   } else {
     // No events found in the database
-    upcomingEventTile.style.display = 'none';
+    upcomingEventImage.style.display = 'none';
+    upcomingEventDate.style.display = 'none';
+    upcomingEventButton.style.display = 'none';
+    noEventElement.style.display = 'block';
   }
 })
 .catch(error => {
   console.error(error);
-  upcomingEventTile.innerHTML = `
-  <h2 class="subtitle has-text-weight-bold">Upcoming Event...</h2>
-  <div>
-    <p>Sign in to see upcoming events</p>
-  </div>`;
+  noEventElement.style.display = 'block';
 });
 
 const eventDetailsButton = document.querySelector('#event-details-button');
@@ -452,14 +458,181 @@ db.collection("members").get().then(function(querySnapshot) {
   attendedEventsCount.innerHTML = "<strong>" + attendedEvents + "</strong>";
 });
 
-// *** UPCOMING EVENTS PAGE JS
+// *** UPCOMING EVENTS PAGE JS (NEW)
 const eventCards = document.getElementById('event_cards');
 
 // Create empty list to store card data before date sorting
 const cards = [];
 
+async function openEventModal(eventId) {
+  // Fetch event details from Firestore
+  const eventRef = firebase.firestore().collection('events').doc(eventId);
+  const eventDoc = await eventRef.get();
+  const eventData = eventDoc.data();
+
+  // Fetch member details from Firestore
+  const memberRefs = eventData.members.map(memberId => {
+    return firebase.firestore().collection('members').doc(memberId);
+  });
+  const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
+  const memberData = memberDocs.map(doc => doc.data());
+
+  // Filter out undefined elements in memberData
+  const filteredMemberData = memberData.filter(member => member);
+
+  if (filteredMemberData.length > 0) {
+    attendeesHtml = filteredMemberData.map(member => `
+      <div class="column is-one-fifth">
+        <img src="${member.photoURL}" alt="Avatar">
+        <p>${member.name}</p>
+      </div>
+    `).join('');
+  } else {
+    attendeesHtml = '<p>Be the first to attend!</p>';
+  }
+
+  // Build modal HTML with event and member data
+  const modalHtml = `
+  <div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box">
+        <h1 class="title mb-2">${eventData.name}</h1>
+        <p class="has-text-centered">${eventData.description}</p>
+        <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
+        <h2 class="subtitle mb-1"><strong>Number of attendees: </strong><span id="numberOfAttendees">${memberData.length}</span></h2>
+        <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
+        <div id="attendingMembers" class="columns is-multiline mb-0">
+          ${filteredMemberData.length > 0 ? filteredMemberData.map(member => `
+            <div class="column is-one-fifth">
+                <figure class="image is-32x32">
+                  <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
+                </figure>
+              </a>
+            </div>
+          `).join('') : `
+          <div class="column is-full">
+            <p id="beFirstToAttend">Be the first to attend!</p>
+          </div>
+          `}
+        </div>
+        <div class="field">
+          <label class="label">Attendance Code</label>
+          <div class="control">
+            <input id="attendanceCodeInput" class="input" type="text" placeholder="Enter attendance code">
+          </div>
+          <p id="attendanceStatus" class="help"></p>
+          <button id="submitAttendance" class="button is-success is-fullwidth mt-4">Submit Attendance</button>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+  `;
+
+  // Add modal HTML to the page
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+  // Add event listener to the "Submit Attendance" button
+  const submitAttendanceButton = document.getElementById('submitAttendance');
+  
+  submitAttendanceButton.addEventListener('click', async () => {
+    const attendanceCodeInput = document.getElementById('attendanceCodeInput');
+    const attendanceStatus = document.getElementById('attendanceStatus');
+    const attendanceCode = attendanceCodeInput.value;
+
+    // Fetch event details from Firestore
+    const eventRef = firebase.firestore().collection('events').doc(eventId);
+    const eventDoc = await eventRef.get();
+    const eventData = eventDoc.data();
+
+    // Check attendance code against the one in the database
+    if (attendanceCode === eventData.attendance_code) {
+      // Get the current user's UID
+      const currentUserUid = firebase.auth().currentUser.uid;
+
+      // Check if the user is already marked as attending
+      if (eventData.members.includes(currentUserUid)) {
+        attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
+        // Hide the message after 3 seconds
+        setTimeout(() => {
+          attendanceStatus.innerText = '';
+        }, 3000);
+        return;
+      }
+
+      // Add the user's UID to the members array in the events collection
+      await eventRef.update({
+        members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
+      });
+
+      // Get the current user's document from the members collection
+      const userRef = firebase.firestore().collection('members').doc(currentUserUid);
+      const userDoc = await userRef.get();
+      const userData = userDoc.data();
+
+      // Add the event's DocID to the attended_events array in the user's document
+      await userRef.update({
+        attended_events: firebase.firestore.FieldValue.arrayUnion(eventId)
+      });
+
+      // Update the number of attendees
+      const numberOfAttendees = document.getElementById('numberOfAttendees');
+      numberOfAttendees.innerText = parseInt(numberOfAttendees.innerText) + 1;
+
+      // Update the attending members section
+      const attendingMembers = document.getElementById('attendingMembers');
+      const beFirstToAttend = document.getElementById('beFirstToAttend');
+      const newAttendeeHtml = `
+        <div class="column is-one-fifth" style="padding-left: 0; padding-right: 0">
+          <figure class="image is-32x32">
+            <img class="is-rounded" src="${userData.photoURL}" alt="Avatar">
+          </figure>
+        </div>
+      `;
+      if (beFirstToAttend) {
+        beFirstToAttend.insertAdjacentHTML('afterend', newAttendeeHtml);
+        beFirstToAttend.remove();
+      } else {
+        attendingMembers.insertAdjacentHTML('beforeend', newAttendeeHtml);
+      }
+
+      // Display attendance code validation status
+      attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">Attendance Code is Correct! See you soon!</p>';
+      setTimeout(() => {
+        attendanceStatus.innerText = '';
+      }, 3000);
+
+      // Replace the "Event Details" button with a completed button
+      eventDetailsButton.classList.remove('button');
+      eventDetailsButton.classList.add('button', 'is-static');
+      eventDetailsButton.disabled = true;
+      eventDetailsButton.innerText = 'Completed!';
+    } else {
+      attendanceStatus.innerText = 'Attendance code is incorrect!';
+
+      // Hide the "Attendance code is incorrect!" message after 3 seconds
+      setTimeout(() => {
+        attendanceStatus.innerText = '';
+      }, 3000);
+    }
+  });
+
+  // Add event listener to the modal background
+  const modalBackground = document.querySelector('.modal-background');
+  modalBackground.addEventListener('click', () => {
+    document.querySelector('.modal').remove();
+  });
+
+  // Add event listener to the modal close button
+  const modalCloseButton = document.querySelector('.modal-close');
+  modalCloseButton.addEventListener('click', () => {
+    document.querySelector('.modal').remove();
+  });
+}
+
 db.collection('events').get().then(querySnapshot => {
-// Gather card data from the db and add it to the 'cards' list
+  // Gather card data from the db and add it to the 'cards' list
   querySnapshot.forEach(doc => {
     const eventData = doc.data();
 
@@ -468,7 +641,7 @@ db.collection('events').get().then(querySnapshot => {
       name: eventData.name,
       date: eventData.date.toDate(),
       image_url: eventData.image_url,
-      description: eventData.description, 
+      description: eventData.description,
       members: eventData.members
     };
 
@@ -497,163 +670,232 @@ db.collection('events').get().then(querySnapshot => {
       </div>
     `;
 
-    // select the button element and add a red background
-    let buttonElement = cardElement.querySelector('.button');
-    buttonElement.style.backgroundColor = '#e95861';
+      // select the button element and add a red background
+      let buttonElement = cardElement.querySelector('.button');
+      buttonElement.style.backgroundColor = '#e95861';
 
-    // Add event listener to the "Event Details" button
+    // Add the event ID as a data attribute to the "Event Details" button
     const eventDetailsButton = cardElement.querySelector('.button');
-    eventDetailsButton.addEventListener('click', async () => {
-      // Fetch event details from Firestore
-      const eventId = card.id; // Assuming the card has an "id" field
-      const eventRef = firebase.firestore().collection('events').doc(eventId);
-      const eventDoc = await eventRef.get();
-      const eventData = eventDoc.data();
-
-      // Fetch member details from Firestore
-      const memberRefs = eventData.members.map(memberId => {
-        return firebase.firestore().collection('members').doc(memberId);
-      });
-      const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
-      const memberData = memberDocs.map(doc => doc.data());
-
-      // Build attendee list HTML
-      let attendeesHtml;
-      if (memberData.length > 0) {
-        attendeesHtml = memberData.map(member => `
-          <div class="column is-one-fifth">
-            <img src="${member.photoURL}" alt="Avatar">
-            <p>${member.name}</p>
-          </div>
-        `).join('');
-      } else {
-        attendeesHtml = '<p>Be the first to attend!</p>';
-      }
-
-      // Build modal HTML with event and member data
-      const modalHtml = `
-        <div class="modal is-active">
-          <div class="modal-background"></div>
-          <div class="modal-content">
-            <div class="box">
-              <h1 class="title mb-2">${eventData.name}</h1>
-              <p class="has-text-centered">${eventData.description}</p>
-              <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
-              <h2 class="subtitle mb-1"><strong>Number of attendees: </strong>${memberData.length}</h2>
-              <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
-              <div class="columns is-multiline mb-0">
-                ${memberData.map(member => `
-                  <div class="column is-one-fifth">
-                      <figure class="image is-32x32">
-                        <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
-                      </figure>
-                    </a>
-                  </div>
-                `).join('')}
-              </div>
-              <div class="field">
-                <label class="label">Attendance Code</label>
-                <div class="control">
-                  <input id="attendanceCodeInput" class="input" type="text" placeholder="Enter attendance code">
-                </div>
-                <p id="attendanceStatus" class="help"></p>
-                <button id="submitAttendance" class="button is-success is-fullwidth mt-4">Submit Attendance</button>
-              </div>
-            </div>
-          </div>
-          <button class="modal-close is-large" aria-label="close"></button>
-        </div>
-      `;
-
-      // Add modal HTML to the page
-      document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-      // Add event listener to the "Submit Attendance" button
-      const submitAttendanceButton = document.getElementById('submitAttendance');
-      submitAttendanceButton.addEventListener('click', async () => {
-        const attendanceCodeInput = document.getElementById('attendanceCodeInput');
-        const attendanceStatus = document.getElementById('attendanceStatus');
-        const attendanceCode = attendanceCodeInput.value;
-
-        // Fetch event details from Firestore
-        const eventId = card.id; // Assuming the card has an "id" field
-        const eventRef = firebase.firestore().collection('events').doc(eventId);
-        const eventDoc = await eventRef.get();
-        const eventData = eventDoc.data();
-
-        // Check attendance code against the one in the database
-        if (attendanceCode === eventData.attendance_code) {
-          // Get the current user's UID
-          const currentUserUid = firebase.auth().currentUser.uid;
-
-          // Check if the user is already marked as attending
-          if (eventData.members.includes(currentUserUid)) {
-            attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
-            // Hide the message after 3 seconds
-            setTimeout(() => {
-              attendanceStatus.innerText = '';
-            }, 3000);
-            return;
-          }
-
-          // Add the user's UID to the members array in the events collection
-          await eventRef.update({
-            members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
-          });
-
-          // Get the current user's document from the members collection
-          const userRef = firebase.firestore().collection('members').doc(currentUserUid);
-          const userDoc = await userRef.get();
-          const userData = userDoc.data();
-
-          // Add the event's DocID to the attended_events array in the user's document
-          await userRef.update({
-            attended_events: firebase.firestore.FieldValue.arrayUnion(eventId)
-          });
-
-          // Display attendance code validation status
-          attendanceStatus.innerText = 'Attendance code is correct!';
-
-          // Replace the "Event Details" button with a completed button
-          eventDetailsButton.classList.remove('button');
-          eventDetailsButton.classList.add('button', 'is-static');
-          eventDetailsButton.disabled = true;
-          eventDetailsButton.innerText = 'Completed!';
-        } else {
-          attendanceStatus.innerText = 'Attendance code is incorrect!';
-      
-          // Hide the "Attendance code is incorrect!" message after 3 seconds
-          setTimeout(() => {
-            attendanceStatus.innerText = '';
-          }, 3000);
-        }
-      });
-
-      // Add event listener to the "Event Details" button
-      eventDetailsButton.addEventListener('click', async (event) => {
-        event.stopPropagation(); // stop click event propagation to prevent closing the modal
-        //...
-      });
-
-      // Add event listener to the modal background
-      const modalBackground = document.querySelector('.modal-background');
-      modalBackground.addEventListener('click', () => {
-        document.querySelector('.modal').remove();
-      });
-
-      // Add event listener to the modal close button
-      const modalCloseButton = document.querySelector('.modal-close');
-      modalCloseButton.addEventListener('click', () => {
-        document.querySelector('.modal').remove();
-      });
-    });
+    eventDetailsButton.dataset.eventId = card.id;
 
     eventCards.appendChild(cardElement);
+  });
+
+  // Add a single event listener to the event cards container for event delegation
+  eventCards.addEventListener('click', (e) => {
+    if (e.target.classList.contains('button')) {
+      // Get the event ID from the data attribute and call the openEventModal function
+      const eventId = e.target.dataset.eventId;
+      openEventModal(eventId);
+    }
   });
 })
 .catch(error => {
   console.error(error);
 });
+
+// *** UPCOMING EVENTS PAGE JS (OLD)
+// const eventCards = document.getElementById('event_cards');
+
+// // Create empty list to store card data before date sorting
+// const cards = [];
+
+// db.collection('events').get().then(querySnapshot => {
+// // Gather card data from the db and add it to the 'cards' list
+//   querySnapshot.forEach(doc => {
+//     const eventData = doc.data();
+
+//     const card = {
+//       id: doc.id,
+//       name: eventData.name,
+//       date: eventData.date.toDate(),
+//       image_url: eventData.image_url,
+//       description: eventData.description, 
+//       members: eventData.members
+//     };
+
+//     cards.push(card);
+//   });
+
+//   // Sort the cards by date
+//   cards.sort((a, b) => a.date - b.date);
+
+//   // Loop through the sorted cards and create a new element for each card
+//   cards.forEach(card => {
+//     const cardElement = document.createElement('div');
+//     cardElement.classList.add('column', 'is-one-third');
+//     cardElement.innerHTML = `
+//       <div class="card">
+//         <div class="card-image">
+//           <figure class="image is-3by1">
+//             <img src="${card.image_url}" alt="Event Image" class="cover-image">
+//           </figure>
+//         </div>
+//         <div class="card-content">
+//           <p class="title is-4">${card.name}</p>
+//           <p class="subtitle is-6">Date: ${card.date.toLocaleDateString()}</p>
+//           <button class="button is-info is-fullwidth">Event Details</button>
+//         </div>
+//       </div>
+//     `;
+
+//     // select the button element and add a red background
+//     let buttonElement = cardElement.querySelector('.button');
+//     buttonElement.style.backgroundColor = '#e95861';
+
+//     // Add event listener to the "Event Details" button
+//     const eventDetailsButton = cardElement.querySelector('.button');
+//     eventDetailsButton.addEventListener('click', async () => {
+//       // Fetch event details from Firestore
+//       const eventId = card.id; // Assuming the card has an "id" field
+//       const eventRef = firebase.firestore().collection('events').doc(eventId);
+//       const eventDoc = await eventRef.get();
+//       const eventData = eventDoc.data();
+
+//       // Fetch member details from Firestore
+//       const memberRefs = eventData.members.map(memberId => {
+//         return firebase.firestore().collection('members').doc(memberId);
+//       });
+//       const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
+//       const memberData = memberDocs.map(doc => doc.data());
+
+//       // Build attendee list HTML
+//       let attendeesHtml;
+//       if (memberData.length > 0) {
+//         attendeesHtml = memberData.map(member => `
+//           <div class="column is-one-fifth">
+//             <img src="${member.photoURL}" alt="Avatar">
+//             <p>${member.name}</p>
+//           </div>
+//         `).join('');
+//       } else {
+//         attendeesHtml = '<p>Be the first to attend!</p>';
+//       }
+
+//       // Build modal HTML with event and member data
+//       const modalHtml = `
+//         <div class="modal is-active">
+//           <div class="modal-background"></div>
+//           <div class="modal-content">
+//             <div class="box">
+//               <h1 class="title mb-2">${eventData.name}</h1>
+//               <p class="has-text-centered">${eventData.description}</p>
+//               <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
+//               <h2 class="subtitle mb-1"><strong>Number of attendees: </strong>${memberData.length}</h2>
+//               <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
+//               <div class="columns is-multiline mb-0">
+//                 ${memberData.map(member => `
+//                   <div class="column is-one-fifth">
+//                       <figure class="image is-32x32">
+//                         <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
+//                       </figure>
+//                     </a>
+//                   </div>
+//                 `).join('')}
+//               </div>
+//               <div class="field">
+//                 <label class="label">Attendance Code</label>
+//                 <div class="control">
+//                   <input id="attendanceCodeInput" class="input" type="text" placeholder="Enter attendance code">
+//                 </div>
+//                 <p id="attendanceStatus" class="help"></p>
+//                 <button id="submitAttendance" class="button is-success is-fullwidth mt-4">Submit Attendance</button>
+//               </div>
+//             </div>
+//           </div>
+//           <button class="modal-close is-large" aria-label="close"></button>
+//         </div>
+//       `;
+
+//       // Add modal HTML to the page
+//       document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+//       // Add event listener to the "Submit Attendance" button
+//       const submitAttendanceButton = document.getElementById('submitAttendance');
+//       submitAttendanceButton.addEventListener('click', async () => {
+//         const attendanceCodeInput = document.getElementById('attendanceCodeInput');
+//         const attendanceStatus = document.getElementById('attendanceStatus');
+//         const attendanceCode = attendanceCodeInput.value;
+
+//         // Fetch event details from Firestore
+//         const eventId = card.id; // Assuming the card has an "id" field
+//         const eventRef = firebase.firestore().collection('events').doc(eventId);
+//         const eventDoc = await eventRef.get();
+//         const eventData = eventDoc.data();
+
+//         // Check attendance code against the one in the database
+//         if (attendanceCode === eventData.attendance_code) {
+//           // Get the current user's UID
+//           const currentUserUid = firebase.auth().currentUser.uid;
+
+//           // Check if the user is already marked as attending
+//           if (eventData.members.includes(currentUserUid)) {
+//             attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
+//             // Hide the message after 3 seconds
+//             setTimeout(() => {
+//               attendanceStatus.innerText = '';
+//             }, 3000);
+//             return;
+//           }
+
+//           // Add the user's UID to the members array in the events collection
+//           await eventRef.update({
+//             members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
+//           });
+
+//           // Get the current user's document from the members collection
+//           const userRef = firebase.firestore().collection('members').doc(currentUserUid);
+//           const userDoc = await userRef.get();
+//           const userData = userDoc.data();
+
+//           // Add the event's DocID to the attended_events array in the user's document
+//           await userRef.update({
+//             attended_events: firebase.firestore.FieldValue.arrayUnion(eventId)
+//           });
+
+//           // Display attendance code validation status
+//           attendanceStatus.innerText = 'Attendance code is correct!';
+
+//           // Replace the "Event Details" button with a completed button
+//           eventDetailsButton.classList.remove('button');
+//           eventDetailsButton.classList.add('button', 'is-static');
+//           eventDetailsButton.disabled = true;
+//           eventDetailsButton.innerText = 'Completed!';
+//         } else {
+//           attendanceStatus.innerText = 'Attendance code is incorrect!';
+      
+//           // Hide the "Attendance code is incorrect!" message after 3 seconds
+//           setTimeout(() => {
+//             attendanceStatus.innerText = '';
+//           }, 3000);
+//         }
+//       });
+
+//       // Add event listener to the "Event Details" button
+//       eventDetailsButton.addEventListener('click', async (event) => {
+//         event.stopPropagation(); // stop click event propagation to prevent closing the modal
+//         //...
+//       });
+
+//       // Add event listener to the modal background
+//       const modalBackground = document.querySelector('.modal-background');
+//       modalBackground.addEventListener('click', () => {
+//         document.querySelector('.modal').remove();
+//       });
+
+//       // Add event listener to the modal close button
+//       const modalCloseButton = document.querySelector('.modal-close');
+//       modalCloseButton.addEventListener('click', () => {
+//         document.querySelector('.modal').remove();
+//       });
+//     });
+
+//     eventCards.appendChild(cardElement);
+//   });
+// })
+// .catch(error => {
+//   console.error(error);
+// });
 
 // ***PROFILE PAGE JS
 // add an event listener to the profile picture element
