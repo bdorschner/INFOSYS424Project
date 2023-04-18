@@ -186,7 +186,7 @@ No problems just yet.
 
 4/11/23:
 
-Jacob:
+Brian:
 a. What did you do yesterday?
 Yesterday I planned on seeing what visualization (maybe chart js?)
 b. What are you planning to do today?
@@ -194,7 +194,7 @@ Today I am planning on figuring out the CRUD of the events collection.
 c. Any problems are you facing?
 No problems right now in the sprint.
 
-Brian:
+Jacob:
 a. What did you do yesterday?
 Yesterday I added an edit button for user bio.
 b. What are you planning to do today?
