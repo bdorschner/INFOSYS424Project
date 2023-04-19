@@ -135,7 +135,7 @@
           <a class="navbar-item pl-5 pr-5 page-item" id="events" data-auth="true" style="display: none;">Upcoming Events</a>
           <a class="navbar-item pl-5 pr-5 page-item" id="contact">Contact Us</a>
           <a class="navbar-item pl-5 pr-5 page-item" id="resources">Resources</a>
-          <a class="navbar-item pl-5 pr-5 page-item" id="attendance" data-auth="true" style="display: none;">Attendance History</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="admin">Admin</a>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
@@ -405,9 +405,33 @@
 
 
     <!-- Attendance History content -->
-    <div class="container is-hidden" id="attendance_container">
+    <div class="container is-hidden" id="admin_container">
       <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Attendance History' page
+        <section class="section" id="adminDashboard">
+          <div class="container">
+            <h1 class="title">Admin Dashboard</h1>
+            <div class="tile is-ancestor">
+              <div class="tile is-parent is-4">
+                <button id="attendanceTracking" class="tile is-child box button">
+                  <h2 class="subtitle">Attendance Tracking</h2>
+                  <p>Manage attendance records and view reports.</p>
+                </button>
+              </div>
+              <div class="tile is-parent is-4">
+                <button id="clubMembers" class="tile is-child box button">
+                  <h2 class="subtitle">Club Members</h2>
+                  <p>View and manage club member information.</p>
+                </button>
+              </div>
+              <div class="tile is-parent is-4">
+                <button id="userFeedback" class="tile is-child box button">
+                  <h2 class="subtitle">User Feedback</h2>
+                  <p>Review and respond to user feedback and suggestions.</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
       </p>
     </div>
 

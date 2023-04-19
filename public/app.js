@@ -69,7 +69,7 @@ resources.addEventListener('click', () => {
 })
 // Insert 'Attendance' page content
 attendance.addEventListener('click', () => {
-    const attendance_container = document.querySelector('#attendance_container');
+    const attendance_container = document.querySelector('#admin_container');
     showPageContent(attendance_container);
 })
 // Insert 'Profile' page content
@@ -156,11 +156,11 @@ const signOut = document.getElementById('sign-out');
 const signOutBtn = document.getElementById('sign-out-button');
 const profilePic = document.getElementById('profile-pic');
 const upcomingEventsPage = document.getElementById('events');
-const attendanceHistoryPage = document.getElementById('attendance');
+const adminPage = document.getElementById('admin');
 
 // Hide upcoming events and attendance history page initially
 upcomingEventsPage.style.display = 'none';
-attendanceHistoryPage.style.display = 'none';
+//adminPage.style.display = 'none';
 
 // get a reference to the 'members' collection
 const membersCollection = db.collection('members');
@@ -174,7 +174,6 @@ if (user) {
     if (!doc.exists) {
       // create a new member document for the user
       membersCollection.doc(user.uid).set({
-        attendance_total: 0,
         attended_events: [],
         admin: false,
         email: user.email,
@@ -183,10 +182,10 @@ if (user) {
       });
     } else {
       // check if the user is not an admin
-      if (!doc.data().admin) {
-        // if user is not an admin, hide the attendance history page
-        attendanceHistoryPage.style.display = 'none';
-      }
+      // if (!doc.data().admin) {
+      //   // if user is not an admin, hide the admin history page
+      //   adminPage.style.display = 'none';
+      // }
     }
   });
   // update the UI to show the user is signed in
@@ -195,7 +194,7 @@ if (user) {
   profilePic.style.display = '';
   signOut.style.display = '';
   upcomingEventsPage.style.display = '';
-  attendanceHistoryPage.style.display = '';
+  adminPage.style.display = '';
 } else {
   // user is signed out
   // update the UI to show the user is signed out
@@ -203,7 +202,7 @@ if (user) {
   profilePic.style.display = 'none';
   signOut.style.display = 'none';
   upcomingEventsPage.style.display = 'none';
-  attendanceHistoryPage.style.display = 'none';
+  adminPage.style.display = 'none';
 }
 });
 
@@ -977,7 +976,7 @@ profilePic.addEventListener('click', () => {
       document.getElementById('profile_container').classList.remove('is-hidden');
       // hide the other pages
       document.getElementById('events_container').classList.add('is-hidden');
-      document.getElementById('attendance_container').classList.add('is-hidden');
+      document.getElementById('admin_container').classList.add('is-hidden');
     } else {
       console.error(`User document with UID ${user.uid} does not exist.`);
     }
