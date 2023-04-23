@@ -1,10 +1,10 @@
-// Global Variables
+// Global Variables for navbar and login auth
 const index = document.querySelector('#index');
 const about = document.querySelector('#about');
 const events = document.querySelector('#events');
 const contact = document.querySelector('#contact');
 const resources = document.querySelector('#resources');
-const attendance = document.querySelector('#attendance');
+const admin = document.querySelector('#admin');
 const profile = document.querySelector('#profile');
 
 // Bulma Navbar Burger JS for expanding Navbar on click
@@ -68,14 +68,19 @@ resources.addEventListener('click', () => {
     showPageContent(resources_container);
 })
 // Insert 'Attendance' page content
-attendance.addEventListener('click', () => {
-    const attendance_container = document.querySelector('#attendance_container');
-    showPageContent(attendance_container);
+admin.addEventListener('click', () => {
+    const admin_container = document.querySelector('#admin_container');
+    showPageContent(admin_container);
 })
 // Insert 'Profile' page content
 profile.addEventListener('click', () => {
   const profile_container = document.querySelector('#profile_container');
   showPageContent(profile_container);
+})
+// Insert 'Admin' page content
+admin.addEventListener('click', () => {
+  const admin_container = document.querySelector('#admin_container');
+  showPageContent(admin_container);
 })
 
 // Event listener to handle redirecting to Google auth - OLD WAY - likely is what's causing mobile browser errors
@@ -156,11 +161,11 @@ const signOut = document.getElementById('sign-out');
 const signOutBtn = document.getElementById('sign-out-button');
 const profilePic = document.getElementById('profile-pic');
 const upcomingEventsPage = document.getElementById('events');
-const attendanceHistoryPage = document.getElementById('attendance');
+const adminPage = document.getElementById('admin');
 
-// Hide upcoming events and attendance history page initially
+// Hide upcoming events and admin page initially
 upcomingEventsPage.style.display = 'none';
-attendanceHistoryPage.style.display = 'none';
+adminPage.style.display = 'none';
 
 // get a reference to the 'members' collection
 const membersCollection = db.collection('members');
@@ -184,8 +189,10 @@ if (user) {
     } else {
       // check if the user is not an admin
       if (!doc.data().admin) {
-        // if user is not an admin, hide the attendance history page
-        attendanceHistoryPage.style.display = 'none';
+        // if user is not an admin, hide the admin page
+        adminPage.style.display = 'none';
+      } else {
+        adminPage.style.display = '';
       }
     }
   });
@@ -195,7 +202,7 @@ if (user) {
   profilePic.style.display = '';
   signOut.style.display = '';
   upcomingEventsPage.style.display = '';
-  attendanceHistoryPage.style.display = '';
+  adminPage.style.display = '';
 } else {
   // user is signed out
   // update the UI to show the user is signed out
@@ -203,7 +210,7 @@ if (user) {
   profilePic.style.display = 'none';
   signOut.style.display = 'none';
   upcomingEventsPage.style.display = 'none';
-  attendanceHistoryPage.style.display = 'none';
+  adminPage.style.display = 'none';
 }
 });
 
@@ -983,5 +990,44 @@ profilePic.addEventListener('click', () => {
     }
   }).catch((error) => {
     console.error(error);
+  });
+});
+
+// ***ADMIN PAGE JS
+// Variables for Admin sub-pages
+const eventManagement = document.getElementById('event_management');
+const attendanceMetrics = document.getElementById('attendance_metrics');
+const viewAllUsers = document.getElementById('view_all_users');
+const memberFeedback = document.getElementById('member_feedback');
+
+// Insert 'Event Management' page content
+eventManagement.addEventListener('click', () => {
+  const event_management_container = document.querySelector('#event_management_container');
+  showPageContent(event_management_container);
+});
+
+// Insert 'Attendance Metrics' page content
+attendanceMetrics.addEventListener('click', () => {
+  const attendance_metrics_container = document.querySelector('#attendance_metrics_container');
+  showPageContent(attendance_metrics_container);
+});
+
+// Insert 'View All Users' page content
+viewAllUsers.addEventListener('click', () => {
+  const view_all_users_container = document.querySelector('#view_all_users_container');
+  showPageContent(view_all_users_container);
+});
+
+// Insert 'Member Feedback' page content
+memberFeedback.addEventListener('click', () => {
+  const member_feedback_container = document.querySelector('#member_feedback_container');
+  showPageContent(member_feedback_container);
+});
+
+const backButton = document.querySelectorAll('.back_btn');
+
+backButton.forEach((button) => {
+  button.addEventListener('click', () => {
+    showPageContent(admin_container);
   });
 });

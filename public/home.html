@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Bulma CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"/>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <!-- Cabin 500 fontpack -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -104,6 +106,38 @@
         }
       }
 
+      /* Admin Page CSS */
+      .tile.is-child {
+        cursor: pointer;
+      }
+      @media screen and (max-width: 768px) {
+        .admin-tile .tile-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .tile.is-ancestor.is-mobile {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .tile.is-parent {
+          margin: 0 15px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .admin-tile{
+          white-space: nowrap;
+          width: 20rem;
+          height: 12rem;
+        }
+      }
+      
       /* Profile Page CSS */
       @media screen and (max-width: 768px) {
         #profile_container .image.is-128x128 {
@@ -135,7 +169,7 @@
           <a class="navbar-item pl-5 pr-5 page-item" id="events" data-auth="true" style="display: none;">Upcoming Events</a>
           <a class="navbar-item pl-5 pr-5 page-item" id="contact">Contact Us</a>
           <a class="navbar-item pl-5 pr-5 page-item" id="resources">Resources</a>
-          <a class="navbar-item pl-5 pr-5 page-item" id="attendance" data-auth="true" style="display: none;">Attendance History</a>
+          <a class="navbar-item pl-5 pr-5 page-item" id="admin" data-auth="true" style="display: none;">Admin</a>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
@@ -321,12 +355,12 @@
       <h1 class="title has-text-centered">
         Club Events
       </h1>
-      <div class="columns">
+      <div class="columns m-4">
         <div class="column is-6">
-          <button class="button custom-danger is-fullwidth" id="upcoming_btn"> Upcoming Events </button>
+          <button class="button custom-danger is-fullwidth has-text-white" id="upcoming_btn"> Upcoming Events </button>
         </div>
         <div class="column is-6">
-          <button class="button custom-danger is-fullwidth" id="past_btn"> Past Events </button>
+          <button class="button custom-danger is-fullwidth has-text-white" id="past_btn"> Past Events </button>
         </div>
       </div>
         <div class="columns is-multiline m-4" id="event_cards">
@@ -404,11 +438,81 @@
     </div>
 
 
-    <!-- Attendance History content -->
-    <div class="container is-hidden" id="attendance_container">
+    <!-- Admin content -->
+    <div class="container is-hidden" id="admin_container">
+      <div class="tile is-ancestor is-mobile mt-4">
+        <div class="tile is-parent">
+          <button class="tile is-child box admin-tile" id="event_management">
+            <div class="tile-content">
+              <span class="icon is-large">
+                <i class="fas fa-2x fa-calendar-alt"></i>
+              </span>
+              <p class="title">Event Management</p>
+            </div>
+          </button>
+        </div>
+        <div class="tile is-parent">
+          <button class="tile is-child box admin-tile" id="attendance_metrics">
+            <div class="tile-content">
+              <span class="icon is-large">
+                <i class="fas fa-2x fa-chart-bar"></i>
+              </span>
+              <p class="title">Attendance Metrics</p>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="tile is-ancestor is-mobile mt-4">
+        <div class="tile is-parent">
+          <button class="tile is-child box admin-tile" id="view_all_users">
+            <div class="tile-content">
+              <span class="icon is-large">
+                <i class="fas fa-2x fa-users"></i>
+              </span>
+              <p class="title">View All Users</p>
+            </div>
+          </button>
+        </div>
+        <div class="tile is-parent">
+          <button class="tile is-child box admin-tile" id="member_feedback">
+            <div class="tile-content">
+              <span class="icon is-large">
+                <i class="fas fa-2x fa-comments"></i>
+              </span>
+              <p class="title">Member Feedback</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder Admin sub-pages -->
+    <div class="container is-hidden" id="event_management_container">
       <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Attendance History' page
+        Placeholder content for 'Event Management' page
       </p>
+      <button class="button is-primary back_btn m-3">Back</button>
+    </div>
+
+    <div class="container is-hidden" id="attendance_metrics_container">
+      <p class="title is-4 has-text-centered m-4">
+        Placeholder content for 'Attendance Metrics' page
+      </p>
+      <button class="button is-primary m-3 back_btn">Back</button>
+    </div>
+
+    <div class="container is-hidden" id="view_all_users_container">
+      <p class="title is-4 has-text-centered m-4">
+        Placeholder content for 'View All Users' page
+      </p>
+      <button class="button is-primary m-3 back_btn">Back</button>
+    </div>
+
+    <div class="container is-hidden" id="member_feedback_container">
+      <p class="title is-4 has-text-centered m-4">
+        Placeholder content for 'Member Feedback' page
+      </p>
+      <button class="button is-primary m-3 back_btn">Back</button>
     </div>
 
     <!-- Profile Page content -->
