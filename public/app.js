@@ -179,7 +179,6 @@ if (user) {
     if (!doc.exists) {
       // create a new member document for the user
       membersCollection.doc(user.uid).set({
-        attendance_total: 0,
         attended_events: [],
         admin: false,
         email: user.email,
@@ -957,7 +956,7 @@ profilePic.addEventListener('click', () => {
       // set the profile role
       document.getElementById('profile-role').innerHTML = `<strong>Club Role: </strong> ${userData.admin ? 'Admin' : 'Member'}`;
       // set the attendance total
-      document.getElementById('attendance-total').innerHTML = `<strong>Attendance Total: </strong> ${userData.attendance_total}`;
+      document.getElementById('attendance-total').innerHTML = `<strong>Attendance Total: </strong> ${userData.attended_events.length}`;
       // clear the table of attended events
       const attendedEventsTableBody = document.getElementById('attended-events-table').getElementsByTagName('tbody')[0];
       attendedEventsTableBody.innerHTML = '';
@@ -984,7 +983,6 @@ profilePic.addEventListener('click', () => {
       document.getElementById('profile_container').classList.remove('is-hidden');
       // hide the other pages
       document.getElementById('events_container').classList.add('is-hidden');
-      document.getElementById('attendance_container').classList.add('is-hidden');
     } else {
       console.error(`User document with UID ${user.uid} does not exist.`);
     }
