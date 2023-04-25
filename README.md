@@ -287,3 +287,112 @@ Day 14:
 
 We chose to document our ‘stand-up’ Scrum meetings from 4/20/23 and 4/25/23. Our reports from those dates are as follows:
 
+4/20/23:
+
+Jacob:
+a. What did you do yesterday?
+Yesterday I fixed our attendance_count and attendance_total logic so it is calculated and not incremented.
+b. What are you planning to do today?
+I am planning on beginning to write JavaScript/HTML/CSS for the admin page.
+c. Any problems are you facing?
+The problems I am facing is deciding how the admin panel should look.
+
+Brian:
+a. What did you do yesterday?
+Yesterday I looked at the various icons we could use for the DB.
+b. What are you planning to do today?
+I am planning on updating the resources page and contact us page.
+c. Any problems are you facing?
+I am having problems deciding how the icons should dissapear when they are clicked on.
+
+Michael:
+a. What did you do yesterday?
+Yesterday I researched why we are having login issues on mobile devices.
+b. What are you planning to do today?
+Today I plan to work on and test some of the research I found.
+c. Any problems are you facing?
+Why this issue is occuring. 
+
+Al:
+a. What did you do yesterday?
+Yesterday I updated the profile page.
+b. What are you planning to do today?
+I am planning to add a way so an admin can see an individual user's account profile.
+c. Any problems are you facing?
+No problems so far.
+
+Drew: 
+a. What did you do yesterday?
+Yesterday I on styling and organizing the JS code.
+b. What are you planning to do today?
+I am planning on fixing the contact us page into a collection when submitted.
+c. Any problems are you facing?
+How this collection can be linked into the admin panel.
+
+4/25/23:
+
+Brian:
+a. What did you do yesterday?
+Yesterday I updated the visualization charts.
+b. What are you planning to do today?
+Today I am planning on fixing some previous JS code.
+c. Any problems are you facing?
+No problems right now in the sprint.
+
+Jacob:
+a. What did you do yesterday?
+Yesterday I created the admin panel.
+b. What are you planning to do today?
+Today I am planning on completing the sections of the panel.
+c. Any problems are you facing?
+The problem I faced is completing admin connections to the DB.
+
+Michael:
+a. What did you do yesterday?
+Yesterday I worked on the mobile devices issue.
+b. What are you planning to do today?
+Today I am planning on continuing to debug the problem.
+c. Any problems are you facing?
+The problems I am facing is still the mobile device problem.
+
+Al:
+a. What did you do yesterday?
+Yesterday I fixed the logic for an admin to see any user.
+b. What are you planning to do today?
+Completing/fixing the profile page.
+c. Any problems are you facing?
+No problems I am facing.
+
+Drew: 
+a. What did you do yesterday?
+Yesterday I worked on the contact us collection.
+b. What are you planning to do today?
+Today I am planning on connecting it to the admin pannel now that it is created.
+c. Any problems are you facing?
+No problems right now towards the end of the sprint.
+
+#Sprint Review
+
+What did you learn from doing our third sprint?
+From our third sprint, our group executed perfect communication with each other during the two weeks and we were able to complete all of the back-end work in this sprint with admin panel, as well as doing the finishing touches on the client-side.
+
+What did go well? Why?
+What went well in this third sprint was the entire group understanding the tasks necessary for the sprint to be successful and who is assigned to what. Scrum Master Jacob was able to create a specific role designation document again that laid out all specific tasks for members before the start of the sprint, so each group member was able to get a head start in understanding what was needed to be completed in the two weeks.
+
+What didn’t go well? Why not?
+What did not go well in our third sprint was issues with the login and user authentication with Google. For example, there was an issue for four of our members to be able to login on their mobile devices.
+
+How can you make things better next time?
+We can make things better next time in our careers or future projects by using the project managment and agile skills we learned in this course so we will be ahead of the game in our careerpath.
+
+Are you satisfied with what you already completed?
+Yes, our group is satisfied with the work we put in on the third sprint. Our site is nearly completed and can be shown to the client with high confidence in the work we put in.
+
+Which group was invited? What are your observations/notes? Everybody was present?
+For the third sprint we met with group eight for the sprint review. This group's sprint was once again very similar to ours as they tailored and focuesed their sprint on the finishing touches and coding logic. We met in-person and talked about what went well and what could be improved for the last sprint, based on the postives and negatives of both groups. Everybody was present. 
+
+#Github Repo URL
+
+A link to our Github Repository can be found here: https://github.com/bdorschner/INFOSYS424Project
+
+
