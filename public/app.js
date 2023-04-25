@@ -1217,9 +1217,6 @@ function getAllContacts() {
     })
     .catch(function (error) {
       console.error("Error getting documents: ", error);
-      alert(
-        "There was an error retrieving the messages. Please try again later."
-      );
     });
 }
 
