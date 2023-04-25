@@ -373,7 +373,7 @@
       <div class="tile is-ancestor">
         <div class="tile is-parent">
           <div class="tile is-child box" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); background-color: white;">
-            <form action="#" method="post" class="mx-5 my-5">
+            <form id="contact-form" action="#" method="post" class="mx-5 my-5">
               <div class="field">
                 <label class="label" for="name">Name</label>
                 <div class="control">
@@ -385,7 +385,7 @@
               <div class="field">
                 <label class="label" for="email">Email</label>
                 <div class="control">
-                  <input class="input" type="email" placeholder="Email" name="email" id="contact-email" />
+                  <input class="input" type="email" placeholder="Email" name="email" id="contact-email" required/>
                 </div>
               </div>
   
@@ -509,9 +509,10 @@
     </div>
 
     <div class="container is-hidden" id="member_feedback_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Member Feedback' page
-      </p>
+      <h1 class="title">Member Feedback</h1>
+       <div class="tile is-ancestor" id="feedback_tiles">
+      <!-- Tiles will be added here dynamically -->
+      </div>
       <button class="button is-primary m-3 back_btn">Back</button>
     </div>
 
