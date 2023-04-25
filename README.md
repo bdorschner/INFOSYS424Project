@@ -275,13 +275,13 @@ A link to our Github Repository can be found here: https://github.com/bdorschner
 #Burndown Chart Images Day 4, 9, 14 (Scrum Master: Jacob Ringhand)
 
 Day 4:
-![alt text]()
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/2086b4297d64e8660889bcb7842c350ee804b19a/public/images/Sprint%203%20Day%204.png?raw=true)
 
 Day 9:
-![alt text]()
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/2086b4297d64e8660889bcb7842c350ee804b19a/public/images/Sprint%203%20Day%209.png?raw=true)
 
 Day 14: 
-![alt text]()
+![alt text](https://github.com/bdorschner/INFOSYS424Project/blob/2086b4297d64e8660889bcb7842c350ee804b19a/public/images/Sprint%203%20Day%2014.png?raw=true)
 
 #Daily Srum Meetings
 
