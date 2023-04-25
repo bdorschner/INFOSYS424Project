@@ -250,4 +250,40 @@ For the second sprint we met with group eight for the sprint review. This group'
 
 A link to our Github Repository can be found here: https://github.com/bdorschner/INFOSYS424Project
 
+#Sprint 3:
+
+#User Stories:
+1. As an ISS member/user, I want to be able to login and authenticate my user status on my mobile device.
+2. As an ISS admin, I wnat to be able to see a fully-finished admin panel where I can operate and see all of the logistics of ISS.
+3. As an ISS user, I want to be able to send a contact form directly to an admin, and as an admin I want to see this form info directly in the admin panel.
+4. As an ISS user, I want to be able to see that when I enter the correct password for an event there is confirmation
+
+#Task Assignment Table
+| Task                                 | Corresponding Story Number      | Duration     | Priority      | Complexity        | Lead Person             |
+| ------------------------------------ | ------------------------------- | ------------ | ------------- | ----------------- | ----------------------- |
+| Fix Google Auth. on Mobile Devices   | 1                               | 5 hours      | 9             | High              | Everyone                |
+| Update attendance count and total JS | 2                               | 1 hours      | 3             | Average           | Jacob                   |
+| Add loading icons for database       | 2                               | 1 hours      | 2             | Average           | Brian                   |
+| Update submit attendance button JS   | 4                               | 1 hour       | 4             | Average           | Michael                 |
+| Create admin panel                   | 2                               | 6 hour       | 9             | High              | Everyone                |
+| Allow admin to see individual user   | 2                               | 1 hour       | 5             | Average           | Al                      |
+| Update Contact Us form with admin    | 3                               | 2 hour       | 4             | Average           | Drew                    |
+| Fix/Complete all JS and DB Logic     | 1, 2, 3, 4                      | 5 hours      | 10            | High              | Everyone                |
+
+#Trello Board Sprint Three Link: https://trello.com/invite/b/Q0LP80JF/ATTI52808e57e50ca77a7213094947d8cf27CCA43EA8/is424-group-4-sprint-three
+
+#Burndown Chart Images Day 4, 9, 14 (Scrum Master: Jacob Ringhand)
+
+Day 4:
+![alt text]()
+
+Day 9:
+![alt text]()
+
+Day 14: 
+![alt text]()
+
+#Daily Srum Meetings
+
+We chose to document our ‘stand-up’ Scrum meetings from 4/20/23 and 4/25/23. Our reports from those dates are as follows:
 
