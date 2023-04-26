@@ -1157,7 +1157,7 @@ const contactCollection = db.collection("contacts");
 function createTile(doc) {
   // Create tile element
   const tile = document.createElement("div");
-  tile.className = "tile is-parent is-4";
+  tile.className = "column is-one-third px-3 py-3";
 
   // Create box element
   const box = document.createElement("div");
