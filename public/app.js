@@ -83,59 +83,6 @@ admin.addEventListener('click', () => {
   showPageContent(admin_container);
 })
 
-// Event listener to handle redirecting to Google auth - OLD WAY - likely is what's causing mobile browser errors
-// login.addEventListener('click', (e) => {
-//   signInWithRedirect(auth, provider);
-
-//   // Redirect to another page
-//   getRedirectResult(auth)
-//     .then((result) => {
-//       // This gives you a Google Access Token. You can use it to access Google APIs.
-//       const credential = GoogleAuthProvider.credentialFromResult(result);
-//       const token = credential.accessToken;
-
-//       // The signed-in user info.
-//       const user = result.user;
-
-//     }).catch((error) => {
-//       // Handle Errors here.
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//       // The email of the user's account used.
-//       const email = error.email;
-//       // The AuthCredential type that was used.
-//       const credential = GoogleAuthProvider.credentialFromError(error);
-//       // ...
-      
-//   });
-// })
-
-// Event listener to handle Google auth
-// Source: https://firebase.google.com/docs/auth/web/redirect-best-practices
-login.addEventListener('click', async (e) => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    
-    // This gives you a Google Access Token. You can use it to access Google APIs.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-
-    // The signed-in user info.
-    const user = result.user;
-
-  } catch (error) {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-  }
-});
-
 // *** NAVBAR AND LOGIN AUTH JS
 const navbarItems = document.querySelectorAll('.navbar-item');
 
@@ -213,18 +160,66 @@ if (user) {
 }
 });
 
+// Event listener to handle Google auth
+// Source: https://firebase.google.com/docs/auth/web/redirect-best-practices
+// login.addEventListener('click', async (e) => {
+//   try {
+//     const provider = new GoogleAuthProvider();
+//     const result = await signInWithPopup(auth, provider);
+    
+//     // This gives you a Google Access Token. You can use it to access Google APIs.
+//     const credential = GoogleAuthProvider.credentialFromResult(result);
+//     const token = credential.accessToken;
+
+//     // The signed-in user info.
+//     const user = result.user;
+
+//   } catch (error) {
+//     // Handle Errors here.
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     // The email of the user's account used.
+//     const email = error.email;
+//     // The AuthCredential type that was used.
+//     const credential = GoogleAuthProvider.credentialFromError(error);
+//     // ...
+//   }
+// });
+
 // handle sign in button click event
-loginButton.addEventListener('click', () => {
+loginButton.addEventListener('click', async (e) => {
   // Use signInWithPopup instead of signInWithRedirect
   auth.signInWithPopup(provider)
     .then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = result.credential;
-      const token = credential.accessToken;
-
       // The signed-in user info.
       const user = result.user;
-      
+
+      // get a reference to the 'members' collection
+      const membersCollection = db.collection('members');
+
+      // check if the user exists in the 'members' collection
+      membersCollection.doc(user.uid).get().then(doc => {
+        if (!doc.exists) {
+          // create a new member document for the user
+          membersCollection.doc(user.uid).set({
+            attended_events: [],
+            admin: false,
+            email: user.email,
+            name: user.displayName, 
+            photoURL: user.photoURL
+          });
+        } else {
+          // check if the user is not an admin
+          if (!doc.data().admin) {
+            // if user is not an admin, hide the admin page
+            adminPage.style.display = 'none';
+          } else {
+            adminPage.style.display = '';
+          }
+        }
+      });
+
+      location.reload();
     })
     .catch((error) => {
       // Handle Errors here.
@@ -234,6 +229,7 @@ loginButton.addEventListener('click', () => {
       const email = error.email;
       // The AuthCredential type that was used.
       const credential = error.credential;
+      // ...
     });
 });
 
@@ -277,10 +273,6 @@ db.collection('events')
     upcomingEventButton.style.display = 'none';
     noEventElement.style.display = 'block';
   }
-})
-.catch(error => {
-  console.error(error);
-  noEventElement.style.display = 'block';
 });
 
 const eventDetailsButton = document.querySelector('#event-details-button');
@@ -678,6 +670,8 @@ db.collection('events').get().then(querySnapshot => {
     cards.push(card);
   });
 
+  console.log(cards);
+
   // Sort the cards by date
   cards.sort((a, b) => a.date - b.date);
 
@@ -748,7 +742,7 @@ db.collection('events').get().then(querySnapshot => {
   });
 })
 .catch(error => {
-  console.error(error);
+  // console.error(error);
 });
 
 // *** UPCOMING EVENTS PAGE JS (OLD)
