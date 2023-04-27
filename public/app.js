@@ -1051,7 +1051,9 @@ backButton.forEach((button) => {
 });
 
 function createEventAttendanceChart(dbRef, chartId) {
-  return dbRef.collection('events').orderBy('date', 'asc').get().then(querySnapshot => {
+  const query = db.collection('events').orderBy('date', 'desc').limit(10);
+
+  return query.get().then(querySnapshot => {
 
     // Process the data returned from the database
     const data = {
@@ -1067,9 +1069,15 @@ function createEventAttendanceChart(dbRef, chartId) {
 
     querySnapshot.forEach(doc => {
       const event = doc.data();
-      data.labels.push(event.name);
-      data.datasets[0].data.push(event.members.length);
+      data.labels.unshift(event.name); // Add event name to start of labels array
+      data.datasets[0].data.unshift(event.members.length); // Add attendee count to start of data array
     });
+
+    // Check if a Chart.js instance already exists for the specified chart ID
+    const existingChart = Chart.getChart(chartId);
+    if (existingChart) {
+      existingChart.destroy();
+    }
 
     // Create a new Chart.js bar chart object
     const ctx = document.getElementById(chartId).getContext('2d');
@@ -1102,3 +1110,5 @@ function createEventAttendanceChart(dbRef, chartId) {
     return chart;
   });
 }
+
+
