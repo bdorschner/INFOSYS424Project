@@ -1350,19 +1350,6 @@ function fetchUserData() {
   db.collection('members')
     .get()
     .then((querySnapshot) => {
-      // Create an array of user documents
-      const users = querySnapshot.docs.map((doc) => {
-        return {
-          id: doc.id,
-          data: doc.data(),
-        };
-      });
-
-      // Sort the user documents by the 'name' field
-      users.sort((userA, userB) => {
-        return userA.data.name.localeCompare(userB.data.name);
-      });
-
       const userList = document.getElementById('userList');
       userList.innerHTML = '';
       querySnapshot.forEach((doc) => {
@@ -1379,7 +1366,28 @@ function fetchUserData() {
         row.appendChild(emailCell);
 
         const adminCell = document.createElement('td');
-        adminCell.textContent = user.admin ? 'Yes' : 'No';
+        const adminSelect = document.createElement('select');
+        const yesOption = document.createElement('option');
+        yesOption.value = 'yes';
+        yesOption.textContent = 'Yes';
+        adminSelect.appendChild(yesOption);
+
+        const noOption = document.createElement('option');
+        noOption.value = 'no';
+        noOption.textContent = 'No';
+        adminSelect.appendChild(noOption);
+
+        adminSelect.value = user.admin ? 'yes' : 'no';
+        adminSelect.addEventListener('change', () => {
+          updateUserAdminStatus(doc.id, adminSelect.value === 'yes');
+        });
+
+        // Add the click event listener to stop event propagation
+        adminSelect.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+
+        adminCell.appendChild(adminSelect);
         row.appendChild(adminCell);
 
         userList.appendChild(row);
@@ -1389,6 +1397,18 @@ function fetchUserData() {
       console.error('Error fetching user data:', error);
     });
 }
+
+async function updateUserAdminStatus(userId, isAdmin) {
+  try {
+    await db.collection('members').doc(userId).update({
+      admin: isAdmin,
+    });
+    console.log(`User ${userId} admin status updated to: ${isAdmin}`);
+  } catch (error) {
+    console.error('Error updating user admin status:', error);
+  }
+}
+
 
 
 // Add an event listener to close the modal when the 'X' button is clicked
