@@ -489,7 +489,7 @@
     <!-- Placeholder Admin sub-pages -->
     <div class="container is-hidden" id="event_management_container">
       <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Event Management' page
+
       </p>
       <button class="button is-primary back_btn m-3">Back</button>
     </div>
@@ -503,10 +503,32 @@
     </div>
 
     <div class="container is-hidden" id="view_all_users_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'View All Users' page
-      </p>
-      <button class="button is-primary m-3 back_btn">Back</button>
+      <button class="button customer-danger m-3 back_btn">Back</button>
+      <p class="title is-4 has-text-centered m-4">Member List</p>
+      <div class="table-container">
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                </tr>
+            </thead>
+            <tbody id="userList">
+                <!-- User list will be populated here -->
+            </tbody>
+        </table>
+        <div class="modal" id="eventsModal">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <div class="box">
+              <h3 class="title is-4">Attended Events</h3>
+              <ul id="attendedEvents"></ul>
+            </div>
+          </div>
+          <button class="modal-close is-large" aria-label="close" id="closeModal"></button>
+        </div>      
+      </div>
     </div>
 
     <div class="container is-hidden" id="member_feedback_container">
