@@ -1026,6 +1026,7 @@ eventManagement.addEventListener('click', () => {
 // Insert 'Attendance Metrics' page content
 attendanceMetrics.addEventListener('click', () => {
   const attendance_metrics_container = document.querySelector('#attendance_metrics_container');
+  createEventAttendanceChart(db, 'eventAttendanceChart')
   showPageContent(attendance_metrics_container);
 });
 
@@ -1048,3 +1049,56 @@ backButton.forEach((button) => {
     showPageContent(admin_container);
   });
 });
+
+function createEventAttendanceChart(dbRef, chartId) {
+  return dbRef.collection('events').orderBy('date', 'asc').get().then(querySnapshot => {
+
+    // Process the data returned from the database
+    const data = {
+      labels: [], // event names will go here
+      datasets: [{
+        label: 'Event Attendance',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        data: [] // number of attendees will go here
+      }]
+    };
+
+    querySnapshot.forEach(doc => {
+      const event = doc.data();
+      data.labels.push(event.name);
+      data.datasets[0].data.push(event.members.length);
+    });
+
+    // Create a new Chart.js bar chart object
+    const ctx = document.getElementById(chartId).getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Event Attendance'
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Event Name'
+            }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Number of Attendees'
+            }
+          }]
+        }
+      }
+    });
+
+    return chart;
+  });
+}

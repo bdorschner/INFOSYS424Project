@@ -495,10 +495,11 @@
     </div>
 
     <div class="container is-hidden" id="attendance_metrics_container">
-      <p class="title is-4 has-text-centered m-4">
-        Placeholder content for 'Attendance Metrics' page
-      </p>
-      <button class="button is-primary m-3 back_btn">Back</button>
+      <button class="button custom-danger m-3 back_btn">Back</button>
+      <p class="title is-4 has-text-centered m-4">Attendance Metrics</p>
+      <div class="box">
+        <canvas id="eventAttendanceChart"></canvas>
+      </div>
     </div>
 
     <div class="container is-hidden" id="view_all_users_container">
@@ -592,7 +593,7 @@
       let ref = firebase.storage().ref();
       let provider = new firebase.auth.GoogleAuthProvider(); 
     </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
