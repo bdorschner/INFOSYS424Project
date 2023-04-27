@@ -1364,6 +1364,7 @@ function fetchUserData() {
       });
 
       const userList = document.getElementById('userList');
+      userList.innerHTML = '';
       querySnapshot.forEach((doc) => {
         const user = doc.data();
         const row = document.createElement('tr');
