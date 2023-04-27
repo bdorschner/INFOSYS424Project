@@ -250,7 +250,7 @@ const noEventElement = document.querySelector('#no-event-element');
 const now = new Date();
 
 db.collection('events')
-.where('date', '>', now)
+// .where('date', '>', now)
 .orderBy('date', 'asc')
 .limit(1)
 .get()
