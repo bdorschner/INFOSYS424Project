@@ -1032,6 +1032,7 @@ attendanceMetrics.addEventListener('click', () => {
 // Insert 'View All Users' page content
 viewAllUsers.addEventListener('click', () => {
   const view_all_users_container = document.querySelector('#view_all_users_container');
+  fetchUserData();
   showPageContent(view_all_users_container);
 });
 
@@ -1048,3 +1049,88 @@ backButton.forEach((button) => {
     showPageContent(admin_container);
   });
 });
+
+function fetchUserData() {
+  db.collection('members')
+    .get()
+    .then((querySnapshot) => {
+      // Create an array of user documents
+      const users = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          data: doc.data(),
+        };
+      });
+
+      // Sort the user documents by the 'name' field
+      users.sort((userA, userB) => {
+        return userA.data.name.localeCompare(userB.data.name);
+      });
+
+      const userList = document.getElementById('userList');
+      querySnapshot.forEach((doc) => {
+        const user = doc.data();
+        const row = document.createElement('tr');
+        row.addEventListener('click', () => fetchAttendedEvents(doc.id));
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = user.name;
+        row.appendChild(nameCell);
+
+        const emailCell = document.createElement('td');
+        emailCell.textContent = user.email;
+        row.appendChild(emailCell);
+
+        const adminCell = document.createElement('td');
+        adminCell.textContent = user.admin ? 'Yes' : 'No';
+        row.appendChild(adminCell);
+
+        userList.appendChild(row);
+      });
+    })
+    .catch((error) => {
+      console.error('Error fetching user data:', error);
+    });
+}
+
+
+// Add an event listener to close the modal when the 'X' button is clicked
+document.getElementById('closeModal').addEventListener('click', () => {
+  const eventsModal = document.getElementById('eventsModal');
+  eventsModal.classList.remove('is-active');
+});
+
+async function fetchAttendedEvents(userId) {
+  try {
+    const memberDoc = await db.collection('members').doc(userId).get();
+
+    if (memberDoc.exists) {
+      const attendedEventsList = memberDoc.data().attended_events;
+
+      const attendedEvents = document.getElementById('attendedEvents');
+      attendedEvents.innerHTML = '';
+
+      const eventsModal = document.getElementById('eventsModal');
+      eventsModal.classList.add('is-active');
+
+      for (const eventId of attendedEventsList) {
+        const eventDoc = await db.collection('events').doc(eventId).get();
+
+        if (eventDoc.exists) {
+          const event = eventDoc.data();
+          console.log('Event:', event);
+
+          const listItem = document.createElement('li');
+          listItem.textContent = `${event.name} (${event.date.toDate().toLocaleDateString()})`;
+          attendedEvents.appendChild(listItem);
+        } else {
+          console.error(`No such event with ID: ${eventId}`);
+        }
+      }
+    } else {
+      console.error('No such member document!');
+    }
+  } catch (error) {
+    console.error('Error fetching attended events:', error);
+  }
+}
