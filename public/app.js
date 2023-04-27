@@ -1015,7 +1015,175 @@ const memberFeedback = document.getElementById('member_feedback');
 eventManagement.addEventListener('click', () => {
   const event_management_container = document.querySelector('#event_management_container');
   showPageContent(event_management_container);
+
+  // Get reference to Firestore database
+  const db = firebase.firestore();
+
+  // Get reference to 'events' collection
+  const eventsRef = db.collection('events');
+
+  // Get all documents in the 'events' collection
+  eventsRef.get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+
+      // Display each document's data
+      // You can replace the console.log() with your own function to display the data on the page
+    });
+  });
 });
+
+function addEvent(name, date, description, image_url, attendance_code, members) {
+  // Get reference to Firestore database
+  const db = firebase.firestore();
+
+  // Add a new document to the 'events' collection
+  db.collection("events").add({
+    name: name,
+    date: date,
+    description: description,
+    image_url: image_url,
+    attendance_code: attendance_code,
+    members: members
+  })
+  .then((docRef) => {
+    console.log("Document written with ID: ", docRef.id);
+  })
+  .catch((error) => {
+    console.error("Error adding document: ", error);
+  });
+}
+
+function updateEvent(eventId, updatedData) {
+  // Get reference to Firestore database
+  const db = firebase.firestore();
+
+  // Update the document
+  db.collection("events").doc(eventId).update(updatedData)
+  .then(() => {
+    console.log("Document successfully updated!");
+  })
+  .catch((error) => {
+    console.error("Error updating document: ", error);
+  });
+}
+
+function deleteEvent(eventId) {
+  // Get reference to Firestore database
+  const db = firebase.firestore();
+
+  // Delete the document
+  db.collection("events").doc(eventId).delete()
+  .then(() => {
+    console.log("Document successfully deleted!");
+  })
+  .catch((error) => {
+    console.error("Error removing document: ", error);
+  });
+}
+// Get references to HTML elements
+const createEventButton = document.querySelector('#createEventButton');
+const createEventModal = document.querySelector('#createEventModal');
+const createEventForm = document.querySelector('#createEventForm');
+const eventsTableBody = document.querySelector('#eventsTableBody');
+const deleteEventModal = document.querySelector('#deleteEventModal');
+const confirmDeleteButton = document.querySelector('#confirmDeleteButton');
+
+// Show Create Event modal when button is clicked
+createEventButton.addEventListener('click', () => {
+  createEventModal.style.display = 'block';
+});
+
+// Handle Create Event form submission
+createEventForm.addEventListener('submit', (e) => {
+  e.preventDefault(); // prevent form from refreshing the page
+  
+  // get form values
+  const name = document.querySelector('#create_name').value;
+  const description = document.querySelector('#create_description').value;
+  const imageUrl = document.querySelector('#create_imageUrl').value;
+  const attendanceCode = document.querySelector('#create_attendanceCode').value;
+  //... and so on for other fields ...
+
+  // call addEvent function with form values
+  addEvent(name, description, imageUrl, attendanceCode, /*... other fields ...*/);
+
+  // clear form and hide modal
+  createEventForm.reset();
+  createEventModal.style.display = 'none';
+});
+
+// Function for adding an event to the table
+function addEventToTable(eventId, name, description, imageUrl, attendanceCode /*... other fields ...*/) {
+  const row = document.createElement('tr');
+
+  row.innerHTML = `
+    <td>${name}</td>
+    <td>${description}</td>
+    <td>${imageUrl}</td>
+    <td>${attendanceCode}</td>
+    <!--... and so on for other fields ...-->
+    <td><button class="editButton" data-id="${eventId}">Edit</button></td>
+    <td><button class="deleteButton" data-id="${eventId}">Delete</button></td>
+  `;
+
+  eventsTableBody.appendChild(row);
+}
+
+// Function for fetching events from Firestore and adding them to the table
+function fetchEvents() {
+  firebase.firestore().collection('events').get().then((snapshot) => {
+    snapshot.docs.forEach(doc => {
+      const event = doc.data();
+      addEventToTable(doc.id, event.name, event.description, event.imageUrl, event.attendanceCode /*... other fields ...*/);
+    });
+  });
+}
+
+// Call fetchEvents when the page loads
+fetchEvents();
+
+// Event listener for Edit and Delete buttons
+eventsTableBody.addEventListener('click', (e) => {
+  if (e.target.classList.contains('editButton')) {
+    // Handle edit
+    const eventId = e.target.getAttribute('data-id');
+    // fetch event and show edit form
+  } else if (e.target.classList.contains('deleteButton')) {
+    // Handle delete
+    const eventId = e.target.getAttribute('data-id');
+    deleteEventModal.style.display = 'block';
+    confirmDeleteButton.onclick = () => {
+      deleteEvent(eventId);
+    };
+  }
+});
+
+// Function for adding an event to Firestore
+function addEvent(name, description, imageUrl, attendanceCode /*... other fields ...*/) {
+  firebase.firestore().collection('events').add({
+    name,
+    description,
+    imageUrl,
+    attendanceCode,
+    //... and so on for other fields ...
+  }).then(() => {
+    // fetch events again to update the table
+    fetchEvents();
+  });
+}
+
+// Function for deleting an event from Firestore
+function deleteEvent(eventId) {
+  firebase.firestore().collection('events').doc(eventId).delete().then(() => {
+    // fetch events again to update the table
+    fetchEvents();
+
+    // hide delete modal
+    deleteEventModal.style.display = 'none';
+  });
+};
+
 
 // Insert 'Attendance Metrics' page content
 attendanceMetrics.addEventListener('click', () => {

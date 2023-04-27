@@ -488,9 +488,50 @@
 
     <!-- Placeholder Admin sub-pages -->
     <div class="container is-hidden" id="event_management_container">
-      <p class="title is-4 has-text-centered m-4">
+      <!-- <p class="title is-4 has-text-centered m-4">
         Placeholder content for 'Event Management' page
-      </p>
+      </p> -->
+      <!-- Create Event button and modal -->
+      <button id="createEventButton">Create Event</button>
+
+      <div id="createEventModal" class="modal">
+        <div class="modal-content">
+          <form id="createEventForm">
+            <input type="text" id="create_name" placeholder="Event Name" required>
+            <input type="text" id="create_description" placeholder="Event Description" required>
+            <input type="text" id="create_imageUrl" placeholder="Image URL" required>
+            <input type="text" id="create_attendanceCode" placeholder="Attendance Code" required>
+            <!--... and so on for other fields ...-->
+            <button type="submit">Create Event</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Events table -->
+      <table id="eventsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Image URL</th>
+            <th>Attendance Code</th>
+            <!--... and so on for other fields ...-->
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="eventsTableBody">
+          <!-- This is where the events will be added -->
+        </tbody>
+      </table>
+
+      <!-- Delete Event modal -->
+      <div id="deleteEventModal" class="modal">
+        <div class="modal-content">
+          <p>Are you sure you want to delete this event?</p>
+          <button id="confirmDeleteButton">Delete</button>
+        </div>
+      </div>
       <button class="button is-primary back_btn m-3">Back</button>
     </div>
 
