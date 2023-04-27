@@ -1,163 +1,217 @@
 // Global Variables for navbar and login auth
-const index = document.querySelector('#index');
-const about = document.querySelector('#about');
-const events = document.querySelector('#events');
-const contact = document.querySelector('#contact');
-const resources = document.querySelector('#resources');
-const admin = document.querySelector('#admin');
-const profile = document.querySelector('#profile');
+const index = document.querySelector("#index");
+const about = document.querySelector("#about");
+const events = document.querySelector("#events");
+const contact = document.querySelector("#contact");
+const resources = document.querySelector("#resources");
+const admin = document.querySelector("#admin");
+const profile = document.querySelector("#profile");
 
 // Bulma Navbar Burger JS for expanding Navbar on click
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(
+    document.querySelectorAll(".navbar-burger"),
+    0
+  );
 
-    // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-  
-    // Add a click event on each of them
-    $navbarBurgers.forEach( el => {
-      el.addEventListener('click', () => {
-  
-        // Get the target from the "data-target" attribute
-        const target = el.dataset.target;
-        const $target = document.getElementById(target);
-  
-        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-        el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
-  
-      });
+  // Add a click event on each of them
+  $navbarBurgers.forEach((el) => {
+    el.addEventListener("click", () => {
+      // Get the target from the "data-target" attribute
+      const target = el.dataset.target;
+      const $target = document.getElementById(target);
+
+      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+      el.classList.toggle("is-active");
+      $target.classList.toggle("is-active");
     });
-  
   });
+});
 
 // Function for showing main content when a particular button is clicked
 function showPageContent(container) {
-    const containers = document.querySelectorAll('.container');
-    containers.forEach((c) => {
-      if (c == container) {
-        c.classList.remove('is-hidden');
-      } else {
-        c.classList.add('is-hidden');
-      }
-    });
+  const containers = document.querySelectorAll(".container");
+  containers.forEach((c) => {
+    if (c == container) {
+      c.classList.remove("is-hidden");
+    } else {
+      c.classList.add("is-hidden");
+    }
+  });
 }
 
 // Insert 'Home' page content
-index.addEventListener('click', () => {
-    const index_container = document.querySelector('#index_container');
-    showPageContent(index_container);
-})
+index.addEventListener("click", () => {
+  const index_container = document.querySelector("#index_container");
+  showPageContent(index_container);
+});
 // Insert 'About Us' page content
-about.addEventListener('click', () => {
-    const about_container = document.querySelector('#about_container');
-    showPageContent(about_container);
-})
+about.addEventListener("click", () => {
+  const about_container = document.querySelector("#about_container");
+  showPageContent(about_container);
+});
 // Insert 'Upcoming Events' page content
-events.addEventListener('click', () => {
-    const events_container = document.querySelector('#events_container');
-    showPageContent(events_container);
-})
+events.addEventListener("click", () => {
+  const events_container = document.querySelector("#events_container");
+  showPageContent(events_container);
+});
 // Insert 'Contact Us' page content
-contact.addEventListener('click', () => {
-    const contact_container = document.querySelector('#contact_container');
-    showPageContent(contact_container);
-})
+contact.addEventListener("click", () => {
+  const contact_container = document.querySelector("#contact_container");
+  showPageContent(contact_container);
+});
 // Insert 'Resources' page content
-resources.addEventListener('click', () => {
-    const resources_container = document.querySelector('#resources_container');
-    showPageContent(resources_container);
-})
+resources.addEventListener("click", () => {
+  const resources_container = document.querySelector("#resources_container");
+  showPageContent(resources_container);
+});
 // Insert 'Attendance' page content
-admin.addEventListener('click', () => {
-    const admin_container = document.querySelector('#admin_container');
-    showPageContent(admin_container);
-})
-// Insert 'Profile' page content
-profile.addEventListener('click', () => {
-  const profile_container = document.querySelector('#profile_container');
-  showPageContent(profile_container);
-})
-// Insert 'Admin' page content
-admin.addEventListener('click', () => {
-  const admin_container = document.querySelector('#admin_container');
+admin.addEventListener("click", () => {
+  const admin_container = document.querySelector("#admin_container");
   showPageContent(admin_container);
-})
+});
+// Insert 'Profile' page content
+profile.addEventListener("click", () => {
+  const profile_container = document.querySelector("#profile_container");
+  showPageContent(profile_container);
+});
+// Insert 'Admin' page content
+admin.addEventListener("click", () => {
+  const admin_container = document.querySelector("#admin_container");
+  showPageContent(admin_container);
+});
+
+// Event listener to handle redirecting to Google auth - OLD WAY - likely is what's causing mobile browser errors
+// login.addEventListener('click', (e) => {
+//   signInWithRedirect(auth, provider);
+
+//   // Redirect to another page
+//   getRedirectResult(auth)
+//     .then((result) => {
+//       // This gives you a Google Access Token. You can use it to access Google APIs.
+//       const credential = GoogleAuthProvider.credentialFromResult(result);
+//       const token = credential.accessToken;
+
+//       // The signed-in user info.
+//       const user = result.user;
+
+//     }).catch((error) => {
+//       // Handle Errors here.
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       // The email of the user's account used.
+//       const email = error.email;
+//       // The AuthCredential type that was used.
+//       const credential = GoogleAuthProvider.credentialFromError(error);
+//       // ...
+
+//   });
+// })
+
+// Event listener to handle Google auth
+// Source: https://firebase.google.com/docs/auth/web/redirect-best-practices
+login.addEventListener("click", async (e) => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+
+    // This gives you a Google Access Token. You can use it to access Google APIs.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+
+    // The signed-in user info.
+    const user = result.user;
+  } catch (error) {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  }
+});
 
 // *** NAVBAR AND LOGIN AUTH JS
-const navbarItems = document.querySelectorAll('.navbar-item');
+const navbarItems = document.querySelectorAll(".navbar-item");
 
-const homeNavItem = document.querySelector('#index');
+const homeNavItem = document.querySelector("#index");
 
-homeNavItem.classList.add('active');
+homeNavItem.classList.add("active");
 
-navbarItems.forEach(item => {
-item.addEventListener('click', () => {
-  // Remove the active class from all navbar items
-  navbarItems.forEach(item => {
-    item.classList.remove('active');
+navbarItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    // Remove the active class from all navbar items
+    navbarItems.forEach((item) => {
+      item.classList.remove("active");
+    });
+
+    // Add the active class to the clicked navbar item
+    item.classList.add("active");
   });
-
-  // Add the active class to the clicked navbar item
-  item.classList.add('active');
-});
 });
 
 // Replace Sign-in button with user icon and sign out button
-const loginButton = document.getElementById('login');
-const signOut = document.getElementById('sign-out');
-const signOutBtn = document.getElementById('sign-out-button');
-const profilePic = document.getElementById('profile-pic');
-const upcomingEventsPage = document.getElementById('events');
-const adminPage = document.getElementById('admin');
+const loginButton = document.getElementById("login");
+const signOut = document.getElementById("sign-out");
+const signOutBtn = document.getElementById("sign-out-button");
+const profilePic = document.getElementById("profile-pic");
+const upcomingEventsPage = document.getElementById("events");
+const adminPage = document.getElementById("admin");
 
 // Hide upcoming events and admin page initially
-upcomingEventsPage.style.display = 'none';
-adminPage.style.display = 'none';
+upcomingEventsPage.style.display = "none";
+adminPage.style.display = "none";
 
 // get a reference to the 'members' collection
-const membersCollection = db.collection('members');
+const membersCollection = db.collection("members");
 
 // listen for authentication state changes
-auth.onAuthStateChanged(user => {
-if (user) {
-  // user is signed in
-  // check if the user exists in the 'members' collection
-  membersCollection.doc(user.uid).get().then(doc => {
-    if (!doc.exists) {
-      // create a new member document for the user
-      membersCollection.doc(user.uid).set({
-        attended_events: [],
-        admin: false,
-        email: user.email,
-        name: user.displayName, 
-        photoURL: user.photoURL
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    // user is signed in
+    // check if the user exists in the 'members' collection
+    membersCollection
+      .doc(user.uid)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          // create a new member document for the user
+          membersCollection.doc(user.uid).set({
+            attended_events: [],
+            admin: false,
+            email: user.email,
+            name: user.displayName,
+            photoURL: user.photoURL,
+          });
+        } else {
+          // check if the user is not an admin
+          if (!doc.data().admin) {
+            // if user is not an admin, hide the admin page
+            adminPage.style.display = "none";
+          } else {
+            adminPage.style.display = "";
+          }
+        }
       });
-    } else {
-      // check if the user is not an admin
-      if (!doc.data().admin) {
-        // if user is not an admin, hide the admin page
-        adminPage.style.display = 'none';
-      } else {
-        adminPage.style.display = '';
-      }
-    }
-  });
-  // update the UI to show the user is signed in
-  loginButton.style.display = 'none';
-  profilePic.src = user.photoURL;
-  profilePic.style.display = '';
-  signOut.style.display = '';
-  upcomingEventsPage.style.display = '';
-  adminPage.style.display = '';
-} else {
-  // user is signed out
-  // update the UI to show the user is signed out
-  loginButton.style.display = '';
-  profilePic.style.display = 'none';
-  signOut.style.display = 'none';
-  upcomingEventsPage.style.display = 'none';
-  adminPage.style.display = 'none';
-}
+    // update the UI to show the user is signed in
+    loginButton.style.display = "none";
+    profilePic.src = user.photoURL;
+    profilePic.style.display = "";
+    signOut.style.display = "";
+    upcomingEventsPage.style.display = "";
+    adminPage.style.display = "";
+  } else {
+    // user is signed out
+    // update the UI to show the user is signed out
+    loginButton.style.display = "";
+    profilePic.style.display = "none";
+    signOut.style.display = "none";
+    upcomingEventsPage.style.display = "none";
+    adminPage.style.display = "none";
+  }
 });
 
 // Event listener to handle Google auth
@@ -234,7 +288,7 @@ loginButton.addEventListener('click', async (e) => {
 });
 
 // handle sign out button click event
-signOutBtn.addEventListener('click', () => {
+signOutBtn.addEventListener("click", () => {
   auth.signOut();
   // let index = document.querySelector("#index");
   // index.click();
@@ -242,11 +296,11 @@ signOutBtn.addEventListener('click', () => {
 });
 
 // *** HOME PAGE JS
-const upcomingEventTile = document.querySelector('#upcoming-event');
-const upcomingEventImage = document.querySelector('#upcoming-event-image');
-const upcomingEventDate = document.querySelector('#upcoming-event-date');
-const upcomingEventButton = document.querySelector('#event-details-button');
-const noEventElement = document.querySelector('#no-event-element');
+const upcomingEventTile = document.querySelector("#upcoming-event");
+const upcomingEventImage = document.querySelector("#upcoming-event-image");
+const upcomingEventDate = document.querySelector("#upcoming-event-date");
+const upcomingEventButton = document.querySelector("#event-details-button");
+const noEventElement = document.querySelector("#no-event-element");
 const now = new Date();
 
 db.collection('events')
@@ -258,11 +312,11 @@ db.collection('events')
   if (!querySnapshot.empty) {
     const eventData = querySnapshot.docs[0].data();
 
-    // Update the upcoming event tile with the event data
-    upcomingEventImage.style.display = 'block';
-    upcomingEventDate.style.display = 'block';
-    upcomingEventButton.style.display = 'block';
-    noEventElement.style.display = 'none';
+      // Update the upcoming event tile with the event data
+      upcomingEventImage.style.display = "block";
+      upcomingEventDate.style.display = "block";
+      upcomingEventButton.style.display = "block";
+      noEventElement.style.display = "none";
 
     upcomingEventImage.src = eventData.image_url;
     upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
@@ -275,13 +329,14 @@ db.collection('events')
   }
 });
 
-const eventDetailsButton = document.querySelector('#event-details-button');
+const eventDetailsButton = document.querySelector("#event-details-button");
 
-eventDetailsButton.addEventListener('click', async () => {
+eventDetailsButton.addEventListener("click", async () => {
   try {
     // Fetch the details of the upcoming event from Firestore
-    const querySnapshot = await db.collection('events')
-      .orderBy('date', 'asc')
+    const querySnapshot = await db
+      .collection("events")
+      .orderBy("date", "asc")
       .limit(1)
       .get();
 
@@ -289,24 +344,28 @@ eventDetailsButton.addEventListener('click', async () => {
       const eventData = querySnapshot.docs[0].data();
 
       // Fetch member details from Firestore
-      const memberRefs = eventData.members.map(memberId => {
-        return db.collection('members').doc(memberId);
+      const memberRefs = eventData.members.map((memberId) => {
+        return db.collection("members").doc(memberId);
       });
-      const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
-      const memberData = memberDocs.map(doc => doc.data());
+      const memberDocs = await Promise.all(memberRefs.map((ref) => ref.get()));
+      const memberData = memberDocs.map((doc) => doc.data());
 
       // Build the attendees list HTML
       let attendeesHtml;
       if (memberData.length > 0) {
-        attendeesHtml = memberData.map(member => `
+        attendeesHtml = memberData
+          .map(
+            (member) => `
           <div class="column is-one-fifth">
             <figure class="image is-32x32">
               <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
             </figure>
           </div>
-        `).join('');
+        `
+          )
+          .join("");
       } else {
-        attendeesHtml = '<p>Be the first to attend!</p>';
+        attendeesHtml = "<p>Be the first to attend!</p>";
       }
 
       // Build the modal HTML with the event and attendance data
@@ -317,8 +376,12 @@ eventDetailsButton.addEventListener('click', async () => {
             <div class="box">
               <h1 class="title mb-2">${eventData.name}</h1>
               <p class="has-text-centered">${eventData.description}</p>
-              <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
-              <h2 class="subtitle mb-1"><strong>Number of attendees: </strong>${memberData.length}</h2>
+              <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date
+                .toDate()
+                .toLocaleDateString()}</h2>
+              <h2 class="subtitle mb-1"><strong>Number of attendees: </strong>${
+                memberData.length
+              }</h2>
               <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
               <div class="columns is-multiline mb-0">
                 ${attendeesHtml}
@@ -338,87 +401,106 @@ eventDetailsButton.addEventListener('click', async () => {
       `;
 
       // Insert the modal HTML into the page
-      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      document.body.insertAdjacentHTML("beforeend", modalHtml);
 
       // Add event listener to the "Submit Attendance" button
-      const submitAttendanceButton = document.getElementById('submitAttendance');
-submitAttendanceButton.addEventListener('click', async () => {
-  try {
-    const attendanceCodeInput = document.getElementById('attendanceCodeInput');
-    const attendanceStatus = document.getElementById('attendanceStatus');
-    const attendanceCode = attendanceCodeInput.value;
+      const submitAttendanceButton =
+        document.getElementById("submitAttendance");
+      submitAttendanceButton.addEventListener("click", async () => {
+        try {
+          const attendanceCodeInput = document.getElementById(
+            "attendanceCodeInput"
+          );
+          const attendanceStatus = document.getElementById("attendanceStatus");
+          const attendanceCode = attendanceCodeInput.value;
 
-    // Fetch the details of the upcoming event from Firestore
-    const querySnapshot = await db.collection('events')
-      .orderBy('date', 'asc')
-      .limit(1)
-      .get();
+          // Fetch the details of the upcoming event from Firestore
+          const querySnapshot = await db
+            .collection("events")
+            .orderBy("date", "asc")
+            .limit(1)
+            .get();
 
-    if (!querySnapshot.empty) {
-      const eventData = querySnapshot.docs[0].data();
+          if (!querySnapshot.empty) {
+            const eventData = querySnapshot.docs[0].data();
 
-      // Check attendance code against the one in the database
-      if (attendanceCode === eventData.attendance_code) {
-        // Get the current user's UID
-        const currentUserUid = firebase.auth().currentUser.uid;
+            // Check attendance code against the one in the database
+            if (attendanceCode === eventData.attendance_code) {
+              // Get the current user's UID
+              const currentUserUid = firebase.auth().currentUser.uid;
 
-        // Check if the user is already marked as attending
-        if (eventData.members.includes(currentUserUid)) {
-          attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
-          // Hide the message after 3 seconds
-          setTimeout(() => {
-            attendanceStatus.innerText = '';
-          }, 3000);
-          return;
+              // Check if the user is already marked as attending
+              if (eventData.members.includes(currentUserUid)) {
+                attendanceStatus.innerHTML =
+                  '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                  attendanceStatus.innerText = "";
+                }, 3000);
+                return;
+              }
+
+              // Add the user's UID to the members array in the events collection
+              await db
+                .collection("events")
+                .doc(eventData.id)
+                .update({
+                  members:
+                    firebase.firestore.FieldValue.arrayUnion(currentUserUid),
+                });
+
+              // Get the current user's document from the members collection
+              const userDoc = await db
+                .collection("members")
+                .doc(currentUserUid)
+                .get();
+              const userData = userDoc.data();
+
+              // Add the event's DocID to the attended_events array in the user's document
+              await db
+                .collection("members")
+                .doc(currentUserUid)
+                .update({
+                  attended_events: firebase.firestore.FieldValue.arrayUnion(
+                    eventData.id
+                  ),
+                });
+
+              // Display attendance code validation status
+              attendanceStatus.innerText = "Attendance code is correct!";
+
+              // Replace the "Event Details" button with a completed button
+              const eventDetailsButton = document.getElementById(
+                "event-details-button"
+              );
+              eventDetailsButton.classList.remove("button");
+              eventDetailsButton.classList.add("button", "is-static");
+              eventDetailsButton.disabled = true;
+              eventDetailsButton.innerText = "Completed!";
+            } else {
+              attendanceStatus.innerText = "Attendance code is incorrect!";
+
+              // Hide the "Attendance code is incorrect!" message after 3 seconds
+              setTimeout(() => {
+                attendanceStatus.innerText = "";
+              }, 3000);
+            }
+          }
+        } catch (error) {
+          console.error(error);
         }
-
-        // Add the user's UID to the members array in the events collection
-        await db.collection('events').doc(eventData.id).update({
-          members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
-        });
-
-        // Get the current user's document from the members collection
-        const userDoc = await db.collection('members').doc(currentUserUid).get();
-        const userData = userDoc.data();
-
-        // Add the event's DocID to the attended_events array in the user's document
-        await db.collection('members').doc(currentUserUid).update({
-          attended_events: firebase.firestore.FieldValue.arrayUnion(eventData.id)
-        });
-
-        // Display attendance code validation status
-        attendanceStatus.innerText = 'Attendance code is correct!';
-
-        // Replace the "Event Details" button with a completed button
-        const eventDetailsButton = document.getElementById('event-details-button');
-        eventDetailsButton.classList.remove('button');
-        eventDetailsButton.classList.add('button', 'is-static');
-        eventDetailsButton.disabled = true;
-        eventDetailsButton.innerText = 'Completed!';
-      } else {
-        attendanceStatus.innerText = 'Attendance code is incorrect!';
-
-        // Hide the "Attendance code is incorrect!" message after 3 seconds
-        setTimeout(() => {
-          attendanceStatus.innerText = '';
-        }, 3000);
-      }
-    }
-  } catch (error) {
-    console.error(error);
-  }
-});
+      });
 
       // Add event listener to the modal background
-      const modalBackground = document.querySelector('.modal-background');
-      modalBackground.addEventListener('click', () => {
-        document.querySelector('.modal').remove();
+      const modalBackground = document.querySelector(".modal-background");
+      modalBackground.addEventListener("click", () => {
+        document.querySelector(".modal").remove();
       });
 
       // Add event listener to the modal close button
-      const modalCloseButton = document.querySelector('.modal-close');
-      modalCloseButton.addEventListener('click', () => {
-        document.querySelector('.modal').remove();
+      const modalCloseButton = document.querySelector(".modal-close");
+      modalCloseButton.addEventListener("click", () => {
+        document.querySelector(".modal").remove();
       });
     }
   } catch (error) {
@@ -430,57 +512,57 @@ var eventsLeftCount = document.getElementById("events-left-count");
 var totalMembersCount = document.getElementById("total-club-members-count");
 var attendedEventsCount = document.getElementById("events-attended-count");
 
-
 var eventsLeft = 0;
 
-
 // Query the Firestore database for the events collection
-db.collection("events").get().then(function(querySnapshot) {
-  
-  // Loop through the documents in the events collection
-  querySnapshot.forEach(function(doc) {
-    var eventData = doc.data();
-    var eventTimestamp = eventData.date;
-    var eventDate = eventTimestamp.toDate();
+db.collection("events")
+  .get()
+  .then(function (querySnapshot) {
+    // Loop through the documents in the events collection
+    querySnapshot.forEach(function (doc) {
+      var eventData = doc.data();
+      var eventTimestamp = eventData.date;
+      var eventDate = eventTimestamp.toDate();
 
+      // Check if the event date is today or after
+      if (eventDate >= new Date()) {
+        eventsLeft++;
+      }
+    });
 
-    // Check if the event date is today or after
-    if (eventDate >= new Date()) {
-      eventsLeft++;
-    }
-        });
-
-
-  // Update the HTML with the queried values
-  eventsLeftCount.innerHTML = "<strong>" + eventsLeft + "</strong>";
-});
-
+    // Update the HTML with the queried values
+    eventsLeftCount.innerHTML = "<strong>" + eventsLeft + "</strong>";
+  });
 
 // Query the Firestore database for the club members collection
-db.collection("members").get().then(function(querySnapshot) {
-  var totalMembers = querySnapshot.size;
-  
-  // Update the HTML with the queried value
-  totalMembersCount.innerHTML = "<strong>" + totalMembers + "</strong>";
+db.collection("members")
+  .get()
+  .then(function (querySnapshot) {
+    var totalMembers = querySnapshot.size;
 
-
-});
+    // Update the HTML with the queried value
+    totalMembersCount.innerHTML = "<strong>" + totalMembers + "</strong>";
+  });
 
 // Query the Firestore database for the club members collection
-db.collection("members").get().then(function(querySnapshot) {
-  // Get the document for the current user
-  var userDoc = querySnapshot.docs.filter(doc => doc.id === auth.currentUser.uid)[0];
-  var userDocData = userDoc.data();
-  var attendedEvents = userDocData.attended_events.length;
+db.collection("members")
+  .get()
+  .then(function (querySnapshot) {
+    // Get the document for the current user
+    var userDoc = querySnapshot.docs.filter(
+      (doc) => doc.id === auth.currentUser.uid
+    )[0];
+    var userDocData = userDoc.data();
+    var attendedEvents = userDocData.attended_events.length;
 
-  // Update the HTML with the queried value
-  attendedEventsCount.innerHTML = "<strong>" + attendedEvents + "</strong>";
-});
+    // Update the HTML with the queried value
+    attendedEventsCount.innerHTML = "<strong>" + attendedEvents + "</strong>";
+  });
 
 // *** UPCOMING EVENTS PAGE JS (NEW)
-const eventCards = document.getElementById('event_cards');
-const upcomingBtn = document.getElementById('upcoming_btn');
-const pastBtn = document.getElementById('past_btn');
+const eventCards = document.getElementById("event_cards");
+const upcomingBtn = document.getElementById("upcoming_btn");
+const pastBtn = document.getElementById("past_btn");
 const currentDate = new Date();
 
 // Create empty list to store card data before date sorting
@@ -488,29 +570,33 @@ const cards = [];
 
 async function openEventModal(eventId) {
   // Fetch event details from Firestore
-  const eventRef = firebase.firestore().collection('events').doc(eventId);
+  const eventRef = firebase.firestore().collection("events").doc(eventId);
   const eventDoc = await eventRef.get();
   const eventData = eventDoc.data();
 
   // Fetch member details from Firestore
-  const memberRefs = eventData.members.map(memberId => {
-    return firebase.firestore().collection('members').doc(memberId);
+  const memberRefs = eventData.members.map((memberId) => {
+    return firebase.firestore().collection("members").doc(memberId);
   });
-  const memberDocs = await Promise.all(memberRefs.map(ref => ref.get()));
-  const memberData = memberDocs.map(doc => doc.data());
+  const memberDocs = await Promise.all(memberRefs.map((ref) => ref.get()));
+  const memberData = memberDocs.map((doc) => doc.data());
 
   // Filter out undefined elements in memberData
-  const filteredMemberData = memberData.filter(member => member);
+  const filteredMemberData = memberData.filter((member) => member);
 
   if (filteredMemberData.length > 0) {
-    attendeesHtml = filteredMemberData.map(member => `
+    attendeesHtml = filteredMemberData
+      .map(
+        (member) => `
       <div class="column is-one-fifth">
         <img src="${member.photoURL}" alt="Avatar">
         <p>${member.name}</p>
       </div>
-    `).join('');
+    `
+      )
+      .join("");
   } else {
-    attendeesHtml = '<p>Be the first to attend!</p>';
+    attendeesHtml = "<p>Be the first to attend!</p>";
   }
 
   // Build modal HTML with event and member data
@@ -521,22 +607,34 @@ async function openEventModal(eventId) {
       <div class="box">
         <h1 class="title mb-2">${eventData.name}</h1>
         <p class="has-text-centered">${eventData.description}</p>
-        <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date.toDate().toLocaleDateString()}</h2>
-        <h2 class="subtitle mb-1"><strong>Number of attendees: </strong><span id="numberOfAttendees">${memberData.length}</span></h2>
+        <h2 class="subtitle mb-1 mt-3"><strong>Date: </strong>${eventData.date
+          .toDate()
+          .toLocaleDateString()}</h2>
+        <h2 class="subtitle mb-1"><strong>Number of attendees: </strong><span id="numberOfAttendees">${
+          memberData.length
+        }</span></h2>
         <h2 class="subtitle mb-1"><strong>Attending Members:</strong></h2>
         <div id="attendingMembers" class="columns is-multiline mb-0">
-          ${filteredMemberData.length > 0 ? filteredMemberData.map(member => `
+          ${
+            filteredMemberData.length > 0
+              ? filteredMemberData
+                  .map(
+                    (member) => `
             <div class="column is-one-fifth">
                 <figure class="image is-32x32">
                   <img class="is-rounded" src="${member.photoURL}" alt="Avatar">
                 </figure>
               </a>
             </div>
-          `).join('') : `
+          `
+                  )
+                  .join("")
+              : `
           <div class="column is-full">
             <p id="beFirstToAttend">Be the first to attend!</p>
           </div>
-          `}
+          `
+          }
         </div>
         <div class="field">
           <label class="label">Attendance Code</label>
@@ -553,18 +651,18 @@ async function openEventModal(eventId) {
   `;
 
   // Add modal HTML to the page
-  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  document.body.insertAdjacentHTML("beforeend", modalHtml);
 
   // Add event listener to the "Submit Attendance" button
-  const submitAttendanceButton = document.getElementById('submitAttendance');
-  
-  submitAttendanceButton.addEventListener('click', async () => {
-    const attendanceCodeInput = document.getElementById('attendanceCodeInput');
-    const attendanceStatus = document.getElementById('attendanceStatus');
+  const submitAttendanceButton = document.getElementById("submitAttendance");
+
+  submitAttendanceButton.addEventListener("click", async () => {
+    const attendanceCodeInput = document.getElementById("attendanceCodeInput");
+    const attendanceStatus = document.getElementById("attendanceStatus");
     const attendanceCode = attendanceCodeInput.value;
 
     // Fetch event details from Firestore
-    const eventRef = firebase.firestore().collection('events').doc(eventId);
+    const eventRef = firebase.firestore().collection("events").doc(eventId);
     const eventDoc = await eventRef.get();
     const eventData = eventDoc.data();
 
@@ -575,36 +673,40 @@ async function openEventModal(eventId) {
 
       // Check if the user is already marked as attending
       if (eventData.members.includes(currentUserUid)) {
-        attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
+        attendanceStatus.innerHTML =
+          '<p id="attendanceStatus" class="help has-text-success">You are already marked as attending for this event!</p>';
         // Hide the message after 3 seconds
         setTimeout(() => {
-          attendanceStatus.innerText = '';
+          attendanceStatus.innerText = "";
         }, 3000);
         return;
       }
 
       // Add the user's UID to the members array in the events collection
       await eventRef.update({
-        members: firebase.firestore.FieldValue.arrayUnion(currentUserUid)
+        members: firebase.firestore.FieldValue.arrayUnion(currentUserUid),
       });
 
       // Get the current user's document from the members collection
-      const userRef = firebase.firestore().collection('members').doc(currentUserUid);
+      const userRef = firebase
+        .firestore()
+        .collection("members")
+        .doc(currentUserUid);
       const userDoc = await userRef.get();
       const userData = userDoc.data();
 
       // Add the event's DocID to the attended_events array in the user's document
       await userRef.update({
-        attended_events: firebase.firestore.FieldValue.arrayUnion(eventId)
+        attended_events: firebase.firestore.FieldValue.arrayUnion(eventId),
       });
 
       // Update the number of attendees
-      const numberOfAttendees = document.getElementById('numberOfAttendees');
+      const numberOfAttendees = document.getElementById("numberOfAttendees");
       numberOfAttendees.innerText = parseInt(numberOfAttendees.innerText) + 1;
 
       // Update the attending members section
-      const attendingMembers = document.getElementById('attendingMembers');
-      const beFirstToAttend = document.getElementById('beFirstToAttend');
+      const attendingMembers = document.getElementById("attendingMembers");
+      const beFirstToAttend = document.getElementById("beFirstToAttend");
       const newAttendeeHtml = `
         <div class="column is-one-fifth" style="padding-left: 0; padding-right: 0">
           <figure class="image is-32x32">
@@ -613,88 +715,89 @@ async function openEventModal(eventId) {
         </div>
       `;
       if (beFirstToAttend) {
-        beFirstToAttend.insertAdjacentHTML('afterend', newAttendeeHtml);
+        beFirstToAttend.insertAdjacentHTML("afterend", newAttendeeHtml);
         beFirstToAttend.remove();
       } else {
-        attendingMembers.insertAdjacentHTML('beforeend', newAttendeeHtml);
+        attendingMembers.insertAdjacentHTML("beforeend", newAttendeeHtml);
       }
 
       // Display attendance code validation status
-      attendanceStatus.innerHTML = '<p id="attendanceStatus" class="help has-text-success">Attendance Code is Correct! See you soon!</p>';
+      attendanceStatus.innerHTML =
+        '<p id="attendanceStatus" class="help has-text-success">Attendance Code is Correct! See you soon!</p>';
       setTimeout(() => {
-        attendanceStatus.innerText = '';
+        attendanceStatus.innerText = "";
       }, 3000);
 
       // Replace the "Event Details" button with a completed button
-      eventDetailsButton.classList.remove('button');
-      eventDetailsButton.classList.add('button', 'is-static');
+      eventDetailsButton.classList.remove("button");
+      eventDetailsButton.classList.add("button", "is-static");
       eventDetailsButton.disabled = true;
-      eventDetailsButton.innerText = 'Completed!';
+      eventDetailsButton.innerText = "Completed!";
     } else {
-      attendanceStatus.innerText = 'Attendance code is incorrect!';
+      attendanceStatus.innerText = "Attendance code is incorrect!";
 
       // Hide the "Attendance code is incorrect!" message after 3 seconds
       setTimeout(() => {
-        attendanceStatus.innerText = '';
+        attendanceStatus.innerText = "";
       }, 3000);
     }
   });
 
   // Add event listener to the modal background
-  const modalBackground = document.querySelector('.modal-background');
-  modalBackground.addEventListener('click', () => {
-    document.querySelector('.modal').remove();
+  const modalBackground = document.querySelector(".modal-background");
+  modalBackground.addEventListener("click", () => {
+    document.querySelector(".modal").remove();
   });
 
   // Add event listener to the modal close button
-  const modalCloseButton = document.querySelector('.modal-close');
-  modalCloseButton.addEventListener('click', () => {
-    document.querySelector('.modal').remove();
+  const modalCloseButton = document.querySelector(".modal-close");
+  modalCloseButton.addEventListener("click", () => {
+    document.querySelector(".modal").remove();
   });
 }
 
-db.collection('events').get().then(querySnapshot => {
-  // Gather card data from the db and add it to the 'cards' list
-  querySnapshot.forEach(doc => {
-    const eventData = doc.data();
+db.collection("events")
+  .get()
+  .then((querySnapshot) => {
+    // Gather card data from the db and add it to the 'cards' list
+    querySnapshot.forEach((doc) => {
+      const eventData = doc.data();
 
-    const card = {
-      id: doc.id,
-      name: eventData.name,
-      date: eventData.date.toDate(),
-      image_url: eventData.image_url,
-      description: eventData.description,
-      members: eventData.members
-    };
+      const card = {
+        id: doc.id,
+        name: eventData.name,
+        date: eventData.date.toDate(),
+        image_url: eventData.image_url,
+        description: eventData.description,
+        members: eventData.members,
+      };
 
-    cards.push(card);
-  });
-
-  console.log(cards);
-
-  // Sort the cards by date
-  cards.sort((a, b) => a.date - b.date);
-
-  // Function to filter the cards based on the button clicked
-  function filterCards(filterType) {
-    const currentDate = new Date();
-    eventCards.innerHTML = '';
-
-    cards.forEach(card => {
-      // Check if the card should be included based on the filter type
-      if (filterType === 'upcoming' && card.date >= currentDate) {
-        createCard(card);
-      } else if (filterType === 'past' && card.date < currentDate) {
-        createCard(card);
-      }
+      cards.push(card);
     });
-  }
 
-  // Function to create a new element for each card
-  function createCard(card) {
-    const cardElement = document.createElement('div');
-    cardElement.classList.add('column', 'is-one-third');
-    cardElement.innerHTML = `
+    // Sort the cards by date
+    cards.sort((a, b) => a.date - b.date);
+
+    // Function to filter the cards based on the button clicked
+    function filterCards(filterType) {
+      const currentDate = new Date();
+      eventCards.innerHTML = "";
+
+      cards.forEach((card) => {
+        // Check if the card should be included based on the filter type
+        if (filterType === "upcoming" && card.date >= currentDate) {
+          createCard(card);
+        } else if (filterType === "past" && card.date < currentDate) {
+          createCard(card);
+        }
+      });
+    }
+
+    // Function to create a new element for each card
+    function createCard(card) {
+      const cardElement = document.createElement("div");
+      cardElement.classList.add("column", "is-one-third");
+      cardElement.innerHTML = `
       <div class="card">
         <div class="card-image">
           <figure class="image is-3by1">
@@ -709,28 +812,28 @@ db.collection('events').get().then(querySnapshot => {
       </div>
     `;
 
-    // select the button element and add a red background
-    let buttonElement = cardElement.querySelector('.button');
-    buttonElement.style.backgroundColor = '#e95861';
+      // select the button element and add a red background
+      let buttonElement = cardElement.querySelector(".button");
+      buttonElement.style.backgroundColor = "#e95861";
 
-    // Add the event ID as a data attribute to the "Event Details" button
-    const eventDetailsButton = cardElement.querySelector('.button');
-    eventDetailsButton.dataset.eventId = card.id;
+      // Add the event ID as a data attribute to the "Event Details" button
+      const eventDetailsButton = cardElement.querySelector(".button");
+      eventDetailsButton.dataset.eventId = card.id;
 
-    eventCards.appendChild(cardElement);
-  }
+      eventCards.appendChild(cardElement);
+    }
 
-  // Initial load: filter cards by upcoming events
-  filterCards('upcoming');
+    // Initial load: filter cards by upcoming events
+    filterCards("upcoming");
 
-  // Add event listeners to the filter buttons
-  upcomingBtn.addEventListener('click', () => {
-    filterCards('upcoming');
-  });
+    // Add event listeners to the filter buttons
+    upcomingBtn.addEventListener("click", () => {
+      filterCards("upcoming");
+    });
 
-  pastBtn.addEventListener('click', () => {
-    filterCards('past');
-  });
+    pastBtn.addEventListener("click", () => {
+      filterCards("past");
+    });
 
   // Add a single event listener to the event cards container for event delegation
   eventCards.addEventListener('click', (e) => {
@@ -761,7 +864,7 @@ db.collection('events').get().then(querySnapshot => {
 //       name: eventData.name,
 //       date: eventData.date.toDate(),
 //       image_url: eventData.image_url,
-//       description: eventData.description, 
+//       description: eventData.description,
 //       members: eventData.members
 //     };
 
@@ -914,7 +1017,7 @@ db.collection('events').get().then(querySnapshot => {
 //           eventDetailsButton.innerText = 'Completed!';
 //         } else {
 //           attendanceStatus.innerText = 'Attendance code is incorrect!';
-      
+
 //           // Hide the "Attendance code is incorrect!" message after 3 seconds
 //           setTimeout(() => {
 //             attendanceStatus.innerText = '';
@@ -950,95 +1053,401 @@ db.collection('events').get().then(querySnapshot => {
 
 // ***PROFILE PAGE JS
 // add an event listener to the profile picture element
-profilePic.addEventListener('click', () => {
+profilePic.addEventListener("click", () => {
   // get the currently signed-in user
   const user = auth.currentUser;
   // get a reference to the user's document in the 'members' collection
-  const userDocRef = db.collection('members').doc(user.uid);
+  const userDocRef = db.collection("members").doc(user.uid);
   // fetch the user's data from the document
-  userDocRef.get().then((doc) => {
-    if (doc.exists) {
-      // if the user document exists, populate the profile page with their data
-      const userData = doc.data();
-      // set the profile icon
-      document.getElementById('profile-icon').src = userData.photoURL;
-      // set the profile name
-      document.getElementById('profile-name').textContent = userData.name;
-      // set the profile email
-      document.getElementById('profile-email').innerHTML = `<strong>Email: </strong>${userData.email}`;
-      // set the profile role
-      document.getElementById('profile-role').innerHTML = `<strong>Club Role: </strong> ${userData.admin ? 'Admin' : 'Member'}`;
-      // set the attendance total
-      document.getElementById('attendance-total').innerHTML = `<strong>Attendance Total: </strong> ${userData.attended_events.length}`;
-      // clear the table of attended events
-      const attendedEventsTableBody = document.getElementById('attended-events-table').getElementsByTagName('tbody')[0];
-      attendedEventsTableBody.innerHTML = '';
-      // populate the table of attended events
-      userData.attended_events.forEach((eventId) => {
-        // get a reference to the attended event document
-        const eventDocRef = db.collection('events').doc(eventId);
-        // fetch the attended event data from the document
-        eventDocRef.get().then((eventDoc) => {
-          if (eventDoc.exists) {
-            // if the attended event document exists, add a row to the table with the event data
-            const eventData = eventDoc.data();
-            const attendedEventTableRow = attendedEventsTableBody.insertRow(-1);
-            const attendedEventNameCell = attendedEventTableRow.insertCell(0);
-            const attendedEventDateCell = attendedEventTableRow.insertCell(1);
-            attendedEventNameCell.textContent = eventData.name;
-            attendedEventDateCell.textContent = eventData.date.toDate().toLocaleDateString();
-          }
-        }).catch((error) => {
-          console.error(error);
+  userDocRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        // if the user document exists, populate the profile page with their data
+        const userData = doc.data();
+        // set the profile icon
+        document.getElementById("profile-icon").src = userData.photoURL;
+        // set the profile name
+        document.getElementById("profile-name").textContent = userData.name;
+        // set the profile email
+        document.getElementById(
+          "profile-email"
+        ).innerHTML = `<strong>Email: </strong>${userData.email}`;
+        // set the profile role
+        document.getElementById(
+          "profile-role"
+        ).innerHTML = `<strong>Club Role: </strong> ${
+          userData.admin ? "Admin" : "Member"
+        }`;
+        // set the attendance total
+        document.getElementById(
+          "attendance-total"
+        ).innerHTML = `<strong>Attendance Total: </strong> ${userData.attended_events.length}`;
+        // clear the table of attended events
+        const attendedEventsTableBody = document
+          .getElementById("attended-events-table")
+          .getElementsByTagName("tbody")[0];
+        attendedEventsTableBody.innerHTML = "";
+        // populate the table of attended events
+        userData.attended_events.forEach((eventId) => {
+          // get a reference to the attended event document
+          const eventDocRef = db.collection("events").doc(eventId);
+          // fetch the attended event data from the document
+          eventDocRef
+            .get()
+            .then((eventDoc) => {
+              if (eventDoc.exists) {
+                // if the attended event document exists, add a row to the table with the event data
+                const eventData = eventDoc.data();
+                const attendedEventTableRow =
+                  attendedEventsTableBody.insertRow(-1);
+                const attendedEventNameCell =
+                  attendedEventTableRow.insertCell(0);
+                const attendedEventDateCell =
+                  attendedEventTableRow.insertCell(1);
+                attendedEventNameCell.textContent = eventData.name;
+                attendedEventDateCell.textContent = eventData.date
+                  .toDate()
+                  .toLocaleDateString();
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         });
-      });
-      // show the profile page
-      document.getElementById('profile_container').classList.remove('is-hidden');
-      // hide the other pages
-      document.getElementById('events_container').classList.add('is-hidden');
-    } else {
-      console.error(`User document with UID ${user.uid} does not exist.`);
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
+        // show the profile page
+        document
+          .getElementById("profile_container")
+          .classList.remove("is-hidden");
+        // hide the other pages
+        document.getElementById("events_container").classList.add("is-hidden");
+      } else {
+        console.error(`User document with UID ${user.uid} does not exist.`);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 // ***ADMIN PAGE JS
 // Variables for Admin sub-pages
-const eventManagement = document.getElementById('event_management');
-const attendanceMetrics = document.getElementById('attendance_metrics');
-const viewAllUsers = document.getElementById('view_all_users');
-const memberFeedback = document.getElementById('member_feedback');
+const eventManagement = document.getElementById("event_management");
+const attendanceMetrics = document.getElementById("attendance_metrics");
+const viewAllUsers = document.getElementById("view_all_users");
+const memberFeedback = document.getElementById("member_feedback");
 
 // Insert 'Event Management' page content
-eventManagement.addEventListener('click', () => {
-  const event_management_container = document.querySelector('#event_management_container');
+eventManagement.addEventListener("click", () => {
+  const event_management_container = document.querySelector(
+    "#event_management_container"
+  );
   showPageContent(event_management_container);
 });
 
 // Insert 'Attendance Metrics' page content
 attendanceMetrics.addEventListener('click', () => {
   const attendance_metrics_container = document.querySelector('#attendance_metrics_container');
+  createEventAttendanceChart(db, 'eventAttendanceChart')
   showPageContent(attendance_metrics_container);
 });
 
 // Insert 'View All Users' page content
 viewAllUsers.addEventListener('click', () => {
   const view_all_users_container = document.querySelector('#view_all_users_container');
+  fetchUserData();
   showPageContent(view_all_users_container);
 });
 
 // Insert 'Member Feedback' page content
-memberFeedback.addEventListener('click', () => {
-  const member_feedback_container = document.querySelector('#member_feedback_container');
+memberFeedback.addEventListener("click", () => {
+  const member_feedback_container = document.querySelector(
+    "#member_feedback_container"
+  );
   showPageContent(member_feedback_container);
 });
 
-const backButton = document.querySelectorAll('.back_btn');
+const backButton = document.querySelectorAll(".back_btn");
 
 backButton.forEach((button) => {
-  button.addEventListener('click', () => {
+  button.addEventListener("click", () => {
     showPageContent(admin_container);
   });
 });
+
+// ***Contact Us Page JS
+// Adding form to collection when submit
+
+// Add an event listener to the form submit button
+document
+  .querySelector("#contact-form")
+  .addEventListener("submit", function (event) {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
+    // Get the values of the name, email, and message fields
+    const name = document.querySelector("#contact-name").value;
+    const email = document.querySelector("#contact-email").value;
+    const message = document.querySelector("#contact-message").value;
+
+    // Save the data to the Firestore collection
+    db.collection("contacts")
+      .add({
+        name: name,
+        email: email,
+        message: message,
+      })
+      .then(function (docRef) {
+        // Clear the form fields after the data is successfully saved
+        document.querySelector("#contact-form").reset();
+        alert("Your message has been sent!");
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+        alert("Please sign in to send a message.");
+      });
+  });
+
+// Show events in tiles on admin memberfeedback page
+
+// Get a reference to the Firestore collection
+const contactCollection = db.collection("contacts");
+
+// Function to create a tile for each document in the collection
+function createTile(doc) {
+  // Create tile element
+  const tile = document.createElement("div");
+  tile.className = "column is-one-third px-3 py-3";
+
+  // Create box element
+  const box = document.createElement("div");
+  box.className = "box";
+
+  // Create content elements
+  const name = document.createElement("p");
+  name.className = "title is-4";
+  name.textContent = doc.data().name;
+  const email = document.createElement("p");
+  email.className = "subtitle is-6";
+  email.textContent = doc.data().email;
+  const message = document.createElement("div");
+  message.className = "content";
+  message.textContent = doc.data().message;
+
+  // Create delete button
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete";
+  deleteButton.addEventListener("click", function () {
+    // Delete the document from the collection and remove the tile from the DOM
+    contactCollection
+      .doc(doc.id)
+      .delete()
+      .then(function () {
+        tile.remove();
+      })
+      .catch(function (error) {
+        console.error("Error deleting document: ", error);
+        alert(
+          "There was an error deleting the message. Please try again later."
+        );
+      });
+  });
+
+  // Add content to box
+  box.appendChild(name);
+  box.appendChild(email);
+  box.appendChild(message);
+  box.appendChild(deleteButton);
+
+  // Add box to tile
+  tile.appendChild(box);
+
+  // Add tile to page
+  document.getElementById("feedback_tiles").appendChild(tile);
+}
+
+// Function to get all documents from the collection and create tiles for each one
+function getAllContacts() {
+  contactCollection
+    .get()
+    .then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        createTile(doc);
+      });
+    })
+    .catch(function (error) {
+      console.error("Error getting documents: ", error);
+    });
+}
+
+// Call the function to get all contacts on page load
+getAllContacts();
+
+
+function createEventAttendanceChart(dbRef, chartId) {
+  const query = db.collection('events').orderBy('date', 'desc').limit(10);
+
+  return query.get().then(querySnapshot => {
+
+    // Process the data returned from the database
+    const data = {
+      labels: [], // event names will go here
+      datasets: [{
+        label: 'Event Attendance',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        data: [] // number of attendees will go here
+      }]
+    };
+
+    querySnapshot.forEach(doc => {
+      const event = doc.data();
+      data.labels.unshift(event.name); // Add event name to start of labels array
+      data.datasets[0].data.unshift(event.members.length); // Add attendee count to start of data array
+    });
+
+    // Check if a Chart.js instance already exists for the specified chart ID
+    const existingChart = Chart.getChart(chartId);
+    if (existingChart) {
+      existingChart.destroy();
+    }
+
+    // Create a new Chart.js bar chart object
+    const ctx = document.getElementById(chartId).getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Event Attendance'
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Event Name'
+            }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Number of Attendees'
+            }
+          }]
+        }
+      }
+    });
+
+    return chart;
+  });
+}
+
+
+function fetchUserData() {
+  db.collection('members')
+    .get()
+    .then((querySnapshot) => {
+      const userList = document.getElementById('userList');
+      userList.innerHTML = '';
+      querySnapshot.forEach((doc) => {
+        const user = doc.data();
+        const row = document.createElement('tr');
+        row.addEventListener('click', () => fetchAttendedEvents(doc.id));
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = user.name;
+        row.appendChild(nameCell);
+
+        const emailCell = document.createElement('td');
+        emailCell.textContent = user.email;
+        row.appendChild(emailCell);
+
+        const adminCell = document.createElement('td');
+        const adminSelect = document.createElement('select');
+        const yesOption = document.createElement('option');
+        yesOption.value = 'yes';
+        yesOption.textContent = 'Yes';
+        adminSelect.appendChild(yesOption);
+
+        const noOption = document.createElement('option');
+        noOption.value = 'no';
+        noOption.textContent = 'No';
+        adminSelect.appendChild(noOption);
+
+        adminSelect.value = user.admin ? 'yes' : 'no';
+        adminSelect.addEventListener('change', () => {
+          updateUserAdminStatus(doc.id, adminSelect.value === 'yes');
+        });
+
+        // Add the click event listener to stop event propagation
+        adminSelect.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+
+        adminCell.appendChild(adminSelect);
+        row.appendChild(adminCell);
+
+        userList.appendChild(row);
+      });
+    })
+    .catch((error) => {
+      console.error('Error fetching user data:', error);
+    });
+}
+
+async function updateUserAdminStatus(userId, isAdmin) {
+  try {
+    await db.collection('members').doc(userId).update({
+      admin: isAdmin,
+    });
+    console.log(`User ${userId} admin status updated to: ${isAdmin}`);
+  } catch (error) {
+    console.error('Error updating user admin status:', error);
+  }
+}
+
+
+
+// Add an event listener to close the modal when the 'X' button is clicked
+document.getElementById('closeModal').addEventListener('click', () => {
+  const eventsModal = document.getElementById('eventsModal');
+  eventsModal.classList.remove('is-active');
+});
+
+async function fetchAttendedEvents(userId) {
+  try {
+    const memberDoc = await db.collection('members').doc(userId).get();
+
+    if (memberDoc.exists) {
+      const attendedEventsList = memberDoc.data().attended_events;
+
+      const attendedEvents = document.getElementById('attendedEvents');
+      attendedEvents.innerHTML = '';
+
+      const eventsModal = document.getElementById('eventsModal');
+      eventsModal.classList.add('is-active');
+
+      for (const eventId of attendedEventsList) {
+        const eventDoc = await db.collection('events').doc(eventId).get();
+
+        if (eventDoc.exists) {
+          const event = eventDoc.data();
+          console.log('Event:', event);
+
+          const listItem = document.createElement('li');
+          listItem.textContent = `${event.name} (${event.date.toDate().toLocaleDateString()})`;
+          attendedEvents.appendChild(listItem);
+        } else {
+          console.error(`No such event with ID: ${eventId}`);
+        }
+      }
+    } else {
+      console.error('No such member document!');
+    }
+  } catch (error) {
+    console.error('Error fetching attended events:', error);
+  }
+}
