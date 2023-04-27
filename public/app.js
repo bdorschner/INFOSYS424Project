@@ -303,14 +303,14 @@ const upcomingEventButton = document.querySelector("#event-details-button");
 const noEventElement = document.querySelector("#no-event-element");
 const now = new Date();
 
-db.collection("events")
-  .where("date", ">", now)
-  .orderBy("date", "asc")
-  .limit(1)
-  .get()
-  .then((querySnapshot) => {
-    if (!querySnapshot.empty) {
-      const eventData = querySnapshot.docs[0].data();
+db.collection('events')
+// .where('date', '>', now)
+.orderBy('date', 'asc')
+.limit(1)
+.get()
+.then(querySnapshot => {
+  if (!querySnapshot.empty) {
+    const eventData = querySnapshot.docs[0].data();
 
       // Update the upcoming event tile with the event data
       upcomingEventImage.style.display = "block";
