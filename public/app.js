@@ -220,7 +220,7 @@ auth.onAuthStateChanged((user) => {
 //   try {
 //     const provider = new GoogleAuthProvider();
 //     const result = await signInWithPopup(auth, provider);
-    
+
 //     // This gives you a Google Access Token. You can use it to access Google APIs.
 //     const credential = GoogleAuthProvider.credentialFromResult(result);
 //     const token = credential.accessToken;
@@ -241,37 +241,41 @@ auth.onAuthStateChanged((user) => {
 // });
 
 // handle sign in button click event
-loginButton.addEventListener('click', async (e) => {
+loginButton.addEventListener("click", async (e) => {
   // Use signInWithPopup instead of signInWithRedirect
-  auth.signInWithPopup(provider)
+  auth
+    .signInWithPopup(provider)
     .then((result) => {
       // The signed-in user info.
       const user = result.user;
 
       // get a reference to the 'members' collection
-      const membersCollection = db.collection('members');
+      const membersCollection = db.collection("members");
 
       // check if the user exists in the 'members' collection
-      membersCollection.doc(user.uid).get().then(doc => {
-        if (!doc.exists) {
-          // create a new member document for the user
-          membersCollection.doc(user.uid).set({
-            attended_events: [],
-            admin: false,
-            email: user.email,
-            name: user.displayName, 
-            photoURL: user.photoURL
-          });
-        } else {
-          // check if the user is not an admin
-          if (!doc.data().admin) {
-            // if user is not an admin, hide the admin page
-            adminPage.style.display = 'none';
+      membersCollection
+        .doc(user.uid)
+        .get()
+        .then((doc) => {
+          if (!doc.exists) {
+            // create a new member document for the user
+            membersCollection.doc(user.uid).set({
+              attended_events: [],
+              admin: false,
+              email: user.email,
+              name: user.displayName,
+              photoURL: user.photoURL,
+            });
           } else {
-            adminPage.style.display = '';
+            // check if the user is not an admin
+            if (!doc.data().admin) {
+              // if user is not an admin, hide the admin page
+              adminPage.style.display = "none";
+            } else {
+              adminPage.style.display = "";
+            }
           }
-        }
-      });
+        });
 
       location.reload();
     })
@@ -318,16 +322,18 @@ db.collection("events")
       upcomingEventButton.style.display = "block";
       noEventElement.style.display = "none";
 
-    upcomingEventImage.src = eventData.image_url;
-    upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
-  } else {
-    // No events found in the database
-    upcomingEventImage.style.display = 'none';
-    upcomingEventDate.style.display = 'none';
-    upcomingEventButton.style.display = 'none';
-    noEventElement.style.display = 'block';
-  }
-});
+      upcomingEventImage.src = eventData.image_url;
+      upcomingEventDate.textContent += eventData.date
+        .toDate()
+        .toLocaleDateString();
+    } else {
+      // No events found in the database
+      upcomingEventImage.style.display = "none";
+      upcomingEventDate.style.display = "none";
+      upcomingEventButton.style.display = "none";
+      noEventElement.style.display = "block";
+    }
+  });
 
 const eventDetailsButton = document.querySelector("#event-details-button");
 
@@ -402,10 +408,21 @@ eventDetailsButton.addEventListener("click", async () => {
 
       // Insert the modal HTML into the page
       document.body.insertAdjacentHTML("beforeend", modalHtml);
+      // Check if the current user is in the list of attendees
+      const currentUser = firebase.auth().currentUser;
+      const isAttending = eventData.members.includes(currentUser.uid);
 
       // Add event listener to the "Submit Attendance" button
       const submitAttendanceButton =
         document.getElementById("submitAttendance");
+
+      //change submit button if user has attended event
+      if (isAttending) {
+        submitAttendanceButton.textContent = "Event Attended";
+        submitAttendanceButton.classList.add("is-light");
+        submitAttendanceButton.classList.add("is-static");
+      }
+
       submitAttendanceButton.addEventListener("click", async () => {
         try {
           const attendanceCodeInput = document.getElementById(
@@ -653,8 +670,19 @@ async function openEventModal(eventId) {
   // Add modal HTML to the page
   document.body.insertAdjacentHTML("beforeend", modalHtml);
 
+  // Check if the current user is in the list of attendees
+  const currentUser = firebase.auth().currentUser;
+  const isAttending = eventData.members.includes(currentUser.uid);
+
   // Add event listener to the "Submit Attendance" button
   const submitAttendanceButton = document.getElementById("submitAttendance");
+
+  //change submit button if user has attended event
+  if (isAttending) {
+    submitAttendanceButton.textContent = "Event Attended";
+    submitAttendanceButton.classList.add("is-light");
+    submitAttendanceButton.classList.add("is-static");
+  }
 
   submitAttendanceButton.addEventListener("click", async () => {
     const attendanceCodeInput = document.getElementById("attendanceCodeInput");
@@ -835,18 +863,18 @@ db.collection("events")
       filterCards("past");
     });
 
-  // Add a single event listener to the event cards container for event delegation
-  eventCards.addEventListener('click', (e) => {
-    if (e.target.classList.contains('button')) {
-      // Get the event ID from the data attribute and call the openEventModal function
-      const eventId = e.target.dataset.eventId;
-      openEventModal(eventId);
-    }
+    // Add a single event listener to the event cards container for event delegation
+    eventCards.addEventListener("click", (e) => {
+      if (e.target.classList.contains("button")) {
+        // Get the event ID from the data attribute and call the openEventModal function
+        const eventId = e.target.dataset.eventId;
+        openEventModal(eventId);
+      }
+    });
+  })
+  .catch((error) => {
+    // console.error(error);
   });
-})
-.catch(error => {
-  // console.error(error);
-});
 
 // *** UPCOMING EVENTS PAGE JS (OLD)
 // const eventCards = document.getElementById('event_cards');
@@ -1146,15 +1174,19 @@ eventManagement.addEventListener("click", () => {
 });
 
 // Insert 'Attendance Metrics' page content
-attendanceMetrics.addEventListener('click', () => {
-  const attendance_metrics_container = document.querySelector('#attendance_metrics_container');
-  createEventAttendanceChart(db, 'eventAttendanceChart')
+attendanceMetrics.addEventListener("click", () => {
+  const attendance_metrics_container = document.querySelector(
+    "#attendance_metrics_container"
+  );
+  createEventAttendanceChart(db, "eventAttendanceChart");
   showPageContent(attendance_metrics_container);
 });
 
 // Insert 'View All Users' page content
-viewAllUsers.addEventListener('click', () => {
-  const view_all_users_container = document.querySelector('#view_all_users_container');
+viewAllUsers.addEventListener("click", () => {
+  const view_all_users_container = document.querySelector(
+    "#view_all_users_container"
+  );
   fetchUserData();
   showPageContent(view_all_users_container);
 });
@@ -1283,25 +1315,25 @@ function getAllContacts() {
 // Call the function to get all contacts on page load
 getAllContacts();
 
-
 function createEventAttendanceChart(dbRef, chartId) {
-  const query = db.collection('events').orderBy('date', 'desc').limit(10);
+  const query = db.collection("events").orderBy("date", "desc").limit(10);
 
-  return query.get().then(querySnapshot => {
-
+  return query.get().then((querySnapshot) => {
     // Process the data returned from the database
     const data = {
       labels: [], // event names will go here
-      datasets: [{
-        label: 'Event Attendance',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
-        data: [] // number of attendees will go here
-      }]
+      datasets: [
+        {
+          label: "Event Attendance",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+          data: [], // number of attendees will go here
+        },
+      ],
     };
 
-    querySnapshot.forEach(doc => {
+    querySnapshot.forEach((doc) => {
       const event = doc.data();
       data.labels.unshift(event.name); // Add event name to start of labels array
       data.datasets[0].data.unshift(event.members.length); // Add attendee count to start of data array
@@ -1314,40 +1346,43 @@ function createEventAttendanceChart(dbRef, chartId) {
     }
 
     // Create a new Chart.js bar chart object
-    const ctx = document.getElementById(chartId).getContext('2d');
+    const ctx = document.getElementById(chartId).getContext("2d");
     const chart = new Chart(ctx, {
-      type: 'bar',
+      type: "bar",
       data: data,
       options: {
         responsive: true,
         title: {
           display: true,
-          text: 'Event Attendance'
+          text: "Event Attendance",
         },
         scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Event Name'
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Number of Attendees'
-            }
-          }]
-        }
-      }
+          xAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: "Event Name",
+              },
+            },
+          ],
+          yAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: "Number of Attendees",
+              },
+            },
+          ],
+        },
+      },
     });
 
     return chart;
   });
 }
 
-
 function fetchUserData() {
-  db.collection('members')
+  db.collection("members")
     .get()
     .then((querySnapshot) => {
       // Create an array of user documents
@@ -1363,71 +1398,72 @@ function fetchUserData() {
         return userA.data.name.localeCompare(userB.data.name);
       });
 
-      const userList = document.getElementById('userList');
-      userList.innerHTML = '';
+      const userList = document.getElementById("userList");
+      userList.innerHTML = "";
       querySnapshot.forEach((doc) => {
         const user = doc.data();
-        const row = document.createElement('tr');
-        row.addEventListener('click', () => fetchAttendedEvents(doc.id));
+        const row = document.createElement("tr");
+        row.addEventListener("click", () => fetchAttendedEvents(doc.id));
 
-        const nameCell = document.createElement('td');
+        const nameCell = document.createElement("td");
         nameCell.textContent = user.name;
         row.appendChild(nameCell);
 
-        const emailCell = document.createElement('td');
+        const emailCell = document.createElement("td");
         emailCell.textContent = user.email;
         row.appendChild(emailCell);
 
-        const adminCell = document.createElement('td');
-        adminCell.textContent = user.admin ? 'Yes' : 'No';
+        const adminCell = document.createElement("td");
+        adminCell.textContent = user.admin ? "Yes" : "No";
         row.appendChild(adminCell);
 
         userList.appendChild(row);
       });
     })
     .catch((error) => {
-      console.error('Error fetching user data:', error);
+      console.error("Error fetching user data:", error);
     });
 }
 
-
 // Add an event listener to close the modal when the 'X' button is clicked
-document.getElementById('closeModal').addEventListener('click', () => {
-  const eventsModal = document.getElementById('eventsModal');
-  eventsModal.classList.remove('is-active');
+document.getElementById("closeModal").addEventListener("click", () => {
+  const eventsModal = document.getElementById("eventsModal");
+  eventsModal.classList.remove("is-active");
 });
 
 async function fetchAttendedEvents(userId) {
   try {
-    const memberDoc = await db.collection('members').doc(userId).get();
+    const memberDoc = await db.collection("members").doc(userId).get();
 
     if (memberDoc.exists) {
       const attendedEventsList = memberDoc.data().attended_events;
 
-      const attendedEvents = document.getElementById('attendedEvents');
-      attendedEvents.innerHTML = '';
+      const attendedEvents = document.getElementById("attendedEvents");
+      attendedEvents.innerHTML = "";
 
-      const eventsModal = document.getElementById('eventsModal');
-      eventsModal.classList.add('is-active');
+      const eventsModal = document.getElementById("eventsModal");
+      eventsModal.classList.add("is-active");
 
       for (const eventId of attendedEventsList) {
-        const eventDoc = await db.collection('events').doc(eventId).get();
+        const eventDoc = await db.collection("events").doc(eventId).get();
 
         if (eventDoc.exists) {
           const event = eventDoc.data();
-          console.log('Event:', event);
+          console.log("Event:", event);
 
-          const listItem = document.createElement('li');
-          listItem.textContent = `${event.name} (${event.date.toDate().toLocaleDateString()})`;
+          const listItem = document.createElement("li");
+          listItem.textContent = `${event.name} (${event.date
+            .toDate()
+            .toLocaleDateString()})`;
           attendedEvents.appendChild(listItem);
         } else {
           console.error(`No such event with ID: ${eventId}`);
         }
       }
     } else {
-      console.error('No such member document!');
+      console.error("No such member document!");
     }
   } catch (error) {
-    console.error('Error fetching attended events:', error);
+    console.error("Error fetching attended events:", error);
   }
 }
