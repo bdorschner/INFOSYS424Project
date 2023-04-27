@@ -220,7 +220,7 @@ auth.onAuthStateChanged((user) => {
 //   try {
 //     const provider = new GoogleAuthProvider();
 //     const result = await signInWithPopup(auth, provider);
-    
+
 //     // This gives you a Google Access Token. You can use it to access Google APIs.
 //     const credential = GoogleAuthProvider.credentialFromResult(result);
 //     const token = credential.accessToken;
@@ -259,7 +259,7 @@ loginButton.addEventListener('click', async (e) => {
             attended_events: [],
             admin: false,
             email: user.email,
-            name: user.displayName, 
+            name: user.displayName,
             photoURL: user.photoURL
           });
         } else {
@@ -318,16 +318,16 @@ db.collection("events")
       upcomingEventButton.style.display = "block";
       noEventElement.style.display = "none";
 
-    upcomingEventImage.src = eventData.image_url;
-    upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
-  } else {
-    // No events found in the database
-    upcomingEventImage.style.display = 'none';
-    upcomingEventDate.style.display = 'none';
-    upcomingEventButton.style.display = 'none';
-    noEventElement.style.display = 'block';
-  }
-});
+      upcomingEventImage.src = eventData.image_url;
+      upcomingEventDate.textContent += eventData.date.toDate().toLocaleDateString();
+    } else {
+      // No events found in the database
+      upcomingEventImage.style.display = 'none';
+      upcomingEventDate.style.display = 'none';
+      upcomingEventButton.style.display = 'none';
+      noEventElement.style.display = 'block';
+    }
+  });
 
 const eventDetailsButton = document.querySelector("#event-details-button");
 
@@ -445,8 +445,7 @@ eventDetailsButton.addEventListener("click", async () => {
                 .collection("events")
                 .doc(eventData.id)
                 .update({
-                  members:
-                    firebase.firestore.FieldValue.arrayUnion(currentUserUid),
+                  members: firebase.firestore.FieldValue.arrayUnion(currentUserUid),
                 });
 
               // Get the current user's document from the members collection
@@ -835,18 +834,18 @@ db.collection("events")
       filterCards("past");
     });
 
-  // Add a single event listener to the event cards container for event delegation
-  eventCards.addEventListener('click', (e) => {
-    if (e.target.classList.contains('button')) {
-      // Get the event ID from the data attribute and call the openEventModal function
-      const eventId = e.target.dataset.eventId;
-      openEventModal(eventId);
-    }
+    // Add a single event listener to the event cards container for event delegation
+    eventCards.addEventListener('click', (e) => {
+      if (e.target.classList.contains('button')) {
+        // Get the event ID from the data attribute and call the openEventModal function
+        const eventId = e.target.dataset.eventId;
+        openEventModal(eventId);
+      }
+    });
+  })
+  .catch(error => {
+    // console.error(error);
   });
-})
-.catch(error => {
-  // console.error(error);
-});
 
 // *** UPCOMING EVENTS PAGE JS (OLD)
 // const eventCards = document.getElementById('event_cards');
@@ -1175,7 +1174,7 @@ backButton.forEach((button) => {
   });
 });
 
-// ***Contact Us Page JS
+// ***CONTACT US PAGE JS
 // Adding form to collection when submit
 
 // Add an event listener to the form submit button
