@@ -4,7 +4,7 @@ async function go() {
 
     const browser = await puppeteer.launch({
         headless: false,
-        slowMo: 150
+        slowMo: 15
 
     });
 
@@ -20,13 +20,13 @@ async function go() {
 
     // go to contact-us page 
 
-    await new Promise((r) => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 200))
 
     await page.click("#contact")
 
     // fill contact-us form
 
-    await new Promise((r) => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 200))
 
     await page.type("#contact-name", "Test Tester")
     await page.type("#contact-email", "test@test.com")
