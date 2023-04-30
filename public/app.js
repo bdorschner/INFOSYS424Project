@@ -909,6 +909,7 @@ eventManagement.addEventListener("click", () => {
   const event_management_container = document.querySelector(
     "#event_management_container"
   );
+  fetchEventData();
   showPageContent(event_management_container);
 });
 
@@ -1233,3 +1234,37 @@ async function fetchAttendedEvents(userId) {
 };
 
 // ***EVENT MANAGEMENT JS
+function fetchEventData() {
+  db.collection("events")
+    .get()
+    .then((querySnapshot) => {
+      const eventList = document.getElementById('eventList');
+      eventList.innerHTML = '';
+      querySnapshot.forEach((doc) => {
+        const event = doc.data();
+        const row = document.createElement("tr");
+        row.addEventListener("click", () => fetchEventAttendees(doc.id));
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = event.name;
+        row.appendChild(nameCell);
+
+        const dateCell = document.createElement("td");
+        dateCell.textContent = event.date.toDate().toLocaleDateString(); // Convert Firestore Timestamp to JavaScript Date and then to string
+        row.appendChild(dateCell);
+
+        const descriptionCell = document.createElement("td");
+        descriptionCell.textContent = event.description;
+        row.appendChild(descriptionCell);
+
+        const attendanceCodeCell = document.createElement("td");
+        attendanceCodeCell.textContent = event.attendance_code;
+        row.appendChild(attendanceCodeCell);
+
+        eventList.appendChild(row);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching event data:", error);
+    });
+}
