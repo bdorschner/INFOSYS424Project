@@ -188,15 +188,16 @@ auth.onAuthStateChanged((user) => {
 });
 
 // handle sign in button click event
-loginButton.addEventListener('click', async (e) => {
+loginButton.addEventListener("click", async (e) => {
   // Use signInWithPopup instead of signInWithRedirect
-  auth.signInWithPopup(provider)
+  auth
+    .signInWithPopup(provider)
     .then((result) => {
       // The signed-in user info.
       const user = result.user;
 
       // get a reference to the 'members' collection
-      const membersCollection = db.collection('members');
+      const membersCollection = db.collection("members");
 
       // check if the user exists in the 'members' collection
       membersCollection.doc(user.uid).get().then(doc => {
@@ -350,10 +351,21 @@ eventDetailsButton.addEventListener("click", async () => {
 
       // Insert the modal HTML into the page
       document.body.insertAdjacentHTML("beforeend", modalHtml);
+      // Check if the current user is in the list of attendees
+      const currentUser = firebase.auth().currentUser;
+      const isAttending = eventData.members.includes(currentUser.uid);
 
       // Add event listener to the "Submit Attendance" button
       const submitAttendanceButton =
         document.getElementById("submitAttendance");
+
+      //change submit button if user has attended event
+      if (isAttending) {
+        submitAttendanceButton.textContent = "Event Attended";
+        submitAttendanceButton.classList.add("is-light");
+        submitAttendanceButton.classList.add("is-static");
+      }
+
       submitAttendanceButton.addEventListener("click", async () => {
         try {
           const attendanceCodeInput = document.getElementById(
@@ -600,8 +612,19 @@ async function openEventModal(eventId) {
   // Add modal HTML to the page
   document.body.insertAdjacentHTML("beforeend", modalHtml);
 
+  // Check if the current user is in the list of attendees
+  const currentUser = firebase.auth().currentUser;
+  const isAttending = eventData.members.includes(currentUser.uid);
+
   // Add event listener to the "Submit Attendance" button
   const submitAttendanceButton = document.getElementById("submitAttendance");
+
+  //change submit button if user has attended event
+  if (isAttending) {
+    submitAttendanceButton.textContent = "Event Attended";
+    submitAttendanceButton.classList.add("is-light");
+    submitAttendanceButton.classList.add("is-static");
+  }
 
   submitAttendanceButton.addEventListener("click", async () => {
     const attendanceCodeInput = document.getElementById("attendanceCodeInput");
@@ -890,15 +913,19 @@ eventManagement.addEventListener("click", () => {
 });
 
 // Insert 'Attendance Metrics' page content
-attendanceMetrics.addEventListener('click', () => {
-  const attendance_metrics_container = document.querySelector('#attendance_metrics_container');
-  createEventAttendanceChart(db, 'eventAttendanceChart')
+attendanceMetrics.addEventListener("click", () => {
+  const attendance_metrics_container = document.querySelector(
+    "#attendance_metrics_container"
+  );
+  createEventAttendanceChart(db, "eventAttendanceChart");
   showPageContent(attendance_metrics_container);
 });
 
 // Insert 'View All Users' page content
-viewAllUsers.addEventListener('click', () => {
-  const view_all_users_container = document.querySelector('#view_all_users_container');
+viewAllUsers.addEventListener("click", () => {
+  const view_all_users_container = document.querySelector(
+    "#view_all_users_container"
+  );
   fetchUserData();
   showPageContent(view_all_users_container);
 });
@@ -1011,23 +1038,24 @@ getAllContacts();
 
 // ***EVENT ATTENDANCE CHART JS
 function createEventAttendanceChart(dbRef, chartId) {
-  const query = db.collection('events').orderBy('date', 'desc').limit(10);
+  const query = db.collection("events").orderBy("date", "desc").limit(10);
 
-  return query.get().then(querySnapshot => {
-
+  return query.get().then((querySnapshot) => {
     // Process the data returned from the database
     const data = {
       labels: [], // event names will go here
-      datasets: [{
-        label: 'Event Attendance',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
-        data: [] // number of attendees will go here
-      }]
+      datasets: [
+        {
+          label: "Event Attendance",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+          data: [], // number of attendees will go here
+        },
+      ],
     };
 
-    querySnapshot.forEach(doc => {
+    querySnapshot.forEach((doc) => {
       const event = doc.data();
       data.labels.unshift(event.name); // Add event name to start of labels array
       data.datasets[0].data.unshift(event.members.length); // Add attendee count to start of data array
@@ -1040,31 +1068,35 @@ function createEventAttendanceChart(dbRef, chartId) {
     }
 
     // Create a new Chart.js bar chart object
-    const ctx = document.getElementById(chartId).getContext('2d');
+    const ctx = document.getElementById(chartId).getContext("2d");
     const chart = new Chart(ctx, {
-      type: 'bar',
+      type: "bar",
       data: data,
       options: {
         responsive: true,
         title: {
           display: true,
-          text: 'Event Attendance'
+          text: "Event Attendance",
         },
         scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Event Name'
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Number of Attendees'
-            }
-          }]
-        }
-      }
+          xAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: "Event Name",
+              },
+            },
+          ],
+          yAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: "Number of Attendees",
+              },
+            },
+          ],
+        },
+      },
     });
 
     return chart;
@@ -1073,21 +1105,21 @@ function createEventAttendanceChart(dbRef, chartId) {
 
 // ***VIEW ALL USERS JS
 function fetchUserData() {
-  db.collection('members')
+  db.collection("members")
     .get()
     .then((querySnapshot) => {
       const userList = document.getElementById('userList');
       userList.innerHTML = '';
       querySnapshot.forEach((doc) => {
         const user = doc.data();
-        const row = document.createElement('tr');
-        row.addEventListener('click', () => fetchAttendedEvents(doc.id));
+        const row = document.createElement("tr");
+        row.addEventListener("click", () => fetchAttendedEvents(doc.id));
 
-        const nameCell = document.createElement('td');
+        const nameCell = document.createElement("td");
         nameCell.textContent = user.name;
         row.appendChild(nameCell);
 
-        const emailCell = document.createElement('td');
+        const emailCell = document.createElement("td");
         emailCell.textContent = user.email;
         row.appendChild(emailCell);
 
@@ -1120,7 +1152,7 @@ function fetchUserData() {
       });
     })
     .catch((error) => {
-      console.error('Error fetching user data:', error);
+      console.error("Error fetching user data:", error);
     });
 }
 
@@ -1137,7 +1169,7 @@ async function updateUserAdminStatus(userId, isAdmin) {
 
 async function fetchAttendedEvents(userId) {
   try {
-    const memberDoc = await db.collection('members').doc(userId).get();
+    const memberDoc = await db.collection("members").doc(userId).get();
 
     if (memberDoc.exists) {
       const attendedEventsList = memberDoc.data().attended_events;
@@ -1193,10 +1225,10 @@ async function fetchAttendedEvents(userId) {
         }
       }
     } else {
-      console.error('No such member document!');
+      console.error("No such member document!");
     }
   } catch (error) {
-    console.error('Error fetching attended events:', error);
+    console.error("Error fetching attended events:", error);
   }
 };
 
