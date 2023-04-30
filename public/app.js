@@ -921,102 +921,84 @@ backButton.forEach((button) => {
 
 // ***CONTACT US PAGE JS
 // Adding form to collection when submit
+document.querySelector("#contact-form").addEventListener("submit", function (event) {
+  // Prevent the default form submission behavior
+  event.preventDefault();
 
-// Add an event listener to the form submit button
-document
-  .querySelector("#contact-form")
-  .addEventListener("submit", function (event) {
-    // Prevent the default form submission behavior
-    event.preventDefault();
+  // Get the values of the name, email, and message fields
+  const name = document.querySelector("#contact-name").value;
+  const email = document.querySelector("#contact-email").value;
+  const message = document.querySelector("#contact-message").value;
 
-    // Get the values of the name, email, and message fields
-    const name = document.querySelector("#contact-name").value;
-    const email = document.querySelector("#contact-email").value;
-    const message = document.querySelector("#contact-message").value;
-
-    // Save the data to the Firestore collection
-    db.collection("contacts")
-      .add({
-        name: name,
-        email: email,
-        message: message,
-      })
-      .then(function (docRef) {
-        // Clear the form fields after the data is successfully saved
-        document.querySelector("#contact-form").reset();
-        alert("Your message has been sent!");
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-        alert("Please sign in to send a message.");
-      });
-  });
-
-// Show events in tiles on admin memberfeedback page
+  // Save the data to the Firestore collection
+  db.collection("contacts")
+    .add({
+      name: name,
+      email: email,
+      message: message,
+    })
+    .then(function (docRef) {
+      // Clear the form fields after the data is successfully saved
+      document.querySelector("#contact-form").reset();
+      alert("Your message has been sent!");
+    })
+    .catch(function (error) {
+      console.error("Error adding document: ", error);
+      alert("Please sign in to send a message.");
+    });
+});
 
 // Get a reference to the Firestore collection
 const contactCollection = db.collection("contacts");
 
-// Function to create a tile for each document in the collection
-function createTile(doc) {
-  // Create tile element
-  const tile = document.createElement("div");
-  tile.className = "column is-one-third px-3 py-3";
+// Function to create a row for each document in the collection
+function createRow(doc) {
+  const contactList = document.getElementById("contactList");
 
-  // Create box element
-  const box = document.createElement("div");
-  box.className = "box";
+  const row = document.createElement("tr");
 
-  // Create content elements
-  const name = document.createElement("p");
-  name.className = "title is-4";
-  name.textContent = doc.data().name;
-  const email = document.createElement("p");
-  email.className = "subtitle is-6";
-  email.textContent = doc.data().email;
-  const message = document.createElement("div");
-  message.className = "content";
-  message.textContent = doc.data().message;
+  const nameCell = document.createElement("td");
+  nameCell.textContent = doc.data().name;
+  row.appendChild(nameCell);
 
-  // Create delete button
+  const emailCell = document.createElement("td");
+  emailCell.textContent = doc.data().email;
+  row.appendChild(emailCell);
+
+  const messageCell = document.createElement("td");
+  messageCell.textContent = doc.data().message;
+  row.appendChild(messageCell);
+
+  const deleteButtonCell = document.createElement("td");
   const deleteButton = document.createElement("button");
-  deleteButton.className = "delete";
+  deleteButton.className = "button is-danger is-light";
+  deleteButton.textContent = "Delete";
   deleteButton.addEventListener("click", function () {
-    // Delete the document from the collection and remove the tile from the DOM
+    // Delete the document from the collection and remove the row from the DOM
     contactCollection
       .doc(doc.id)
       .delete()
       .then(function () {
-        tile.remove();
+        row.remove();
       })
       .catch(function (error) {
         console.error("Error deleting document: ", error);
-        alert(
-          "There was an error deleting the message. Please try again later."
-        );
+        alert("There was an error deleting the message. Please try again later.");
       });
   });
+  deleteButtonCell.appendChild(deleteButton);
+  row.appendChild(deleteButtonCell);
 
-  // Add content to box
-  box.appendChild(name);
-  box.appendChild(email);
-  box.appendChild(message);
-  box.appendChild(deleteButton);
-
-  // Add box to tile
-  tile.appendChild(box);
-
-  // Add tile to page
-  document.getElementById("feedback_tiles").appendChild(tile);
+  contactList.appendChild(row);
 }
 
-// Function to get all documents from the collection and create tiles for each one
+// Function to get all documents from the collection and create rows for each one
 function getAllContacts() {
   contactCollection
     .get()
     .then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
-        createTile(doc);
+        createRow(doc);
       });
     })
     .catch(function (error) {
@@ -1217,3 +1199,5 @@ async function fetchAttendedEvents(userId) {
     console.error('Error fetching attended events:', error);
   }
 };
+
+// ***EVENT MANAGEMENT JS

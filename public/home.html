@@ -48,6 +48,7 @@
       /* Home page CSS */
       .custom-danger {
         background-color: #e95861;
+        color: #fff;
       }
       .social-icon{
         padding: 2rem;
@@ -488,23 +489,37 @@
 
     <!-- Placeholder Admin sub-pages -->
     <div class="container is-hidden" id="event_management_container">
-      <p class="title is-4 has-text-centered m-4">
-
-      </p>
-      <button class="button is-primary back_btn m-3">Back</button>
+      <button class="button custom-danger mt-4 back_btn">Back</button>
+      <p class="title is-4 has-text-centered mt-0">Event Management</p>
+      <div class="has-text-centered">
+        <button class="button custom-danger has-text-white mb-4 is-centered">Create Event</button>
+      </div>
+      <div class="table-container">
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Attendance Code</th>
+            </tr>
+          </thead>
+          <tbody id="eventList"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="container is-hidden" id="attendance_metrics_container">
-      <button class="button custom-danger m-3 back_btn">Back</button>
-      <p class="title is-4 has-text-centered m-4">Attendance Metrics</p>
-      <div class="box">
+      <button class="button custom-danger mt-4 back_btn">Back</button>
+      <p class="title is-4 has-text-centered mt-0">Attendance Metrics</p>
+      <div class="box mb-4">
         <canvas id="eventAttendanceChart"></canvas>
       </div>
     </div>
 
     <div class="container is-hidden" id="view_all_users_container">
-      <button class="button customer-danger m-3 back_btn">Back</button>
-      <p class="title is-4 has-text-centered m-4">Member List</p>
+      <button class="button custom-danger mt-4 back_btn">Back</button>
+      <p class="title is-4 has-text-centered mt-0">Member List</p>
       <div class="table-container">
         <table class="table is-fullwidth">
             <thead>
@@ -522,12 +537,24 @@
     </div>
 
     <div class="container is-hidden" id="member_feedback_container">
-      <h1 class="title">Member Feedback</h1>
-       <div class="columns is-multiline is-centered" id="feedback_tiles">
-        <!-- Tiles will be added here dynamically -->
-        </div>
+      <button class="button custom-danger mt-4 back_btn">Back</button>
+      <h1 class="title is-4 has-text-centered mt-0">Member Feedback</h1>
+      <div class="table-container">
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="contactList"></tbody>
+        </table>
+      </div>      
+    </div>
       
-      <button class="button is-primary m-3 back_btn">Back</button>
+      
     </div>
 
     <!-- Profile Page content -->
