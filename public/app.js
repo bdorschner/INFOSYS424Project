@@ -82,33 +82,6 @@ admin.addEventListener("click", () => {
   showPageContent(admin_container);
 });
 
-// Event listener to handle redirecting to Google auth - OLD WAY - likely is what's causing mobile browser errors
-// login.addEventListener('click', (e) => {
-//   signInWithRedirect(auth, provider);
-
-//   // Redirect to another page
-//   getRedirectResult(auth)
-//     .then((result) => {
-//       // This gives you a Google Access Token. You can use it to access Google APIs.
-//       const credential = GoogleAuthProvider.credentialFromResult(result);
-//       const token = credential.accessToken;
-
-//       // The signed-in user info.
-//       const user = result.user;
-
-//     }).catch((error) => {
-//       // Handle Errors here.
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//       // The email of the user's account used.
-//       const email = error.email;
-//       // The AuthCredential type that was used.
-//       const credential = GoogleAuthProvider.credentialFromError(error);
-//       // ...
-
-//   });
-// })
-
 // Event listener to handle Google auth
 // Source: https://firebase.google.com/docs/auth/web/redirect-best-practices
 login.addEventListener("click", async (e) => {
@@ -213,32 +186,6 @@ auth.onAuthStateChanged((user) => {
     adminPage.style.display = "none";
   }
 });
-
-// Event listener to handle Google auth
-// Source: https://firebase.google.com/docs/auth/web/redirect-best-practices
-// login.addEventListener('click', async (e) => {
-//   try {
-//     const provider = new GoogleAuthProvider();
-//     const result = await signInWithPopup(auth, provider);
-
-//     // This gives you a Google Access Token. You can use it to access Google APIs.
-//     const credential = GoogleAuthProvider.credentialFromResult(result);
-//     const token = credential.accessToken;
-
-//     // The signed-in user info.
-//     const user = result.user;
-
-//   } catch (error) {
-//     // Handle Errors here.
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//     // The email of the user's account used.
-//     const email = error.email;
-//     // The AuthCredential type that was used.
-//     const credential = GoogleAuthProvider.credentialFromError(error);
-//     // ...
-//   }
-// });
 
 // handle sign in button click event
 loginButton.addEventListener('click', async (e) => {
@@ -1246,23 +1193,27 @@ async function fetchAttendedEvents(userId) {
 
       const attendedEvents = document.getElementById('attendedEvents');
 
-      for (const eventId of attendedEventsList) {
-        const eventDoc = await db.collection('events').doc(eventId).get();
+      if (attendedEventsList.length === 0) {
+        attendedEvents.innerText = "Member hasn't attended any events";
+      } else {
+        for (const eventId of attendedEventsList) {
+          const eventDoc = await db.collection('events').doc(eventId).get();
 
-        if (eventDoc.exists) {
-          const event = eventDoc.data();
-          const listItem = document.createElement('li');
-          listItem.textContent = `${event.name} (${event.date.toDate().toLocaleDateString()})`;
-          attendedEvents.appendChild(listItem);
-        } else {
-          console.error(`No such event with ID: ${eventId}`);
+          if (eventDoc.exists) {
+            const event = eventDoc.data();
+
+            const listItem = document.createElement('li');
+            listItem.textContent = `${event.name} (${event.date.toDate().toLocaleDateString()})`;
+            attendedEvents.appendChild(listItem);
+          } else {
+            console.error(`No such event with ID: ${eventId}`);
+          }
         }
       }
-
     } else {
       console.error('No such member document!');
     }
   } catch (error) {
     console.error('Error fetching attended events:', error);
   }
-}
+};
