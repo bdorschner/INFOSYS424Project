@@ -771,7 +771,7 @@ db.collection("events")
       <div class="card">
         <div class="card-image">
           <figure class="image is-3by1">
-            <img src="${card.image_url}" alt="Event Image" class="cover-image">
+            <img src="${card.image_url}" alt="No Image" class="cover-image">
           </figure>
         </div>
         <div class="card-content">
@@ -1241,30 +1241,356 @@ function fetchEventData() {
       const eventList = document.getElementById('eventList');
       eventList.innerHTML = '';
       querySnapshot.forEach((doc) => {
-        const event = doc.data();
+        const eventData = doc.data();
         const row = document.createElement("tr");
         row.addEventListener("click", () => fetchEventAttendees(doc.id));
 
         const nameCell = document.createElement("td");
-        nameCell.textContent = event.name;
+        nameCell.textContent = eventData.name;
         row.appendChild(nameCell);
 
         const dateCell = document.createElement("td");
-        dateCell.textContent = event.date.toDate().toLocaleDateString(); // Convert Firestore Timestamp to JavaScript Date and then to string
+        dateCell.textContent = eventData.date.toDate().toLocaleDateString(); // Convert Firestore Timestamp to JavaScript Date and then to string
         row.appendChild(dateCell);
 
         const descriptionCell = document.createElement("td");
-        descriptionCell.textContent = event.description;
+        descriptionCell.textContent = eventData.description;
         row.appendChild(descriptionCell);
 
         const attendanceCodeCell = document.createElement("td");
-        attendanceCodeCell.textContent = event.attendance_code;
+        attendanceCodeCell.textContent = eventData.attendance_code;
+
+        // Append attendance code cell to row
         row.appendChild(attendanceCodeCell);
 
+        // Create actions cell
+        const actionsCell = document.createElement("td");
+
+        // Create edit button
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'button custom-warning ml-0';
+        editButton.addEventListener('click', (event) => {
+          event.stopPropagation(); // Prevent the click event from bubbling up to the row
+
+          // Build the basic structure of the edit modal HTML
+          const editModalHtml = `
+            <div class="modal is-active" id="editEventModal">
+              <div class="modal-background"></div>
+              <div class="modal-content">
+                <div class="box">
+                  <h3 class="title is-4">Edit Event</h3>
+                  <form id="editEventForm">
+                    <div class="field">
+                      <label class="label">Name</label>
+                      <div class="control">
+                        <input class="input" type="text" id="editEventName" value="${eventData.name}">
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Date</label>
+                      <div class="control">
+                      <input class="input" type="date" id="editEventDate" value="${eventData.date ? eventData.date.toDate().toISOString().split('T')[0] : ''}">
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Description</label>
+                      <div class="control">
+                        <textarea class="textarea" id="editEventDescription">${eventData.description}</textarea>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Attendance Code</label>
+                      <div class="control">
+                        <input class="input" type="text" id="editEventAttendanceCode" value="${eventData.attendance_code}">
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Image</label>
+                      <div class="control">
+                        <input class="input" type="file" id="editEventImage">
+                      </div>
+                    </div>
+                    <div class="field is-grouped is-grouped-right">
+                      <div class="control">
+                        <button class="button is-primary">Save</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <button class="modal-close is-large" aria-label="close"></button>
+            </div>
+          `;
+
+          // Insert the edit modal HTML into the page
+          document.body.insertAdjacentHTML("beforeend", editModalHtml);
+
+          // Add event listeners to the modal close button and modal background
+          const editEventModal = document.getElementById('editEventModal');
+          editEventModal.querySelector('.modal-background').addEventListener('click', () => editEventModal.remove());
+          editEventModal.querySelector('.modal-close').addEventListener('click', () => editEventModal.remove());
+
+          // Add event listener to the form submit event
+          const editEventForm = document.getElementById('editEventForm');
+          editEventForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            updateEventInFirebase(doc.id);
+            editEventModal.remove();
+          });
+        });
+        actionsCell.appendChild(editButton);
+
+        // Create delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = 'button is-danger is-light ml-2';
+        deleteButton.addEventListener("click", () => deleteEvent(doc.id));
+        actionsCell.appendChild(deleteButton);
+
+        // Append the actions cell to the row
+        row.appendChild(actionsCell);
+        
         eventList.appendChild(row);
+        
       });
     })
     .catch((error) => {
       console.error("Error fetching event data:", error);
     });
 }
+
+// ***EVENT MANAGEMENT JS
+async function saveEventToFirebase() {
+  // Get form values
+  const name = document.getElementById('eventName').value;
+  const date = document.getElementById('eventDate').value;
+  const description = document.getElementById('eventDescription').value;
+  const attendanceCode = document.getElementById('eventAttendanceCode').value;
+  const eventImage = document.getElementById('eventImage').files[0]; // This is a File object
+
+  // Check if an image was uploaded
+  if (eventImage) {
+    // Unique image name
+    let image = new Date() + "__" + eventImage.name;
+
+    // Upload image to Firebase Storage
+    const task = ref.child(image).put(eventImage);
+
+    task
+      .then(snapshot => snapshot.ref.getDownloadURL())
+      .then(imageUrl => {
+        // Once the image URL is obtained, save the rest of the form data to Firestore
+        db.collection('events').add({
+          name: name,
+          date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+          description: description,
+          attendance_code: attendanceCode,
+          image_url: imageUrl,
+          members: [] // Initialize with empty array
+        })
+        .then((docRef) => {
+          console.log("Event document written with ID: ", docRef.id);
+
+          fetchEventData();
+        })
+        .catch((error) => {
+          console.error("Error adding event document: ", error);
+        });
+      })
+      .catch((error) => {
+        console.error("Error uploading image: ", error);
+      });
+  } else {
+    // No image was uploaded, save the rest of the form data to Firestore
+    db.collection('events').add({
+      name: name,
+      date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+      description: description,
+      attendance_code: attendanceCode,
+      members: [] // Initialize with empty array
+    })
+    .then((docRef) => {
+      console.log("Event document written with ID: ", docRef.id);
+
+      fetchEventData();
+    })
+    .catch((error) => {
+      console.error("Error adding event document: ", error);
+    });
+  }
+}
+
+
+
+function createEventModal() {
+  // Build the basic structure of the modal HTML
+  const modalHtml = `
+    <div class="modal is-active" id="eventModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Create Event</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <form id="eventForm">
+            <div class="field">
+              <label class="label">Name</label>
+              <div class="control">
+                <input class="input" type="text" id="eventName">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Date</label>
+              <div class="control">
+                <input class="input" type="datetime-local" id="eventDate">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Description</label>
+              <div class="control">
+                <textarea class="textarea" id="eventDescription"></textarea>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Attendance Code</label>
+              <div class="control">
+                <input class="input" type="text" id="eventAttendanceCode">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Image URL</label>
+              <div class="control">
+                <input class="input" type="file" id="eventImage">
+              </div>
+            </div>
+          </form>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" id="saveEvent">Save changes</button>
+          <button class="button" id="cancelEvent">Cancel</button>
+        </footer>
+      </div>
+    </div>
+  `;
+
+  // Insert the modal HTML into the page
+  document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+  const eventModal = document.getElementById('eventModal');
+
+  // Add event listener to the modal background and close button
+  eventModal.querySelector(".modal-background").addEventListener("click", () => {
+    eventModal.remove();
+  });
+
+  eventModal.querySelector(".delete").addEventListener("click", () => {
+    eventModal.remove();
+  });
+
+  // Hide the modal when the "Save changes" or "Cancel" button is clicked
+  document.getElementById('saveEvent').addEventListener('click', function() {
+    saveEventToFirebase();
+    eventModal.remove();
+  });
+
+  document.getElementById('cancelEvent').addEventListener('click', function() {
+    eventModal.remove();
+  });
+}
+
+// Show the modal when the "Create Event" button is clicked
+document.querySelector('.custom-danger.has-text-white.mb-4.is-centered').addEventListener('click', createEventModal);
+
+async function openEditEventModal(eventId) {
+  const eventDoc = await db.collection("events").doc(eventId).get();
+  
+  if (eventDoc.exists) {
+    const event = eventDoc.data();
+
+    // Use the event data to prefill the fields in the edit event modal
+    document.getElementById('editEventName').value = event.name;
+    document.getElementById('editEventDate').value = event.date.toDate().toISOString().substr(0, 10); // Convert Firestore Timestamp to JavaScript Date and then to ISO string
+    document.getElementById('editEventDescription').value = event.description;
+    document.getElementById('editEventAttendanceCode').value = event.attendance_code;
+    document.getElementById('editEventImageUrl').value = event.image_url;
+
+    // Open the edit event modal
+    // ...code to open the modal...
+  } else {
+    console.error("No such event document!");
+  }
+}
+
+async function deleteEvent(eventId) {
+  if (confirm("Are you sure you want to delete this event?")) {
+    db.collection("events").doc(eventId).delete()
+      .then(() => {
+        console.log("Event successfully deleted!");
+
+        // Call fetchEventData() to update the list
+        fetchEventData();
+      })
+      .catch((error) => {
+        console.error("Error removing event: ", error);
+      });
+  }
+}
+
+async function updateEventInFirebase(eventId) {
+  // Get form values
+  const name = document.getElementById('editEventName').value;
+  const date = document.getElementById('editEventDate').value;
+  const description = document.getElementById('editEventDescription').value;
+  const attendanceCode = document.getElementById('editEventAttendanceCode').value;
+  const eventImage = document.getElementById('editEventImage').files[0]; // This is a File object
+
+  if (eventImage) {
+    let image = new Date() + "__" + eventImage.name; // Create a unique image name
+    const task = ref.child(image).put(eventImage); // Upload image to Firebase Storage
+    
+    task
+      .then(snapshot => snapshot.ref.getDownloadURL())
+      .then(imageUrl => {
+        // Update in Firestore
+        db.collection('events').doc(eventId).update({
+          name: name,
+          date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+          description: description,
+          attendance_code: attendanceCode,
+          image_url: imageUrl,
+        })
+        .then(() => {
+          console.log("Event document successfully updated!");
+
+          // Call fetchEventData() to update the list
+          fetchEventData();
+        })
+        .catch((error) => {
+          console.error("Error updating event document: ", error);
+        });
+      })
+      .catch((error) => {
+        console.error("Error uploading image: ", error);
+      });
+  } else {
+    // Update in Firestore without image
+    db.collection('events').doc(eventId).update({
+      name: name,
+      date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+      description: description,
+      attendance_code: attendanceCode,
+    })
+    .then(() => {
+      console.log("Event document successfully updated!");
+
+      // Call fetchEventData() to update the list
+      fetchEventData();
+    })
+    .catch((error) => {
+      console.error("Error updating event document: ", error);
+    });
+  }
+}
+
