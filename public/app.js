@@ -1369,6 +1369,11 @@ async function saveEventToFirebase() {
   const attendanceCode = document.getElementById('eventAttendanceCode').value;
   const eventImage = document.getElementById('eventImage').files[0]; // This is a File object
 
+  // Parse date string to a JavaScript Date object
+  let jsDate = new Date(date);
+  // Add one day to the date object
+  jsDate.setDate(jsDate.getDate() + 1);
+
   // Check if an image was uploaded
   if (eventImage) {
     // Unique image name
@@ -1383,7 +1388,7 @@ async function saveEventToFirebase() {
         // Once the image URL is obtained, save the rest of the form data to Firestore
         db.collection('events').add({
           name: name,
-          date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+          date: new firebase.firestore.Timestamp.fromDate(new Date(jsDate)),
           description: description,
           attendance_code: attendanceCode,
           image_url: imageUrl,
@@ -1405,7 +1410,7 @@ async function saveEventToFirebase() {
     // No image was uploaded, save the rest of the form data to Firestore
     db.collection('events').add({
       name: name,
-      date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+      date: new firebase.firestore.Timestamp.fromDate(new Date(jsDate)),
       description: description,
       attendance_code: attendanceCode,
       members: [] // Initialize with empty array
@@ -1444,6 +1449,7 @@ function createEventModal() {
             <div class="field">
               <label class="label">Date</label>
               <div class="control">
+                <input class="input" type="date" id="eventDate">
                 <input class="input" type="date" id="eventDate">
               </div>
             </div>
@@ -1546,6 +1552,11 @@ async function updateEventInFirebase(eventId) {
   const attendanceCode = document.getElementById('editEventAttendanceCode').value;
   const eventImage = document.getElementById('editEventImage').files[0]; // This is a File object
 
+  // Parse date string to a JavaScript Date object
+  let jsDate = new Date(date);
+  // Add one day to the date object
+  jsDate.setDate(jsDate.getDate() + 1);
+  
   if (eventImage) {
     let image = new Date() + "__" + eventImage.name; // Create a unique image name
     const task = ref.child(image).put(eventImage); // Upload image to Firebase Storage
@@ -1556,7 +1567,7 @@ async function updateEventInFirebase(eventId) {
         // Update in Firestore
         db.collection('events').doc(eventId).update({
           name: name,
-          date: new firebase.firestore.Timestamp.fromDate(new Date(date)), 
+          date: new firebase.firestore.Timestamp.fromDate(jsDate),
           description: description,
           attendance_code: attendanceCode,
           image_url: imageUrl,
@@ -1578,7 +1589,7 @@ async function updateEventInFirebase(eventId) {
     // Update in Firestore without image
     db.collection('events').doc(eventId).update({
       name: name,
-      date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+      date: new firebase.firestore.Timestamp.fromDate(jsDate),
       description: description,
       attendance_code: attendanceCode,
     })
