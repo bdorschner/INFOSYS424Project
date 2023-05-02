@@ -314,7 +314,7 @@ eventDetailsButton.addEventListener("click", async () => {
           )
           .join("");
       } else {
-        attendeesHtml = "<p>Be the first to attend!</p>";
+        attendeesHtml = `<p class="ml-3 mt-2 mb-1">Be the first to attend!</p>`;
       }
 
       // Build the modal HTML with the event and attendance data
@@ -1444,7 +1444,7 @@ function createEventModal() {
             <div class="field">
               <label class="label">Date</label>
               <div class="control">
-                <input class="input" type="datetime-local" id="eventDate">
+                <input class="input" type="date" id="eventDate">
               </div>
             </div>
             <div class="field">
@@ -1556,7 +1556,7 @@ async function updateEventInFirebase(eventId) {
         // Update in Firestore
         db.collection('events').doc(eventId).update({
           name: name,
-          date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+          date: new firebase.firestore.Timestamp.fromDate(new Date(date)), 
           description: description,
           attendance_code: attendanceCode,
           image_url: imageUrl,
