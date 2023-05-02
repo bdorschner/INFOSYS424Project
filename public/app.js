@@ -1369,6 +1369,11 @@ async function saveEventToFirebase() {
   const attendanceCode = document.getElementById('eventAttendanceCode').value;
   const eventImage = document.getElementById('eventImage').files[0]; // This is a File object
 
+  // Parse date string to a JavaScript Date object
+  let jsDate = new Date(date);
+  // Add one day to the date object
+  jsDate.setDate(jsDate.getDate() + 1);
+
   // Check if an image was uploaded
   if (eventImage) {
     // Unique image name
@@ -1383,7 +1388,7 @@ async function saveEventToFirebase() {
         // Once the image URL is obtained, save the rest of the form data to Firestore
         db.collection('events').add({
           name: name,
-          date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+          date: new firebase.firestore.Timestamp.fromDate(new Date(jsDate)),
           description: description,
           attendance_code: attendanceCode,
           image_url: imageUrl,
@@ -1405,7 +1410,7 @@ async function saveEventToFirebase() {
     // No image was uploaded, save the rest of the form data to Firestore
     db.collection('events').add({
       name: name,
-      date: new firebase.firestore.Timestamp.fromDate(new Date(date)),
+      date: new firebase.firestore.Timestamp.fromDate(new Date(jsDate)),
       description: description,
       attendance_code: attendanceCode,
       members: [] // Initialize with empty array
@@ -1444,7 +1449,7 @@ function createEventModal() {
             <div class="field">
               <label class="label">Date</label>
               <div class="control">
-                <input class="input" type="datetime-local" id="eventDate">
+                <input class="input" type="date" id="eventDate">
               </div>
             </div>
             <div class="field">
