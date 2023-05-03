@@ -142,41 +142,44 @@ adminPage.style.display = "none";
 const membersCollection = db.collection("members");
 
 // listen for authentication state changes
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
   if (user) {
     // user is signed in
-    // check if the user exists in the 'members' collection
-    membersCollection
-      .doc(user.uid)
-      .get()
-      .then((doc) => {
-        if (!doc.exists) {
-          // create a new member document for the user
-          membersCollection.doc(user.uid).set({
-            attended_events: [],
-            admin: false,
-            email: user.email,
-            name: user.displayName,
-            photoURL: user.photoURL,
-          });
-        } else {
-          // check if the user is not an admin
-          if (!doc.data().admin) {
-            // if user is not an admin, hide the admin page
-            adminPage.style.display = "none";
-          } else {
-            adminPage.style.display = "";
-          }
-        }
-      });
+    try {
+      // wait for the user data from Firestore
+      const doc = await membersCollection.doc(user.uid).get();
+
+      if (!doc.exists) {
+        // create a new member document for the user
+        await membersCollection.doc(user.uid).set({
+          attended_events: [],
+          admin: false,
+          email: user.email,
+          name: user.displayName,
+          photoURL: user.photoURL,
+        });
+      }
+
+      // check if the user is not an admin
+      if (!doc.data().admin) {
+        // if user is not an admin, hide the admin page
+        adminPage.style.display = "none";
+      } else {
+        adminPage.style.display = "";
+      }
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+
     // update the UI to show the user is signed in
     loginButton.style.display = "none";
     profilePic.src = user.photoURL;
     profilePic.style.display = "";
     signOut.style.display = "";
     upcomingEventsPage.style.display = "";
-    adminPage.style.display = "";
   } else {
+    // user is signed out
+    // update the UI to show the user
     // user is signed out
     // update the UI to show the user is signed out
     loginButton.style.display = "";
@@ -187,53 +190,142 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+// auth.onAuthStateChanged(async (user) => {
+//   if (user) {
+//     // user is signed in
+//     // check if the user exists in the 'members' collection
+//     membersCollection
+//       .doc(user.uid)
+//       .get()
+//       .then((doc) => {
+//         if (!doc.exists) {
+//           // create a new member document for the user
+//           membersCollection.doc(user.uid).set({
+//             attended_events: [],
+//             admin: false,
+//             email: user.email,
+//             name: user.displayName,
+//             photoURL: user.photoURL,
+//           });
+//         } else {
+//           // check if the user is not an admin
+//           if (!doc.data().admin) {
+//             // if user is not an admin, hide the admin page
+//             adminPage.style.display = "none";
+//           } else {
+//             adminPage.style.display = "";
+//           }
+//         }
+//       });
+//     // update the UI to show the user is signed in
+//     loginButton.style.display = "none";
+//     profilePic.src = user.photoURL;
+//     profilePic.style.display = "";
+//     signOut.style.display = "";
+//     upcomingEventsPage.style.display = "";
+//     adminPage.style.display = "";
+//   } else {
+//     // user is signed out
+//     // update the UI to show the user is signed out
+//     loginButton.style.display = "";
+//     profilePic.style.display = "none";
+//     signOut.style.display = "none";
+//     upcomingEventsPage.style.display = "none";
+//     adminPage.style.display = "none";
+//   }
+// });
+
 // handle sign in button click event
 loginButton.addEventListener("click", async (e) => {
-  // Use signInWithPopup instead of signInWithRedirect
-  auth
-    .signInWithPopup(provider)
-    .then((result) => {
-      // The signed-in user info.
-      const user = result.user;
+  try {
+    // Use signInWithPopup instead of signInWithRedirect
+    const result = await auth.signInWithPopup(provider);
+    // The signed-in user info.
+    const user = result.user;
 
-      // get a reference to the 'members' collection
-      const membersCollection = db.collection("members");
+    // get a reference to the 'members' collection
+    const membersCollection = db.collection("members");
 
-      // check if the user exists in the 'members' collection
-      membersCollection.doc(user.uid).get().then(doc => {
-        if (!doc.exists) {
-          // create a new member document for the user
-          membersCollection.doc(user.uid).set({
-            attended_events: [],
-            admin: false,
-            email: user.email,
-            name: user.displayName,
-            photoURL: user.photoURL
-          });
-        } else {
-          // check if the user is not an admin
-          if (!doc.data().admin) {
-            // if user is not an admin, hide the admin page
-            adminPage.style.display = 'none';
-          } else {
-            adminPage.style.display = '';
-          }
-        }
+    // check if the user exists in the 'members' collection
+    const doc = await membersCollection.doc(user.uid).get();
+    if (!doc.exists) {
+      // create a new member document for the user
+      await membersCollection.doc(user.uid).set({
+        attended_events: [],
+        admin: false,
+        email: user.email,
+        name: user.displayName,
+        photoURL: user.photoURL
       });
+    } else {
+      // check if the user is not an admin
+      if (!doc.data().admin) {
+        // if user is not an admin, hide the admin page
+        adminPage.style.display = 'none';
+      } else {
+        adminPage.style.display = '';
+      }
+    }
 
-      location.reload();
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.email;
-      // The AuthCredential type that was used.
-      const credential = error.credential;
-      // ...
-    });
+    location.reload();
+  } catch (error) {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The AuthCredential type that was used.
+    const credential = error.credential;
+    // ...
+  }
 });
+
+// loginButton.addEventListener("click", async (e) => {
+//   // Use signInWithPopup instead of signInWithRedirect
+//   auth
+//     .signInWithPopup(provider)
+//     .then((result) => {
+//       // The signed-in user info.
+//       const user = result.user;
+
+//       // get a reference to the 'members' collection
+//       const membersCollection = db.collection("members");
+
+//       // check if the user exists in the 'members' collection
+//       membersCollection.doc(user.uid).get().then(doc => {
+//         if (!doc.exists) {
+//           // create a new member document for the user
+//           membersCollection.doc(user.uid).set({
+//             attended_events: [],
+//             admin: false,
+//             email: user.email,
+//             name: user.displayName,
+//             photoURL: user.photoURL
+//           });
+//         } else {
+//           // check if the user is not an admin
+//           if (!doc.data().admin) {
+//             // if user is not an admin, hide the admin page
+//             adminPage.style.display = 'none';
+//           } else {
+//             adminPage.style.display = '';
+//           }
+//         }
+//       });
+
+//       location.reload();
+//     })
+//     .catch((error) => {
+//       // Handle Errors here.
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       // The email of the user's account used.
+//       const email = error.email;
+//       // The AuthCredential type that was used.
+//       const credential = error.credential;
+//       // ...
+//     });
+// });
 
 // handle sign out button click event
 signOutBtn.addEventListener("click", () => {
@@ -1449,7 +1541,6 @@ function createEventModal() {
             <div class="field">
               <label class="label">Date</label>
               <div class="control">
-                <input class="input" type="date" id="eventDate">
                 <input class="input" type="date" id="eventDate">
               </div>
             </div>
