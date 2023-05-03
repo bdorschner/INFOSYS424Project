@@ -647,7 +647,7 @@ async function openEventModal(eventId) {
       )
       .join("");
   } else {
-    attendeesHtml = "<p>Be the first to attend!</p>";
+    attendeesHtml = `<p class="ml-3 mt-2 mb-1">Be the first to attend!</p>`;
   }
 
   // Build modal HTML with event and member data
